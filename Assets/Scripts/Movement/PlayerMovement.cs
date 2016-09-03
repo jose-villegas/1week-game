@@ -1,14 +1,25 @@
 ﻿using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody), typeof(Collider))]
+[RequireComponent(typeof(Rigidbody))]
 public class PlayerMovement : MonoBehaviour
 {
+    private enum MovementState
+    {
+        Grounded,
+        OnJump,
+        Falling
+    }
+
     [SerializeField]
     private DynamicActor _player;
-    private Rigidbody _rigidbody;
+    [SerializeField]
     private Collider _collider;
-    private Vector3 _movementVector = Vector3.zero;
-    private bool _onJump;
+    [SerializeField]
+    private Animator _animator;
+    [SerializeField]
+    private MovementState _state;
+    private Rigidbody _rigidbody;
+
 
     private void Start()
     {
@@ -21,11 +32,15 @@ public class PlayerMovement : MonoBehaviour
             enabled = false;
         }
 
-        _collider = GetComponent<Collider>();
-
         if (!_collider)
         {
-            Debug.LogError("Couldn't obtain Collider component in " + this);
+            Debug.LogError("No Collider component provided");
+            enabled = false;
+        }
+
+        if (!_animator)
+        {
+            Debug.LogError("No Animator component provided");
             enabled = false;
         }
 
@@ -48,29 +63,46 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        bool grounded = IsGrounded();
-        float verticalAxis = Input.GetAxisRaw("Vertical");
-        _movementVector = Vector3.zero;
+        Vector3 _movementVector = Vector3.zero;
+        _state = IsGrounded() ? MovementState.Grounded : MovementState.OnJump;
+
+        if (_state == MovementState.OnJump && _rigidbody.velocity.y < 0.0f)
+        {
+            _state = MovementState.Falling;
+        }
+
+        HorizontalMovement(ref _movementVector);
+        VerticalMovement(ref _movementVector);
+        _rigidbody.AddForce(_movementVector);
+    }
+
+    private void HorizontalMovement(ref Vector3 movement)
+    {
+        float horizontalAxis = Input.GetAxis("Horizontal");
+
         // horizontal movement - forward and backwards, check if player 
         // is grounded to avoid air strafing
-        if (grounded)
+        if (_state == MovementState.Grounded && horizontalAxis != 0.0f)
         {
-            _movementVector.x = Input.GetAxis("Horizontal") * _player.HorizontalForce;
+            movement.x = horizontalAxis * _player.HorizontalForce;
         }
+
+        // deacceleration, brakes
+        if (Input.GetKey(KeyCode.Space) && _state == MovementState.Grounded)
+        {
+            movement = Vector3.zero;
+            _rigidbody.AddTorque(-_rigidbody.angularVelocity * _player.BrakeSpeed);
+        }
+    }
+
+    private void VerticalMovement(ref Vector3 movement)
+    {
+        float verticalAxisRaw = Input.GetAxisRaw("Vertical");
 
         // jumping only when the character is on the ground
-        if (verticalAxis > 0.0f && grounded && !_onJump)
+        if (verticalAxisRaw > 0.0f && _state == MovementState.Grounded)
         {
-            _movementVector.y = _player.VerticalForce;
-            _onJump = true;
+            movement.y = _player.VerticalForce;
         }
-
-        // reset on jump once the player is on the ground
-        if (grounded && _movementVector.y == 0.0f)
-        {
-            _onJump = false;
-        }
-
-        _rigidbody.AddForce(_movementVector);
     }
 }
