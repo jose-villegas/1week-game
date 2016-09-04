@@ -7,7 +7,8 @@ public class PlayerMovement : MonoBehaviour
     {
         Grounded,
         OnJump,
-        Falling
+        Falling,
+        Floating
     }
 
     [SerializeField]
@@ -19,35 +20,43 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private MovementState _state;
     private Rigidbody _rigidbody;
-
+    private RigidbodyConstraints _rigidbodyConstraints;
 
     private void Start()
     {
-        // player's rigidbody for movement
-        _rigidbody = GetComponent<Rigidbody>();  
-
-        if (!_rigidbody)
-        {
-            Debug.LogError("Couldn't obtain Rigidbody component in " + this);
-            enabled = false;
-        }
-
-        if (!_collider)
-        {
-            Debug.LogError("No Collider component provided");
-            enabled = false;
-        }
-
-        if (!_animator)
-        {
-            Debug.LogError("No Animator component provided");
-            enabled = false;
-        }
-
+        // without the dynamic actor scriptableobject there
+        // is no defined parameters for the player movement
         if (!_player)
         {
-            Debug.LogError("No DynamicActor provided");
+            Debug.LogError("No DynamicActor found. Disabling script...");
             enabled = false;
+        }
+
+        // neccesary components for the script to work
+        GetNeededComponent(ref _rigidbody);
+        GetNeededComponent(ref _collider);
+        GetNeededComponent(ref _animator);
+
+        // backup rigidbody constrains
+        if (null != _rigidbody)
+        {
+            _rigidbodyConstraints = _rigidbody.constraints;
+        }
+    }
+
+    void GetNeededComponent<T>(ref T target) where T : Component
+    {
+        target = GetComponent<T>();
+
+        if (target == null)
+        {
+            target = GetComponentInChildren<T>();
+
+            if (target == null)
+            {
+                Debug.LogError("No " + typeof(T) + "found. Disabling script...");
+                enabled = false;
+            }
         }
     }
 
@@ -64,16 +73,60 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         Vector3 _movementVector = Vector3.zero;
+        UpdateMovementState();
+        HorizontalMovement(ref _movementVector);
+        VerticalMovement(ref _movementVector);
+        _rigidbody.AddForce(_movementVector);
+ 
+        // limit player speed
+        if (_rigidbody.velocity.magnitude > _player.MaximumVelocity)
+        {
+            _rigidbody.velocity = Vector3.ClampMagnitude(_rigidbody.velocity, _player.MaximumVelocity);
+        }
+    }
+
+    private void Update()
+    {
+        // inflate player and set the status
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            // terminal timeout float cancelation
+            if (_state == MovementState.Floating)
+            {
+                CancelInvoke();   
+            }
+
+            ToggleFloating();
+        }
+    }
+
+    private void ToggleFloating()
+    {
+        // if it's already inflated then reset and deflate, asume it's 
+        // falling UpdateMovementState will set the correct state
+        _state = _state == MovementState.Floating ? MovementState.Falling : MovementState.Floating;
+        _animator.SetBool("Inflate", _state == MovementState.Floating);
+
+        // if no input is received the floating mode will eventually timeout
+        if (_state == MovementState.Floating)
+        {
+            Invoke("ToggleFloating", _player.FloatingTime);
+        }
+    }
+
+    private void UpdateMovementState()
+    {
+        // if it's floating keep it's state, managed from keypress
+        if (_state == MovementState.Floating) { return; }
+
+        // check if the player is touching the ground, otherwise asume it's jumping
         _state = IsGrounded() ? MovementState.Grounded : MovementState.OnJump;
 
+        // if the object is going downward and not on the ground then it's falling
         if (_state == MovementState.OnJump && _rigidbody.velocity.y < 0.0f)
         {
             _state = MovementState.Falling;
         }
-
-        HorizontalMovement(ref _movementVector);
-        VerticalMovement(ref _movementVector);
-        _rigidbody.AddForce(_movementVector);
     }
 
     private void HorizontalMovement(ref Vector3 movement)
@@ -86,11 +139,17 @@ public class PlayerMovement : MonoBehaviour
         {
             movement.x = horizontalAxis * _player.HorizontalForce;
         }
+        // on floating add horizontal push force
+        else if (_state == MovementState.Floating && horizontalAxis != 0.0f)
+        {
+            movement.x = horizontalAxis * _player.FloatingPush;
+        }
 
         // deacceleration, brakes
         if (Input.GetKey(KeyCode.Space) && _state == MovementState.Grounded)
         {
             movement = Vector3.zero;
+            _rigidbody.AddForce(-_rigidbody.velocity * _player.BrakeSpeed);
             _rigidbody.AddTorque(-_rigidbody.angularVelocity * _player.BrakeSpeed);
         }
     }
@@ -100,9 +159,50 @@ public class PlayerMovement : MonoBehaviour
         float verticalAxisRaw = Input.GetAxisRaw("Vertical");
 
         // jumping only when the character is on the ground
-        if (verticalAxisRaw > 0.0f && _state == MovementState.Grounded)
+        if (_state == MovementState.Grounded && verticalAxisRaw > 0.0f)
         {
             movement.y = _player.VerticalForce;
+        }
+            
+        // flatten on downward force and the player is grounded
+        if (_state == MovementState.Grounded && verticalAxisRaw < 0.0f)
+        {
+            // for the flatte animation to properly work the player has to jave
+            // forward, and up equivalent to world forward and word up
+            var rotation = Quaternion.LookRotation(Vector3.forward, Vector3.up);
+            var t = Time.fixedDeltaTime * _player.FlattenStabilizationSpeed;
+            // stops physics control of rotation to enable flatten animation
+            _rigidbody.freezeRotation = true;
+            _rigidbody.MoveRotation(Quaternion.Lerp(transform.rotation, rotation, t));
+
+            // if rotation target is nearly reached, flatten
+            if (Quaternion.Angle(transform.rotation, rotation) <= 1.0f)
+            {
+                _animator.SetBool("Flatten", true);
+            }
+        }
+        else
+        {
+            // recover physics control of rotation
+            _rigidbody.freezeRotation = false;
+            // recover constraints on rotation
+            _rigidbody.constraints = _rigidbodyConstraints;
+            _animator.SetBool("Flatten", false);
+        }
+
+        // if the player is inflate add constant upward force
+        if (_state == MovementState.Floating)
+        {
+            movement -= Physics.gravity;
+            movement.y += _player.FloatingForce;
+        }
+    }
+
+    private void OnCollisionEnter(Collision col)
+    {
+        if (col.gameObject.layer != LayerMask.NameToLayer("Ground") && _state == MovementState.Floating)
+        {
+            ToggleFloating();
         }
     }
 }

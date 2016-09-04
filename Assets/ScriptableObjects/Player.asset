@@ -14,3 +14,8 @@ MonoBehaviour:
   _horizontalForce: 15
   _verticalForce: 350
   _distanceToGround: 0.1
+  _brakeSpeed: 0.975
+  _flattenStabilizationSpeed: 10
+  _maximumVelocity: 10
+  _floatingForce: 0.05
+  _floatingTime: 15
