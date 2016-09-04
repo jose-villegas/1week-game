@@ -19,6 +19,7 @@ public class PlayerMovement : MonoBehaviour
     private Animator _animator;
     [SerializeField]
     private MovementState _state;
+
     private Rigidbody _rigidbody;
     private RigidbodyConstraints _rigidbodyConstraints;
 
@@ -202,6 +203,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (col.gameObject.layer != LayerMask.NameToLayer("Ground") && _state == MovementState.Floating)
         {
+            CancelInvoke();
             ToggleFloating();
         }
     }
