@@ -34,30 +34,14 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // neccesary components for the script to work
-        GetNeededComponent(ref _rigidbody);
-        GetNeededComponent(ref _collider);
-        GetNeededComponent(ref _animator);
+        this.GetNeededComponent(ref _rigidbody);
+        this.GetNeededComponent(ref _collider);
+        this.GetNeededComponent(ref _animator);
 
         // backup rigidbody constrains
         if (null != _rigidbody)
         {
             _rigidbodyConstraints = _rigidbody.constraints;
-        }
-    }
-
-    void GetNeededComponent<T>(ref T target) where T : Component
-    {
-        target = GetComponent<T>();
-
-        if (target == null)
-        {
-            target = GetComponentInChildren<T>();
-
-            if (target == null)
-            {
-                Debug.LogError("No " + typeof(T) + "found. Disabling script...");
-                enabled = false;
-            }
         }
     }
 
