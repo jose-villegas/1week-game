@@ -1,47 +1,30 @@
 ﻿using UnityEngine;
 using System;
 
-[CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/Dynamic Actor", order = 1)]
+[CreateAssetMenu]
 public class DynamicActor : ScriptableObject
 {
     [SerializeField, Header("On Ground Movement")]
-    private float _horizontalForce = 5.0f;
-    [SerializeField]
-    private float _verticalForce = 50.0f;
-    [SerializeField, Range(0.01f, 1.0f)]
-    private float _brakeSpeed = 0.975f;
-    [SerializeField]
-    private float _flattenStabilizationSpeed = 50.0f;
+    private Vector3 _axisMovementForce;
     [SerializeField, Header("Limits")]
-    private float _maximumVelocity = 10.0f;
+    private float _maximumVelocityMagnitude;
     [SerializeField]
     private float _distanceToGround = 0.1f;
-    [SerializeField, Header("Floating Mode")]
-    private float _floatingForce = 0.15f;
-    [SerializeField]
-    private float _floatingTime = 3.0f;
-    [SerializeField]
-    private float _floatingPushForce = 1.0f;
-    [SerializeField, Range(0.0f, 1.0f)]
-    private float _onFloatVelocityFalloff = 0.5f;
-    [SerializeField]
-    private float _onFloatVelocityFalloffTime = 1.0f;
-    [SerializeField]
-    private float _upwardBuildupTime = 1.0f;
 
-    public float HorizontalForce
+    public Vector3 MovementForce
     {
         get
         {
-            return _horizontalForce;
+            return _axisMovementForce;
         }
     }
 
-    public float VerticalForce
+
+    public float MaximumVelocityMagnitude
     {
         get
-        {
-            return _verticalForce;
+        { 
+            return _maximumVelocityMagnitude;
         }
     }
 
@@ -53,75 +36,14 @@ public class DynamicActor : ScriptableObject
         }
     }
 
-    public float BrakeSpeed
+    /// <summary>
+    /// Determines whether the actor is on the ground, on top of a collider
+    /// </summary>
+    /// <returns<c>true</c> if the actor is on top of a collider; otherwise, <c>false</c>.</returns>
+    /// <param name="actor">The actor.</param>
+    /// <param name="extend">Actor vertical extend, collider.extend.y is recommended.</param>
+    public bool IsGrounded(Transform actor, float extent)
     {
-        get
-        { 
-            return _brakeSpeed;
-        }
-    }
-
-    public float FlattenStabilizationSpeed
-    {
-        get
-        { 
-            return _flattenStabilizationSpeed;
-        }
-    }
-
-    public float MaximumVelocity
-    {
-        get
-        { 
-            return _maximumVelocity;
-        }
-    }
-
-    public float FloatingForce
-    {
-        get
-        { 
-            return _floatingForce;
-        }
-    }
-
-    public float FloatingTime
-    {
-        get
-        { 
-            return _floatingTime;
-        }
-    }
-
-    public float FloatingPush
-    {
-        get
-        { 
-            return _floatingPushForce;
-        }
-    }
-
-    public float FloatVelocityFalloff
-    {
-        get
-        {
-            return _onFloatVelocityFalloff;
-        }
-    }
-
-    public float FloatVelocityFalloffTime
-    {
-        get
-        {
-            return _onFloatVelocityFalloffTime;
-        }
-    }
-
-    public float UpwardBuildupTime
-    {
-        get
-        {
-            return _upwardBuildupTime;
-        }
+        return Physics.Raycast(actor.position, -Vector3.up, extent + _distanceToGround);
     }
 }

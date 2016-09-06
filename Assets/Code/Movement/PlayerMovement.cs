@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     [SerializeField]
-    private DynamicActor _player;
+    private PlayerActor _player;
     [SerializeField]
     private Collider _collider;
     [SerializeField]
@@ -28,11 +28,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
-        // without the dynamic actor scriptableobject there
+        // without the PlayerActor scriptableobject there
         // is no defined parameters for the player movement
         if (!_player)
         {
-            Debug.LogError("No DynamicActor found. Disabling script...");
+            Debug.LogError("No PlayerActor found. Disabling script...");
             enabled = false;
         }
 
@@ -48,16 +48,6 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Determines whether the player is on the ground, on top of a collider
-    /// </summary>
-    /// <returns><c>true</c> if the player is on top of a collider; otherwise, <c>false</c>.</returns>
-    private bool IsGrounded()
-    {
-        float extend = _collider.bounds.extents.y;
-        return Physics.Raycast(transform.position, -Vector3.up, extend + _player.DistanceToGround);
-    }
-
     private void FixedUpdate()
     {
         Vector3 _movementVector = Vector3.zero;
@@ -67,9 +57,9 @@ public class PlayerMovement : MonoBehaviour
         _rigidbody.AddForce(_movementVector);
  
         // limit player speed
-        if (_rigidbody.velocity.magnitude > _player.MaximumVelocity)
+        if (_rigidbody.velocity.magnitude > _player.MaximumVelocityMagnitude)
         {
-            _rigidbody.velocity = Vector3.ClampMagnitude(_rigidbody.velocity, _player.MaximumVelocity);
+            _rigidbody.velocity = Vector3.ClampMagnitude(_rigidbody.velocity, _player.MaximumVelocityMagnitude);
         }
 
         // velocity fall off on float mode
@@ -120,7 +110,8 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // check if the player is touching the ground, otherwise asume it's jumping
-        _state = IsGrounded() ? MovementState.Grounded : MovementState.OnJump;
+        bool isGrounded = _player.IsGrounded(transform, _collider.bounds.extents.y);
+        _state = isGrounded ? MovementState.Grounded : MovementState.OnJump;
 
         // if the object is going downward and not on the ground then it's falling
         if (_state == MovementState.OnJump && _rigidbody.velocity.y < 0.0f)
@@ -137,12 +128,12 @@ public class PlayerMovement : MonoBehaviour
         // is grounded to avoid air strafing
         if (_state == MovementState.Grounded && horizontalAxis != 0.0f)
         {
-            movement.x = horizontalAxis * _player.HorizontalForce;
+            movement.x = horizontalAxis * _player.MovementForce.x;
         }
         // on floating add horizontal push force
         else if (_state == MovementState.Floating && horizontalAxis != 0.0f)
         {
-            movement.x = horizontalAxis * _player.FloatingPush;
+            movement.x = horizontalAxis * _player.FloatingMovementForce;
         }
 
         // deacceleration, brakes
@@ -161,7 +152,7 @@ public class PlayerMovement : MonoBehaviour
         // jumping only when the character is on the ground
         if (_state == MovementState.Grounded && verticalAxisRaw > 0.0f)
         {
-            movement.y = _player.VerticalForce;
+            movement.y = _player.MovementForce.y;
         }
             
         // flatten on downward force and the player is grounded

@@ -8,14 +8,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e5f23db18cc33074484376b658b49f41, type: 3}
+  m_Script: {fileID: 11500000, guid: 14a8a344c7c8d5b439706a750cf1407b, type: 3}
   m_Name: Player
   m_EditorClassIdentifier: 
-  _horizontalForce: 15
-  _verticalForce: 350
+  _axisMovementForce: {x: 5, y: 350, z: 0}
+  _maximumVelocityMagnitude: 10
   _distanceToGround: 0.1
   _brakeSpeed: 0.975
-  _flattenStabilizationSpeed: 10
-  _maximumVelocity: 10
-  _floatingForce: 0.05
-  _floatingTime: 15
+  _flattenStabilizationSpeed: 50
+  _floatingForce: 0.15
+  _floatingTime: 12.5
+  _floatingMovementForce: 1
+  _onFloatVelocityFalloff: 0.5
+  _onFloatVelocityFalloffTime: 1
+  _upwardBuildupTime: 1
