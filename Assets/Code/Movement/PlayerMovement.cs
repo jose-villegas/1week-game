@@ -23,6 +23,9 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody _rigidbody;
     private RigidbodyConstraints _rigidbodyConstraints;
 
+    private float _upwardTimer = 0.0f;
+    private float _velocityFalloffTimer = 0.0f;
+
     private void Start()
     {
         // without the dynamic actor scriptableobject there
@@ -68,6 +71,14 @@ public class PlayerMovement : MonoBehaviour
         {
             _rigidbody.velocity = Vector3.ClampMagnitude(_rigidbody.velocity, _player.MaximumVelocity);
         }
+
+        // velocity fall off on float mode
+        if (_state == MovementState.Floating && _velocityFalloffTimer < _player.FloatVelocityFalloffTime)
+        {
+            _rigidbody.AddForce(-_rigidbody.velocity * _player.FloatVelocityFalloff);
+            _rigidbody.AddTorque(-_rigidbody.angularVelocity * _player.FloatVelocityFalloff);
+            _velocityFalloffTimer += Time.fixedDeltaTime;
+        }
     }
 
     private void Update()
@@ -91,6 +102,7 @@ public class PlayerMovement : MonoBehaviour
         // falling UpdateMovementState will set the correct state
         _state = _state == MovementState.Floating ? MovementState.Falling : MovementState.Floating;
         _animator.SetBool("Inflate", _state == MovementState.Floating);
+        _upwardTimer = _velocityFalloffTimer = 0.0f;
 
         // if no input is received the floating mode will eventually timeout
         if (_state == MovementState.Floating)
@@ -102,7 +114,10 @@ public class PlayerMovement : MonoBehaviour
     private void UpdateMovementState()
     {
         // if it's floating keep it's state, managed from keypress
-        if (_state == MovementState.Floating) { return; }
+        if (_state == MovementState.Floating)
+        {
+            return;
+        }
 
         // check if the player is touching the ground, otherwise asume it's jumping
         _state = IsGrounded() ? MovementState.Grounded : MovementState.OnJump;
@@ -178,17 +193,23 @@ public class PlayerMovement : MonoBehaviour
         // if the player is inflate add constant upward force
         if (_state == MovementState.Floating)
         {
-            movement -= Physics.gravity;
-            movement.y += _player.FloatingForce;
+            float upwardForce = -Physics.gravity.y + _player.FloatingForce;
+            _upwardTimer = _upwardTimer + Time.fixedDeltaTime;
+            movement.y = Mathf.Lerp(movement.y, upwardForce, _upwardTimer / _player.UpwardBuildupTime);
         }
     }
 
     private void OnCollisionEnter(Collision col)
     {
-        if (col.gameObject.layer != LayerMask.NameToLayer("Ground") && _state == MovementState.Floating)
+        if (_state == MovementState.Floating && col.contacts.Length > 0)
         {
-            CancelInvoke();
-            ToggleFloating();
+            Vector3 colDir = (col.contacts[0].point - transform.position).normalized;
+
+            if (Vector3.Angle(colDir, Vector3.up) < 5.0)
+            {
+                CancelInvoke();
+                ToggleFloating(); 
+            }
         }
     }
 }

@@ -22,6 +22,12 @@ public class DynamicActor : ScriptableObject
     private float _floatingTime = 3.0f;
     [SerializeField]
     private float _floatingPushForce = 1.0f;
+    [SerializeField, Range(0.0f, 1.0f)]
+    private float _onFloatVelocityFalloff = 0.5f;
+    [SerializeField]
+    private float _onFloatVelocityFalloffTime = 1.0f;
+    [SerializeField]
+    private float _upwardBuildupTime = 1.0f;
 
     public float HorizontalForce
     {
@@ -92,6 +98,30 @@ public class DynamicActor : ScriptableObject
         get
         { 
             return _floatingPushForce;
+        }
+    }
+
+    public float FloatVelocityFalloff
+    {
+        get
+        {
+            return _onFloatVelocityFalloff;
+        }
+    }
+
+    public float FloatVelocityFalloffTime
+    {
+        get
+        {
+            return _onFloatVelocityFalloffTime;
+        }
+    }
+
+    public float UpwardBuildupTime
+    {
+        get
+        {
+            return _upwardBuildupTime;
         }
     }
 }
