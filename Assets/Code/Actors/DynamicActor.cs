@@ -4,27 +4,20 @@ using System;
 [CreateAssetMenu]
 public class DynamicActor : ScriptableObject
 {
-    [SerializeField, Header("On Ground Movement")]
-    private Vector3 _axisMovementForce;
+    [SerializeField, Header("Movement")]
+    private Vector3 _axisMovementSpeed;
+    [SerializeField]
+    private Vector3 _jumpingForce;
     [SerializeField, Header("Limits")]
     private float _maximumVelocityMagnitude;
     [SerializeField]
     private float _distanceToGround = 0.1f;
 
-    public Vector3 MovementForce
+    public Vector3 MovementSpeed
     {
         get
         {
-            return _axisMovementForce;
-        }
-    }
-
-
-    public float MaximumVelocityMagnitude
-    {
-        get
-        { 
-            return _maximumVelocityMagnitude;
+            return _axisMovementSpeed;
         }
     }
 
@@ -35,6 +28,16 @@ public class DynamicActor : ScriptableObject
             return _distanceToGround;
         }
     }
+
+
+    public Vector3 JumpingForce
+    {
+        get
+        {
+            return _jumpingForce;
+        }
+    }
+
 
     /// <summary>
     /// Determines whether the actor is on the ground, on top of a collider

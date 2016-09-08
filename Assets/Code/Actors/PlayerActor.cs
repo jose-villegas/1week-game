@@ -4,40 +4,16 @@ using System;
 [CreateAssetMenu]
 public class PlayerActor : DynamicActor
 {
-    [SerializeField, Header("Stabilization"), Range(0.01f, 1.0f)]
-    private float _brakeSpeed = 0.975f;
-    [SerializeField]
-    private float _flattenStabilizationSpeed = 50.0f;
     [SerializeField, Header("Floating Mode")]
-    private float _floatingForce = 0.15f;
+    private Vector3 _floatingForce;
     [SerializeField]
     private float _floatingTime = 3.0f;
-    [SerializeField]
-    private float _floatingMovementForce = 1.0f;
     [SerializeField, Range(0.0f, 1.0f)]
-    private float _onFloatVelocityFalloff = 0.5f;
-    [SerializeField]
-    private float _onFloatVelocityFalloffTime = 1.0f;
+    private float _onFloatForceReduction = 0.5f;
     [SerializeField]
     private float _upwardBuildupTime = 1.0f;
 
-    public float BrakeSpeed
-    {
-        get
-        { 
-            return _brakeSpeed;
-        }
-    }
-
-    public float FlattenStabilizationSpeed
-    {
-        get
-        { 
-            return _flattenStabilizationSpeed;
-        }
-    }
-
-    public float FloatingForce
+    public Vector3 FloatingForce
     {
         get
         { 
@@ -53,27 +29,11 @@ public class PlayerActor : DynamicActor
         }
     }
 
-    public float FloatingMovementForce
-    {
-        get
-        { 
-            return _floatingMovementForce;
-        }
-    }
-
-    public float FloatVelocityFalloff
+    public float OnFloatForceReduction
     {
         get
         {
-            return _onFloatVelocityFalloff;
-        }
-    }
-
-    public float FloatVelocityFalloffTime
-    {
-        get
-        {
-            return _onFloatVelocityFalloffTime;
+            return _onFloatForceReduction;
         }
     }
 

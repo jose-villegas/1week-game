@@ -11,11 +11,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14a8a344c7c8d5b439706a750cf1407b, type: 3}
   m_Name: Player
   m_EditorClassIdentifier: 
-  _axisMovementForce: {x: 5, y: 350, z: 0}
+  _axisMovementSpeed: {x: 5, y: 0, z: 0}
+  _jumpingForce: {x: 35, y: 350, z: 0}
   _maximumVelocityMagnitude: 10
   _distanceToGround: 0.1
   _brakeSpeed: 0.975
-  _flattenStabilizationSpeed: 50
+  _flattenStabilizationSpeed: 10
   _floatingForce: 0.15
   _floatingTime: 12.5
   _floatingMovementForce: 1

@@ -21,10 +21,9 @@ public class PlayerMovement : MonoBehaviour
     private MovementState _state;
 
     private Rigidbody _rigidbody;
-    private RigidbodyConstraints _rigidbodyConstraints;
-
+    private Vector3 _movement;
     private float _upwardTimer = 0.0f;
-    private float _velocityFalloffTimer = 0.0f;
+    private bool _onFloatForceReduction = false;
 
     private void Start()
     {
@@ -40,35 +39,6 @@ public class PlayerMovement : MonoBehaviour
         this.GetNeededComponent(ref _rigidbody);
         this.GetNeededComponent(ref _collider);
         this.GetNeededComponent(ref _animator);
-
-        // backup rigidbody constrains
-        if (null != _rigidbody)
-        {
-            _rigidbodyConstraints = _rigidbody.constraints;
-        }
-    }
-
-    private void FixedUpdate()
-    {
-        Vector3 _movementVector = Vector3.zero;
-        UpdateMovementState();
-        HorizontalMovement(ref _movementVector);
-        VerticalMovement(ref _movementVector);
-        _rigidbody.AddForce(_movementVector);
- 
-        // limit player speed
-        if (_rigidbody.velocity.magnitude > _player.MaximumVelocityMagnitude)
-        {
-            _rigidbody.velocity = Vector3.ClampMagnitude(_rigidbody.velocity, _player.MaximumVelocityMagnitude);
-        }
-
-        // velocity fall off on float mode
-        if (_state == MovementState.Floating && _velocityFalloffTimer < _player.FloatVelocityFalloffTime)
-        {
-            _rigidbody.AddForce(-_rigidbody.velocity * _player.FloatVelocityFalloff);
-            _rigidbody.AddTorque(-_rigidbody.angularVelocity * _player.FloatVelocityFalloff);
-            _velocityFalloffTimer += Time.fixedDeltaTime;
-        }
     }
 
     private void Update()
@@ -86,13 +56,86 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void FixedUpdate()
+    {
+        // store input
+        _movement.Set(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0.0f);
+        // check the current state of the player and update properly
+        UpdateMovementState();
+        // on ground movement logic
+        GroundMovement();
+        // jump movement logic
+        JumpMovement();
+        // floating mode movement logic
+        FloatingMovement();
+        // finally move the player
+        _rigidbody.MovePosition(transform.position + _movement * Time.deltaTime);
+    }
+
+    private void GroundMovement()
+    {
+        // horizontal movement - forward and backwards, 
+        // check if grounded to avoid air strafing on jump
+        if (_state == MovementState.Grounded && _movement.x != 0.0f)
+        {
+            _movement.x = _movement.x * _player.MovementSpeed.x;
+        }
+    }
+
+    void JumpMovement()
+    {
+        if (_state == MovementState.OnJump) { _movement.x = 0.0f; }
+
+        // jumping has to happen on the ground
+        if(_state == MovementState.Grounded && _movement.y > 0.0f)
+        {
+            // jump direction force
+            _rigidbody.AddForce
+            (
+                Vector3.right * _movement.x * _player.JumpingForce.x +
+                Vector3.up * _player.JumpingForce.y
+            );
+        }
+    }
+
+    void FloatingMovement()
+    {
+        if (_state != MovementState.Floating) { return; }
+
+        // velocity falloff on floating mode
+        if (_onFloatForceReduction)
+        {
+            _rigidbody.AddForce(-_rigidbody.velocity * _player.OnFloatForceReduction);
+            _onFloatForceReduction = false;
+        }
+
+        Vector3 fForce = Vector3.zero;
+        fForce.y = -Physics.gravity.y + _player.FloatingForce.y;
+
+        // floating upward force
+        if (_upwardTimer < _player.UpwardBuildupTime)
+        {
+            fForce.y = Mathf.Lerp(_rigidbody.velocity.y, fForce.y, _upwardTimer / _player.UpwardBuildupTime);
+            _upwardTimer = _upwardTimer + Time.fixedDeltaTime;
+        }
+
+        // floating horizontal push
+        if(_movement.x != 0.0f)
+        {
+            fForce.x = _movement.x * _player.FloatingForce.x;
+        }
+            
+        _rigidbody.AddForce(fForce);
+    }
+
     private void ToggleFloating()
     {
         // if it's already inflated then reset and deflate, asume it's 
         // falling UpdateMovementState will set the correct state
         _state = _state == MovementState.Floating ? MovementState.Falling : MovementState.Floating;
         _animator.SetBool("Inflate", _state == MovementState.Floating);
-        _upwardTimer = _velocityFalloffTimer = 0.0f;
+        _onFloatForceReduction = true;
+        _upwardTimer = 0.0f; 
 
         // if no input is received the floating mode will eventually timeout
         if (_state == MovementState.Floating)
@@ -117,76 +160,6 @@ public class PlayerMovement : MonoBehaviour
         if (_state == MovementState.OnJump && _rigidbody.velocity.y < 0.0f)
         {
             _state = MovementState.Falling;
-        }
-    }
-
-    private void HorizontalMovement(ref Vector3 movement)
-    {
-        float horizontalAxis = Input.GetAxis("Horizontal");
-
-        // horizontal movement - forward and backwards, check if player 
-        // is grounded to avoid air strafing
-        if (_state == MovementState.Grounded && horizontalAxis != 0.0f)
-        {
-            movement.x = horizontalAxis * _player.MovementForce.x;
-        }
-        // on floating add horizontal push force
-        else if (_state == MovementState.Floating && horizontalAxis != 0.0f)
-        {
-            movement.x = horizontalAxis * _player.FloatingMovementForce;
-        }
-
-        // deacceleration, brakes
-        if (Input.GetKey(KeyCode.Space) && _state == MovementState.Grounded)
-        {
-            movement = Vector3.zero;
-            _rigidbody.AddForce(-_rigidbody.velocity * _player.BrakeSpeed);
-            _rigidbody.AddTorque(-_rigidbody.angularVelocity * _player.BrakeSpeed);
-        }
-    }
-
-    private void VerticalMovement(ref Vector3 movement)
-    {
-        float verticalAxisRaw = Input.GetAxisRaw("Vertical");
-
-        // jumping only when the character is on the ground
-        if (_state == MovementState.Grounded && verticalAxisRaw > 0.0f)
-        {
-            movement.y = _player.MovementForce.y;
-        }
-            
-        // flatten on downward force and the player is grounded
-        if (_state == MovementState.Grounded && verticalAxisRaw < 0.0f)
-        {
-            // for the flatte animation to properly work the player has to jave
-            // forward, and up equivalent to world forward and word up
-            var rotation = Quaternion.LookRotation(Vector3.forward, Vector3.up);
-            var t = Time.fixedDeltaTime * _player.FlattenStabilizationSpeed;
-            // stops physics control of rotation to enable flatten animation
-            _rigidbody.freezeRotation = true;
-            _rigidbody.MoveRotation(Quaternion.Lerp(transform.rotation, rotation, t));
-
-            // if rotation target is nearly reached, flatten
-            if (Quaternion.Angle(transform.rotation, rotation) <= 1.0f)
-            {
-                _animator.SetBool("Flatten", true);
-            }
-        }
-        else
-        {
-            // recover physics control of rotation
-            _rigidbody.freezeRotation = false;
-            // recover constraints on rotation
-            _rigidbody.constraints = _rigidbodyConstraints;
-            _animator.SetBool("Flatten", false);
-        }
-
-        // if the player is inflate add constant upward force
-        if (_state == MovementState.Floating)
-        {
-            float upwardForce = -Physics.gravity.y + _player.FloatingForce;
-            _upwardTimer = _upwardTimer + Time.fixedDeltaTime;
-            movement.y = Mathf.Lerp(movement.y, upwardForce, _upwardTimer / _player.UpwardBuildupTime);
         }
     }
 
