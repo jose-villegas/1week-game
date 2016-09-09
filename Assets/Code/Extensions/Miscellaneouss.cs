@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public static class BehaviorExtension
+public static class Miscellaneous
 {
     /// <summary>
     /// Tries to obtain a neccesary component for a behavior to work, first looks into the
@@ -25,6 +25,17 @@ public static class BehaviorExtension
                 behavior.enabled = false;
             }
         }
+    }
+
+    /// <summary>
+    /// Determines whether the actor is on the ground, on top of a collider
+    /// </summary>
+    /// <returns<c>true</c> if the actor is on top of a collider; otherwise, <c>false</c>.</returns>
+    /// <param name="actor">The actor.</param>
+    /// <param name="extend">Actor vertical extend, collider.extend.y is recommended.</param>
+    public static bool IsGrounded(this Collider actor)
+    {
+        return Physics.Raycast(actor.transform.position, -Vector3.up, actor.bounds.extents.y + 0.1f);
     }
 }
 

@@ -28,6 +28,8 @@ GameObject:
   m_Component:
   - 4: {fileID: 440942}
   - 54: {fileID: 5420334}
+  - 114: {fileID: 11418550}
+  - 114: {fileID: 11419398}
   - 114: {fileID: 11431498}
   m_Layer: 0
   m_Name: Player
@@ -73,7 +75,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 45d1a27100691c94b9c604e49e8fc1b9, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
@@ -109,7 +111,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 24
+  m_Constraints: 120
   m_CollisionDetection: 0
 --- !u!95 &9554082
 Animator:
@@ -128,6 +130,32 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &11418550
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 172926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82e9c9de812a65c4e988bff16a55190f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _state: 0
+  _groundCollider: {fileID: 0}
+--- !u!114 &11419398
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 172926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee2a6e5fdbb65534886fd4c1ab90145f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _player: {fileID: 11400000, guid: ee8dc9051ed10bb429dfa1bce0fbcca9, type: 2}
+  _animator: {fileID: 0}
 --- !u!114 &11431498
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -140,9 +168,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 11400000, guid: ee8dc9051ed10bb429dfa1bce0fbcca9, type: 2}
-  _collider: {fileID: 0}
   _animator: {fileID: 0}
-  _state: 0
 --- !u!136 &13692004
 CapsuleCollider:
   m_ObjectHideFlags: 1

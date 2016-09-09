@@ -12,14 +12,9 @@ MonoBehaviour:
   m_Name: Player
   m_EditorClassIdentifier: 
   _axisMovementSpeed: {x: 5, y: 0, z: 0}
-  _jumpingForce: {x: 35, y: 350, z: 0}
+  _jumpingForce: {x: 12, y: 120, z: 0}
   _maximumVelocityMagnitude: 10
-  _distanceToGround: 0.1
-  _brakeSpeed: 0.975
-  _flattenStabilizationSpeed: 10
-  _floatingForce: 0.15
+  _floatingForce: {x: 2.5, y: 0.15, z: 0}
   _floatingTime: 12.5
-  _floatingMovementForce: 1
-  _onFloatVelocityFalloff: 0.5
-  _onFloatVelocityFalloffTime: 1
+  _onFloatForceReduction: 0.5
   _upwardBuildupTime: 1
