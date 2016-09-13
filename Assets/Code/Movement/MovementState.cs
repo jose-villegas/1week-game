@@ -15,13 +15,34 @@ public class MovementState : MonoBehaviour
     [SerializeField]
     private States _state;
     [SerializeField]
+    private States _previousState;
+    [SerializeField]
     private Collider _groundCollider;
 
     private Rigidbody _rigidbody;
+    private Coroutine _routine;
 
-    public bool Equals(States state)
+    public States State
     {
-        return _state == state;
+        get
+        {
+            return _state;
+        }
+        private set 
+        { 
+            _previousState = _state != value ? _state : _previousState;
+            _state = value;
+        }
+    }
+
+    public bool Current(States state)
+    {
+        return State == state;
+    }
+
+    public bool Previous(States state)
+    {
+        return _previousState == state;
     }
 
     // Use this for initialization
@@ -42,34 +63,53 @@ public class MovementState : MonoBehaviour
     private void UpdateMovementState()
     {
         // if it's floating keep it's state, managed from toggle
-        if (_state == States.Floating)
+        if (State == States.Floating)
         {
             return;
         }
 
         // check if the player is touching the ground, otherwise asume it's jumping
         bool isGrounded = _groundCollider.IsGrounded();
-        _state = isGrounded ? States.Grounded : States.OnJump;
 
-        // if the object is going downward and not on the ground then it's falling
-        if (_state == States.OnJump && _rigidbody.velocity.y < 0.0f)
+        if (_rigidbody.velocity.y > 0.0f)
         {
-            _state = States.Falling;
+            State = States.OnJump;
         }
+        else if (!isGrounded && _rigidbody.velocity.y < 0.0f)
+        {
+            State = States.Falling;
+        }
+        else if (isGrounded)
+        {
+            State = States.Grounded;
+        }
+           
     }
         
     public void ToggleFloating(float floatingTime)
     {
-        CancelInvoke();
+        if (_routine != null)
+        {
+            StopCoroutine(_routine);
+        }
+        
+        _routine = StartCoroutine(ToggleFloatingCo(floatingTime));
+    }
+
+    public IEnumerator ToggleFloatingCo(float floatingTime)
+    {
         // if it's already inflated then reset and deflate, asume it's 
         // falling UpdateMovementState will set the correct state
-        _state = _state == States.Floating ? States.Falling : States.Floating;
+        State = State == States.Floating ? States.Falling : States.Floating;
 
         // if no input is received the floating mode will eventually timeout
-        if (_state == States.Floating)
+        if (State == States.Floating)
         {
-            Invoke("ToggleFloating", floatingTime);
+            yield return new WaitForSeconds(floatingTime);
+            _routine = StartCoroutine(ToggleFloatingCo(0.0f));
         }
+
+        _routine = null;
     }
 }
 

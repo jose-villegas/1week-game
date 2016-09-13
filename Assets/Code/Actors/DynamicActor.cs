@@ -9,7 +9,7 @@ public class DynamicActor : ScriptableObject
     [SerializeField]
     private Vector3 _jumpingForce;
     [SerializeField]
-    private Vector3 _fallingMovementSpeed;
+    private Vector3 _airStrafingSpeed;
     [SerializeField, Header("Limits")]
     private float _maximumVelocityMagnitude;
 
@@ -29,11 +29,11 @@ public class DynamicActor : ScriptableObject
         }
     }
 
-    public Vector3 FallingMovementSpeed
+    public Vector3 AirStrafingSpeed
     {
         get
         {
-            return _fallingMovementSpeed;
+            return _airStrafingSpeed;
         }
     }
 }

@@ -43,7 +43,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 14ec6b06a5c497548b2d74666a89c16e, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
@@ -87,7 +87,7 @@ BoxCollider:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 131364}
-  m_Material: {fileID: 13400000, guid: 6a5014aeca97f3449ba4b578c6f34a2c, type: 2}
+  m_Material: {fileID: 13400000, guid: 519381257451f03499cf62e00cf854e3, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -110,14 +110,14 @@ MonoBehaviour:
     m_Curve:
     - time: 0
       value: 0
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 10
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
     - time: 1
       value: 1
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 10
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 0
     m_RotationOrder: 0
