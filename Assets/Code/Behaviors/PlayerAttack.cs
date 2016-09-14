@@ -6,11 +6,14 @@ public class PlayerAttack : MonoBehaviour
 {
     [SerializeField]
     private PlayerActor _player;
+    [SerializeField]
+    private Animator _animator;
 
     private Rigidbody _rigidbody;
     private MovementState _state;
     private float _verticalInput;
     private bool _isAttacking = false;
+    private int _animFlattenSpeed;
 
     // Use this for initialization
     void Start()
@@ -26,6 +29,14 @@ public class PlayerAttack : MonoBehaviour
         // neccesary components for the script to work
         this.GetNeededComponent(ref _rigidbody);
         this.GetNeededComponent(ref _state);
+        this.GetNeededComponent(ref _animator);
+        // get animator parameters ids
+        _animFlattenSpeed = Animator.StringToHash("FlattenSpeed");
+    }
+
+    private void RecoverFlattenSpeed()
+    {
+        _animator.SetFloat(_animFlattenSpeed, 1.0f);
     }
 	
     // Update is called once per frame
@@ -49,7 +60,9 @@ public class PlayerAttack : MonoBehaviour
         if (!_state.Current(MovementState.States.Falling) && _isAttacking)
         {
             _isAttacking = false;
+            _animator.SetFloat(_animFlattenSpeed, col.impulse.y * 0.75f);
             HitPushback(col.contacts[0].point, col.impulse.y * _player.PushbackRadiusScale);
+            Invoke("RecoverFlattenSpeed", 1.0f);
         }
     }
 
@@ -67,6 +80,13 @@ public class PlayerAttack : MonoBehaviour
 
             if (null != rb && colliders[i].transform != transform)
             {
+                // switch physics
+                if(rb.tag == "Enemy")
+                {
+                    rb.GetComponent<NavMeshAgent>().enabled = false;
+                    rb.isKinematic = false;
+                }
+
                 rb.AddExplosionForce(_player.PushbackForceRatio * radius, position, radius, _player.UpwardModifier);
             }
         }

@@ -16,8 +16,7 @@ MonoBehaviour:
   _airStrafingSpeed: {x: 1, y: 0, z: 0}
   _maximumVelocityMagnitude: 10
   _floatingForce: {x: 2.5, y: 10, z: 0}
-  _floatingTime: 7.5
-  _onFloatForceReduction: 0.1
+  _floatingTime: 8.5
   _upwardBuildupTime: 1
   _attackVerticalForce: 50
   _pushbackRadiusScale: 0.1

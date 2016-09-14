@@ -43,5 +43,7 @@ public class MovingPlatform : MonoBehaviour
         // transition
         Gizmos.color = Color.blue;
         Gizmos.DrawLine(src, dst);
+        // indicator
+        Gizmos.DrawIcon((src + dst) / 2.0f, "pokecog");
     }
 }

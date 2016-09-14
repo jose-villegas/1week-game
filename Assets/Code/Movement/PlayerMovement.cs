@@ -13,7 +13,6 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 _inputAxis;
     private Vector3 _movement;
     private float _upwardTimer = 0.0f;
-    private bool _onFloatForceReduction = true;
     private int _animInflate;
     private int _animFlatten;
 
@@ -56,7 +55,6 @@ public class PlayerMovement : MonoBehaviour
         // reset floating mode timer
         if (_state.Previous(MovementState.States.Floating))
         {
-            _onFloatForceReduction = true;
             _upwardTimer = 0.0f;
         }
     }
@@ -127,18 +125,15 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!_state.Current(MovementState.States.Floating)) { return; }
 
-        // velocity falloff on floating mode
-        if (_onFloatForceReduction)
-        {
-            _rigidbody.AddForce(-_rigidbody.velocity * _player.OnFloatForceReduction);
-            _onFloatForceReduction = false;
-        }
+        Vector3 fForce = Vector3.up * _player.FloatingForce.y;
 
-        Vector3 fForce = Vector3.zero;
-        float t = _upwardTimer / _player.UpwardBuildupTime;
         // floating upward force
-        fForce.y = Mathf.Lerp(0.0f, _player.FloatingForce.y, t);
-        _upwardTimer = _upwardTimer + Time.fixedDeltaTime;
+        if(_upwardTimer <  _player.UpwardBuildupTime)
+        {
+            float t = _upwardTimer / _player.UpwardBuildupTime;
+            fForce.y = Mathf.Lerp(0.0f, _player.FloatingForce.y, t);
+            _upwardTimer = _upwardTimer + Time.fixedDeltaTime;
+        }
 
         // floating horizontal push
         if(_inputAxis.x != 0.0f)
@@ -160,6 +155,7 @@ public class PlayerMovement : MonoBehaviour
                 CancelInvoke();
                 _state.ToggleFloating(_player.FloatingTime);
                 _animator.SetBool(_animInflate, false);
+                _upwardTimer = 0.0f;
             }
         }
     }

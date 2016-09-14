@@ -8,8 +8,6 @@ public class PlayerActor : DynamicActor
     private Vector3 _floatingForce = Vector3.zero;
     [SerializeField]
     private float _floatingTime = 3.0f;
-    [SerializeField, Range(0.0f, 1.0f)]
-    private float _onFloatForceReduction = 0.5f;
     [SerializeField]
     private float _upwardBuildupTime = 1.0f;
     [SerializeField, Header("Attack")]
@@ -34,14 +32,6 @@ public class PlayerActor : DynamicActor
         get
         { 
             return _floatingTime;
-        }
-    }
-
-    public float OnFloatForceReduction
-    {
-        get
-        {
-            return _onFloatForceReduction;
         }
     }
 
