@@ -1,41 +1,44 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-public static class Miscellaneous
+namespace Extensions
 {
-    /// <summary>
-    /// Tries to obtain a neccesary component for a behavior to work, first looks into the
-    /// behavior's components, then the behavior's gameObject children. Disables the behavior
-    /// if the component is not found since it's vital for the behavior to work.
-    /// </summary>
-    /// <param name="behavior">Behavior.</param>
-    /// <param name="target">Target.</param>
-    /// <typeparam name="T">The 1st type parameter.</typeparam>
-    public static void GetNeededComponent<T>(this Behaviour behavior, ref T target) where T : Component
+    public static class Miscellaneous
     {
-        target = behavior.GetComponent<T>();
-
-        if (target == null)
+        /// <summary>
+        /// Tries to obtain a neccesary component for a behavior to work, first looks into the
+        /// behavior's components, then the behavior's gameObject children. Disables the behavior
+        /// if the component is not found since it's vital for the behavior to work.
+        /// </summary>
+        /// <param name="behavior">Behavior.</param>
+        /// <param name="target">Target.</param>
+        /// <typeparam name="T">The 1st type parameter.</typeparam>
+        public static void GetNeededComponent<T>(this Behaviour behavior, ref T target) where T : Component
         {
-            target = behavior.GetComponentInChildren<T>();
+            target = behavior.GetComponent<T>();
 
             if (target == null)
             {
-                Debug.LogError("No " + typeof(T) + "found. Disabling script...");
-                behavior.enabled = false;
+                target = behavior.GetComponentInChildren<T>();
+
+                if (target == null)
+                {
+                    Debug.LogError("No " + typeof(T) + "found. Disabling script...");
+                    behavior.enabled = false;
+                }
             }
         }
-    }
 
-    /// <summary>
-    /// Determines whether the actor is on the ground, on top of a collider
-    /// </summary>
-    /// <returns<c>true</c> if the actor is on top of a collider; otherwise, <c>false</c>.</returns>
-    /// <param name="actor">The actor.</param>
-    /// <param name="extend">Actor vertical extend, collider.extend.y is recommended.</param>
-    public static bool IsGrounded(this Collider actor)
-    {
-        return Physics.Raycast(actor.transform.position, -Vector3.up, actor.bounds.extents.y + 0.1f);
+        /// <summary>
+        /// Determines whether the actor is on the ground, on top of a collider
+        /// </summary>
+        /// <returns>
+        ///  <c>true</c> if the actor is on top of a collider; otherwise, <c>false</c>.
+        /// </returns>
+        /// <param name="actor">The actor.</param>
+        public static bool IsGrounded(this Collider actor)
+        {
+            return Physics.Raycast(actor.transform.position, -Vector3.up, actor.bounds.extents.y + 0.1f);
+        }
     }
 }
 

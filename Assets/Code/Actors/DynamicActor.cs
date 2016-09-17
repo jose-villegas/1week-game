@@ -1,39 +1,39 @@
 ﻿using UnityEngine;
-using System;
 
-[CreateAssetMenu]
-public class DynamicActor : ScriptableObject
+namespace Actors
 {
-    [SerializeField, Header("Movement")]
-    private Vector3 _axisMovementSpeed;
-    [SerializeField]
-    private Vector3 _jumpingForce;
-    [SerializeField]
-    private Vector3 _airStrafingSpeed;
-    [SerializeField, Header("Limits")]
-    private float _maximumVelocityMagnitude;
-
-    public Vector3 MovementSpeed
+    [CreateAssetMenu]
+    public class DynamicActor : ScriptableObject
     {
-        get
+        [SerializeField, Header("Movement")]
+        private Vector3 _axisMovementSpeed = Vector3.right;
+        [SerializeField]
+        private Vector3 _jumpingForce = Vector3.up;
+        [SerializeField]
+        private Vector3 _airStrafingSpeed = Vector3.right;
+
+        public Vector3 MovementSpeed
         {
-            return _axisMovementSpeed;
+            get
+            {
+                return _axisMovementSpeed;
+            }
         }
-    }
 
-    public Vector3 JumpingForce
-    {
-        get
+        public Vector3 JumpingForce
         {
-            return _jumpingForce;
+            get
+            {
+                return _jumpingForce;
+            }
         }
-    }
 
-    public Vector3 AirStrafingSpeed
-    {
-        get
+        public Vector3 AirStrafingSpeed
         {
-            return _airStrafingSpeed;
+            get
+            {
+                return _airStrafingSpeed;
+            }
         }
     }
 }

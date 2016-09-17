@@ -1,5 +1,8 @@
-﻿public interface IEnemy 
+﻿namespace Bases
 {
-    void Kill();
-    void Movement();
+    public interface IEnemy 
+    {
+        void Kill();
+        void Movement();
+    }
 }

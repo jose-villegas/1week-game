@@ -1,77 +1,79 @@
 ﻿using UnityEngine;
-using System;
 
-[CreateAssetMenu]
-public class PlayerActor : DynamicActor
+namespace Actors
 {
-    [SerializeField, Header("Floating Mode")]
-    private Vector3 _floatingForce = Vector3.zero;
-    [SerializeField]
-    private float _floatingTime = 3.0f;
-    [SerializeField]
-    private float _upwardBuildupTime = 1.0f;
-    [SerializeField, Header("Attack")]
-    private float _attackVerticalForce = 5.0f;
-    [SerializeField]
-    private float _pushbackRadiusScale = 0.15f;
-    [SerializeField]
-    private float _upwardModifier = 30.0f;
-    [SerializeField]
-    private float _pushbackForceRatio = 15.0f;
-
-    public Vector3 FloatingForce
+    [CreateAssetMenu]
+    public class PlayerActor : DynamicActor
     {
-        get
-        { 
-            return _floatingForce;
-        }
-    }
+        [SerializeField, Header("Floating Mode")]
+        private Vector3 _floatingForce = Vector3.zero;
+        [SerializeField]
+        private float _floatingTime = 3.0f;
+        [SerializeField]
+        private float _upwardBuildupTime = 1.0f;
+        [SerializeField, Header("Attack")]
+        private float _attackVerticalForce = 5.0f;
+        [SerializeField]
+        private float _pushbackRadiusScale = 0.15f;
+        [SerializeField]
+        private float _upwardModifier = 30.0f;
+        [SerializeField]
+        private float _pushbackForceRatio = 15.0f;
 
-    public float FloatingTime
-    {
-        get
-        { 
-            return _floatingTime;
-        }
-    }
-
-    public float UpwardBuildupTime
-    {
-        get
+        public Vector3 FloatingForce
         {
-            return _upwardBuildupTime;
+            get
+            { 
+                return _floatingForce;
+            }
         }
-    }
 
-    public float AttackVerticalForce
-    {
-        get
+        public float FloatingTime
         {
-            return _attackVerticalForce;
+            get
+            { 
+                return _floatingTime;
+            }
         }
-    }
 
-    public float PushbackRadiusScale
-    {
-        get
+        public float UpwardBuildupTime
         {
-            return _pushbackRadiusScale;
+            get
+            {
+                return _upwardBuildupTime;
+            }
         }
-    }
 
-    public float UpwardModifier
-    {
-        get
+        public float AttackVerticalForce
         {
-            return _upwardModifier;
+            get
+            {
+                return _attackVerticalForce;
+            }
         }
-    }
 
-    public float PushbackForceRatio
-    {
-        get
+        public float PushbackRadiusScale
         {
-            return _pushbackForceRatio;
+            get
+            {
+                return _pushbackRadiusScale;
+            }
+        }
+
+        public float UpwardModifier
+        {
+            get
+            {
+                return _upwardModifier;
+            }
+        }
+
+        public float PushbackForceRatio
+        {
+            get
+            {
+                return _pushbackForceRatio;
+            }
         }
     }
 }

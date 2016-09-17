@@ -1,32 +1,34 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.Events;
 
-public class EnemyBase : MonoBehaviour, IEnemy
+namespace Bases
 {
-    public UnityEvent onMovementEvent;
-    public UnityEvent onKillEvent;
+    public class EnemyBase : MonoBehaviour, IEnemy
+    {
+        public UnityEvent onMovementEvent;
+        public UnityEvent onKillEvent;
 
-    /// <summary>
-    /// Execute event on movement call
-    /// </summary>
-    public virtual void Movement()
-    {
-        if (null != onMovementEvent)
+        /// <summary>
+        /// Execute event on movement call
+        /// </summary>
+        public virtual void Movement()
         {
-            onMovementEvent.Invoke();
+            if (null != onMovementEvent)
+            {
+                onMovementEvent.Invoke();
+            }
         }
-    }
         
-    /// <summary>
-    /// Execute event on dying call
-    /// </summary>
-    public virtual void Kill()
-    {
-        if (null != onKillEvent)
+        /// <summary>
+        /// Execute event on dying call
+        /// </summary>
+        public virtual void Kill()
         {
-            onKillEvent.Invoke();
-        } 
+            if (null != onKillEvent)
+            {
+                onKillEvent.Invoke();
+            } 
+        }
     }
 }
 
