@@ -118,7 +118,7 @@ MonoBehaviour:
   _points:
   - {fileID: 0}
   - {fileID: 0}
-  _minimumDistance: 0
+  _minimumDistance: 0.1
 --- !u!195 &19563236
 NavMeshAgent:
   m_ObjectHideFlags: 1
@@ -127,7 +127,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 188610}
   m_Enabled: 1
   m_Radius: 0.5
-  m_Speed: 2
+  m_Speed: 1
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 180

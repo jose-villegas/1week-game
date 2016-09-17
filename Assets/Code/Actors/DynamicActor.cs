@@ -6,13 +6,13 @@ namespace Actors
     public class DynamicActor : ScriptableObject
     {
         [SerializeField, Header("Movement")]
-        private Vector3 _axisMovementSpeed = Vector3.right;
+        private float _axisMovementSpeed = 5.0f;
         [SerializeField]
-        private Vector3 _jumpingForce = Vector3.up;
+        private Vector2 _jumpingForce = new Vector2(35, 350);
         [SerializeField]
-        private Vector3 _airStrafingSpeed = Vector3.right;
+        private float _airStrafingSpeed = 1.0f ;
 
-        public Vector3 MovementSpeed
+        public float MovementSpeed
         {
             get
             {
@@ -20,7 +20,7 @@ namespace Actors
             }
         }
 
-        public Vector3 JumpingForce
+        public Vector2 JumpingForce
         {
             get
             {
@@ -28,7 +28,7 @@ namespace Actors
             }
         }
 
-        public Vector3 AirStrafingSpeed
+        public float AirStrafingSpeed
         {
             get
             {

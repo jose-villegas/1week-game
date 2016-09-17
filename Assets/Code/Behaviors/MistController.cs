@@ -38,8 +38,9 @@ namespace Behaviors
 
             for (int i = 0; i < _layers.Length; i++)
             {
-                _sumOfSin += Mathf.Sin(Time.time * _speed + i) * _wavingScale / (i + 1);
-                _layers[i].position = _layers[i].position - Vector3.up * _sumOfSin;
+                int l = _layers.Length - 1 - i;
+                _sumOfSin += Mathf.Sin(Time.time * _speed + i) * _wavingScale;
+                _layers[l].position = _layers[l].position - Vector3.up * _sumOfSin;
             }
         }
     }

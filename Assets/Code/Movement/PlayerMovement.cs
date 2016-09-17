@@ -1,5 +1,6 @@
 ﻿using System;
 using Actors;
+using Camera;
 using Extensions;
 using UnityEngine;
 
@@ -91,7 +92,8 @@ namespace Movement
                     _state.Previous(MovementState.States.Grounded)
                     && Math.Abs(_inputAxis.x) > Mathf.Epsilon)
             {
-                _movement.x = _inputAxis.x * _player.MovementSpeed.x;
+                _movement = PlayerCamera.MovementOrientation * _inputAxis.x *
+                            _player.MovementSpeed;
             }
 
             // air strafing happens on falling state
@@ -100,7 +102,8 @@ namespace Movement
                      || _state.Previous(MovementState.States.Floating))
                     && Math.Abs(_inputAxis.x) > Mathf.Epsilon)
             {
-                _movement.x = _inputAxis.x * _player.AirStrafingSpeed.x;
+                _movement = PlayerCamera.MovementOrientation * _inputAxis.x *
+                            _player.AirStrafingSpeed;
             }
 
             // flatten with push down on ground
