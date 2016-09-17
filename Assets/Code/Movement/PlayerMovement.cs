@@ -49,6 +49,7 @@ namespace Movement
         {
             // store input
             _inputAxis.Set(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+
             // inflate player and set the status
             if (Input.GetKeyDown(KeyCode.F))
             {
@@ -57,7 +58,8 @@ namespace Movement
             }
 
             // floating state exists for a given time, check if no longer floating to disable animation
-            if (!_state.Current(MovementState.States.Floating) && _animator.GetBool(_animInflate))
+            if (!_state.Current(MovementState.States.Floating) &&
+                    _animator.GetBool(_animInflate))
             {
                 _animator.SetBool(_animInflate, false);
             }
@@ -82,27 +84,28 @@ namespace Movement
 
         private void HorizontalMovement()
         {
-            // horizontal movement - forward and backwards, 
+            // horizontal movement - forward and backwards,
             // check if grounded to avoid air strafing on jump
-            if (_state.Current(MovementState.States.Grounded) || 
-                _state.Current(MovementState.States.Falling) && 
-                _state.Previous(MovementState.States.Grounded) 
-                && Math.Abs(_inputAxis.x) > Mathf.Epsilon)
+            if (_state.Current(MovementState.States.Grounded) ||
+                    _state.Current(MovementState.States.Falling) &&
+                    _state.Previous(MovementState.States.Grounded)
+                    && Math.Abs(_inputAxis.x) > Mathf.Epsilon)
             {
                 _movement.x = _inputAxis.x * _player.MovementSpeed.x;
             }
 
             // air strafing happens on falling state
-            if (_state.Current(MovementState.States.Falling) && 
-                (_state.Previous(MovementState.States.OnJump) 
-                 || _state.Previous(MovementState.States.Floating)) 
-                && Math.Abs(_inputAxis.x) > Mathf.Epsilon)
+            if (_state.Current(MovementState.States.Falling) &&
+                    (_state.Previous(MovementState.States.OnJump)
+                     || _state.Previous(MovementState.States.Floating))
+                    && Math.Abs(_inputAxis.x) > Mathf.Epsilon)
             {
                 _movement.x = _inputAxis.x * _player.AirStrafingSpeed.x;
             }
 
             // flatten with push down on ground
-            if (_state.Current(MovementState.States.Grounded) && _inputAxis.y < 0.0f && !_animator.GetBool("Flatten"))
+            if (_state.Current(MovementState.States.Grounded) && _inputAxis.y < 0.0f &&
+                    !_animator.GetBool("Flatten"))
             {
                 _animator.SetBool(_animFlatten, true);
             }
@@ -111,7 +114,8 @@ namespace Movement
                 _animator.SetBool(_animFlatten, false);
             }
 
-            if (_state.Current(MovementState.States.Grounded) || _state.Current(MovementState.States.Falling))
+            if (_state.Current(MovementState.States.Grounded) ||
+                    _state.Current(MovementState.States.Falling))
             {
                 _rigidbody.MovePosition(transform.position + _movement * Time.deltaTime);
             }
@@ -124,10 +128,10 @@ namespace Movement
             {
                 // jump direction force
                 _rigidbody.AddForce
-                    (
-                        Vector3.right * _movement.x * _player.JumpingForce.x +
-                        Vector3.up * _player.JumpingForce.y
-                    );
+                (
+                    Vector3.right * _movement.x * _player.JumpingForce.x +
+                    Vector3.up * _player.JumpingForce.y
+                );
             }
         }
 
@@ -150,7 +154,7 @@ namespace Movement
             {
                 fForce.x = _inputAxis.x * _player.FloatingForce.x;
             }
-            
+
             _rigidbody.AddForce(fForce);
         }
 

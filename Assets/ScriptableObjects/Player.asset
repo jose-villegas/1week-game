@@ -14,7 +14,6 @@ MonoBehaviour:
   _axisMovementSpeed: {x: 5, y: 0, z: 0}
   _jumpingForce: {x: 35, y: 350, z: 0}
   _airStrafingSpeed: {x: 1, y: 0, z: 0}
-  _maximumVelocityMagnitude: 10
   _floatingForce: {x: 2.5, y: 10, z: 0}
   _floatingTime: 8.5
   _upwardBuildupTime: 1

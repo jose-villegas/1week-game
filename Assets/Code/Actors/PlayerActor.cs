@@ -23,7 +23,7 @@ namespace Actors
         public Vector3 FloatingForce
         {
             get
-            { 
+            {
                 return _floatingForce;
             }
         }
@@ -31,7 +31,7 @@ namespace Actors
         public float FloatingTime
         {
             get
-            { 
+            {
                 return _floatingTime;
             }
         }

@@ -28,7 +28,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 188610}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071067}
-  m_LocalPosition: {x: 6.84, y: -2, z: -0}
+  m_LocalPosition: {x: 6.84, y: -2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
   m_Children: []
@@ -105,10 +105,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58bf389519db91d4ab56e0307b4ca2d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onMovementEvent:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  onKillEvent:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
   _points:
   - {fileID: 0}
   - {fileID: 0}
-  minimumDistance: 0.5
+  _minimumDistance: 0
 --- !u!195 &19563236
 NavMeshAgent:
   m_ObjectHideFlags: 1

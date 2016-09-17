@@ -47,7 +47,7 @@ namespace Behaviors
         {
             _animator.SetFloat(_animFlattenSpeed, 1.0f);
         }
-	
+
         // Update is called once per frame
         private void Update()
         {
@@ -77,10 +77,9 @@ namespace Behaviors
 
         private void HitPushback(Vector3 position, float radius)
         {
-#if UNITY_EDITOR
+            #if UNITY_EDITOR
             DebugExtension.DebugWireSphere(position, radius, 2);
-#endif
-
+            #endif
             Collider[] colliders = Physics.OverlapSphere(position, radius);
 
             for(int i = 0; i < colliders.Length; i++)
@@ -96,7 +95,8 @@ namespace Behaviors
                         rb.isKinematic = false;
                     }
 
-                    rb.AddExplosionForce(_player.PushbackForceRatio * radius, position, radius, _player.UpwardModifier);
+                    rb.AddExplosionForce(_player.PushbackForceRatio * radius, position, radius,
+                                         _player.UpwardModifier);
                 }
             }
         }

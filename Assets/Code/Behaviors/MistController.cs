@@ -33,7 +33,6 @@ namespace Behaviors
             _newPosition.y = transform.position.y;
             // update position
             transform.position = _newPosition;
-
             // move layers for waving effect
             _sumOfSin = 0.0f;
 

@@ -31,8 +31,9 @@ namespace Movement
             {
                 return _state;
             }
-            private set 
-            { 
+
+            private set
+            {
                 _previousState = _state != value ? _state : _previousState;
                 _state = value;
             }
@@ -55,14 +56,14 @@ namespace Movement
             this.GetNeededComponent(ref _rigidbody);
             this.GetNeededComponent(ref _groundCollider);
         }
-	
+
         // Update is called once per frame
         private void FixedUpdate()
         {
             // refresh state
             UpdateMovementState();
         }
-        
+
         private void UpdateMovementState()
         {
             // if it's floating keep it's state, managed from toggle
@@ -86,22 +87,21 @@ namespace Movement
             {
                 State = States.Grounded;
             }
-           
         }
-        
+
         public void ToggleFloating(float floatingTime)
         {
             if (_routine != null)
             {
                 StopCoroutine(_routine);
             }
-        
+
             _routine = StartCoroutine(ToggleFloatingCo(floatingTime));
         }
 
         public IEnumerator ToggleFloatingCo(float floatingTime)
         {
-            // if it's already inflated then reset and deflate, asume it's 
+            // if it's already inflated then reset and deflate, asume it's
             // falling UpdateMovementState will set the correct state
             State = State == States.Floating ? States.Falling : States.Floating;
 

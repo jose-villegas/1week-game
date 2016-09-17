@@ -18,7 +18,7 @@ namespace Bases
                 onMovementEvent.Invoke();
             }
         }
-        
+
         /// <summary>
         /// Execute event on dying call
         /// </summary>
@@ -27,7 +27,7 @@ namespace Bases
             if (null != onKillEvent)
             {
                 onKillEvent.Invoke();
-            } 
+            }
         }
     }
 }

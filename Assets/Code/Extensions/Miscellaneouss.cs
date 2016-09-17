@@ -12,7 +12,8 @@ namespace Extensions
         /// <param name="behavior">Behavior.</param>
         /// <param name="target">Target.</param>
         /// <typeparam name="T">The 1st type parameter.</typeparam>
-        public static void GetNeededComponent<T>(this Behaviour behavior, ref T target) where T : Component
+        public static void GetNeededComponent<T>(this Behaviour behavior,
+                ref T target) where T : Component
         {
             target = behavior.GetComponent<T>();
 
@@ -37,7 +38,8 @@ namespace Extensions
         /// <param name="actor">The actor.</param>
         public static bool IsGrounded(this Collider actor)
         {
-            return Physics.Raycast(actor.transform.position, -Vector3.up, actor.bounds.extents.y + 0.1f);
+            return Physics.Raycast(actor.transform.position, -Vector3.up,
+                                   actor.bounds.extents.y + 0.1f);
         }
     }
 }

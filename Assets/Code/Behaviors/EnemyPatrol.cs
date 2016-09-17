@@ -34,7 +34,7 @@ namespace Behaviors
         }
 
         /// <summary>
-        /// Default action is to disable agent and 
+        /// Default action is to disable agent and
         /// enable physics simulation
         /// </summary>
         public override void Kill()
@@ -48,7 +48,7 @@ namespace Behaviors
         {
             if (null == _points || _points.Length == 0)
             {
-                return; 
+                return;
             }
 
             // move to current target
@@ -72,14 +72,14 @@ namespace Behaviors
             }
         }
         #endregion
-        
+
         public void OnDrawGizmos()
         {
             if (null == _points || _points.Length == 0)
             {
-                return; 
+                return;
             }
-            
+
             Vector3 prevPosition = _points[0].position;
             Gizmos.color = Color.yellow;
             Gizmos.DrawSphere(prevPosition, 0.2f);
