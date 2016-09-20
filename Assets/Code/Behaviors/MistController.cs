@@ -36,7 +36,7 @@ namespace Behaviors
             // move layers for waving effect
             _sumOfSin = 0.0f;
 
-            for (int i = 0; i < _layers.Length; i++)
+            for (int i = 0; _layers != null && i < _layers.Length; i++)
             {
                 int l = _layers.Length - 1 - i;
                 _sumOfSin += Mathf.Sin(Time.time * _speed + i) * _wavingScale;
