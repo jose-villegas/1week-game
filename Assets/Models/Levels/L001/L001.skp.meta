@@ -5,19 +5,19 @@ licenseType: Free
 SketchUpImporter:
   generateBackFace: 0
   mergeCoplanarFaces: 1
-  selectedNodes: 
+  selectedNodes: 00000000010000000200000003000000
   assetHash:
     serializedVersion: 2
-    Hash: e513cbe2c96ce212b8b8a4de5529fd57
+    Hash: d919bd674c25228e8ce81ecd1afbeafe
   longitude: -105.242139
   latitude: 40.018309
   northCorrection: -0
   fileUnit: 0
   sketchUpImportData:
     defaultCamera:
-      position: {x: 24.702957, y: 15.4658375, z: -23.778591}
-      lookAt: {x: -1.6439496, y: -2.9122734, z: 16.403864}
-      up: {x: -0.19588393, y: 0.9340123, z: 0.29874846}
+      position: {x: 36.09452, y: 30.122019, z: -20.257998}
+      lookAt: {x: 15.794459, y: 7.2426076, z: -1.9386892}
+      up: {x: -0.4764112, y: 0.76693946, z: 0.429926}
       fov: 35
       aspectRatio: 0
       orthoSize: 1
@@ -26,11 +26,16 @@ SketchUpImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
+    100002: Ground
     400000: //RootNode
+    400002: Ground
     2300000: //RootNode
+    2300002: Ground
     3300000: //RootNode
+    3300002: Ground
     4300000: Mesh Test
     4300002: Mesh L001
+    4300004: Mesh Ground
   materials:
     importMaterials: 1
     materialName: 2
