@@ -93,6 +93,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _damping: 2
+  _orientationChangeDuration: 0.5
+  _orbitRadius: 50
 --- !u!124 &12438864
 Behaviour:
   m_ObjectHideFlags: 1

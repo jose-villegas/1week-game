@@ -155,7 +155,8 @@ namespace Movement
             // floating horizontal push
             if(Math.Abs(_inputAxis.x) > Mathf.Epsilon)
             {
-                fForce.x = _inputAxis.x * _player.FloatingForce.x;
+                fForce += PlayerCamera.MovementOrientation * _inputAxis.x *
+                          _player.FloatingForce.x;
             }
 
             _rigidbody.AddForce(fForce);
