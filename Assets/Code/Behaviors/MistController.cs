@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Entities;
+using UnityEngine;
 
 namespace Behaviors
 {
@@ -12,13 +13,15 @@ namespace Behaviors
         private Vector3 _newPosition = Vector3.zero;
         private Transform[] _layers;
         private float _sumOfSin;
+        private PlayerHealth _playerHealth = null;
 
         // Use this for initialization
         private void Start()
         {
-            _layers = new Transform[transform.childCount];
+            // ignore last layer, final layer registers hits
+            _layers = new Transform[transform.childCount - 1];
 
-            for (int i = 0; i < transform.childCount; i++)
+            for (int i = 0; i < transform.childCount - 1; i++)
             {
                 _layers[i] = transform.GetChild(i);
             }
@@ -42,6 +45,19 @@ namespace Behaviors
                 _sumOfSin += Mathf.Sin(Time.time * _speed + i) * _wavingScale;
                 _layers[l].position = _layers[l].position - Vector3.up * _sumOfSin;
             }
+        }
+
+        private void OnTriggerEnter(Collider col)
+        {
+            if (col.gameObject.tag != "Player") return;
+
+            if (null == _playerHealth)
+            {
+                _playerHealth = col.transform.GetComponent<PlayerHealth>();
+            }
+
+            _playerHealth.ReduceHealth();
+            col.transform.position = SpawnZone.CurrentSpawnPoint.position;
         }
     }
 }

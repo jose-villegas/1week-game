@@ -41,7 +41,7 @@ namespace Movement
             this.GetNeededComponent(ref _rigidbody);
             this.GetNeededComponent(ref _state);
             this.GetNeededComponent(ref _animator);
-            // get animator parameters ids
+            // prefetch animator parameters ids
             _animInflate = Animator.StringToHash("Inflate");
             _animFlatten = Animator.StringToHash("Flatten");
         }
@@ -162,13 +162,17 @@ namespace Movement
             _rigidbody.AddForce(fForce);
         }
 
+        //
         private void OnCollisionEnter(Collision col)
         {
+            // collided with something while floating
             if (_state.Current(MovementState.States.Floating) && col.contacts.Length > 0)
             {
-                Vector3 colDir = (col.contacts[0].point - transform.position).normalized;
+                Vector3 collisionDir = (col.contacts[0].point - transform.position).normalized;
 
-                if (Vector3.Angle(colDir, Vector3.up) < 5.0)
+                // checks whether we collided with somethong -above- the player,
+                // 5 degree cone area check, stop floating mode if that's the case
+                if (Vector3.Angle(collisionDir, Vector3.up) < 5.0)
                 {
                     CancelInvoke();
                     _state.ToggleFloating(_player.FloatingTime);

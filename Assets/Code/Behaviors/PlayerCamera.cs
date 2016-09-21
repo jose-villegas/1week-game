@@ -43,7 +43,8 @@ namespace Behaviors
 
             Vector3 target = _player.position - transform.forward * _orbitRadius;
             transform.position = Vector3.SmoothDamp(transform.position, target,
-                                                    ref _velocity, _damping * Time.deltaTime);
+                                                    ref _velocity, _damping *
+                                                    Time.deltaTime);
 
             if (Input.GetKeyDown(KeyCode.J))
             {
@@ -55,6 +56,12 @@ namespace Behaviors
             }
         }
 
+        /// <summary>
+        /// Changes the orientation angle along the y axis of the camera
+        /// given an angle, this also modifies the movement orientation
+        /// </summary>
+        /// <param name="angle">The angle.</param>
+        /// <returns></returns>
         private IEnumerator OrientationChangeCo(float angle)
         {
             float t = 0.0f;

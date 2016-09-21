@@ -13,7 +13,7 @@ GameObject:
   - 136: {fileID: 13692004}
   - 23: {fileID: 2390342}
   m_Layer: 0
-  m_Name: Sphere
+  m_Name: PlayerModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31,6 +31,8 @@ GameObject:
   - 114: {fileID: 11431498}
   - 114: {fileID: 11464750}
   - 114: {fileID: 11460196}
+  - 114: {fileID: 11427476}
+  - 135: {fileID: 13525226}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -130,6 +132,17 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &11427476
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 172926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa250321494a8a14a9d351b8fe631b1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &11431498
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -170,6 +183,18 @@ MonoBehaviour:
   _state: 0
   _previousState: 0
   _groundCollider: {fileID: 0}
+--- !u!135 &13525226
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 172926}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!136 &13692004
 CapsuleCollider:
   m_ObjectHideFlags: 1
