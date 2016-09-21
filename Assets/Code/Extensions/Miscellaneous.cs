@@ -15,18 +15,18 @@ namespace Extensions
         public static void GetNeededComponent<T>(this Behaviour behavior,
                 ref T target) where T : Component
         {
+            if (null != target) return;
+
             target = behavior.GetComponent<T>();
 
-            if (target == null)
-            {
-                target = behavior.GetComponentInChildren<T>();
+            if (target != null) return;
 
-                if (target == null)
-                {
-                    Debug.LogError("No " + typeof(T) + "found. Disabling script...");
-                    behavior.enabled = false;
-                }
-            }
+            target = behavior.GetComponentInChildren<T>();
+
+            if (target != null) return;
+
+            Debug.LogError("No " + typeof(T) + "found. Disabling script...");
+            behavior.enabled = false;
         }
 
         /// <summary>

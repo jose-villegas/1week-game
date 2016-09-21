@@ -1,6 +1,6 @@
 ﻿using System;
 using Actors;
-using Camera;
+using Behaviors;
 using Extensions;
 using UnityEngine;
 
