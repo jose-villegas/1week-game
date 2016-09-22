@@ -33,6 +33,7 @@ GameObject:
   - 114: {fileID: 11460196}
   - 114: {fileID: 11427476}
   - 135: {fileID: 13525226}
+  - 114: {fileID: 11426590}
   m_Layer: 11
   m_Name: Player
   m_TagString: Player
@@ -132,6 +133,18 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &11426590
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 172926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de8194d21250da04aa0f2ff62a3de81a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _collectedCoinsUI: {fileID: 0}
 --- !u!114 &11427476
 MonoBehaviour:
   m_ObjectHideFlags: 1

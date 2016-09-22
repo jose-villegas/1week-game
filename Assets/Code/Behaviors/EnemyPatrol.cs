@@ -1,11 +1,11 @@
-﻿using Bases;
-using Extensions;
+﻿using Extensions;
+using Interfaces;
 using UnityEngine;
 
 namespace Behaviors
 {
     [RequireComponent(typeof(Rigidbody), typeof(Collider))]
-    public class EnemyPatrol : EnemyBase
+    public class EnemyPatrol : MonoBehaviour, IHittable
     {
         [SerializeField]
         private Transform[] _points;
@@ -23,27 +23,36 @@ namespace Behaviors
         }
 
         // Use this for initialization
-        protected void Start()
+        private void Start()
         {
             // neccesary components for the script to work
             this.GetNeededComponent(ref _rigidbody);
             this.GetNeededComponent(ref _agent);
         }
 
-        protected void Update()
+        private void Update()
         {
-            Movement();
+            if (!_agent.enabled)
+            {
+                return;
+            }
+
+            // move to next point once the actor is close enough
+            if (_agent.remainingDistance < _minimumDistance)
+            {
+                GoToNextPoint();
+            }
         }
 
         /// <summary>
-        /// Default action is to disable agent and
+        /// Action is to disable agent and
         /// enable physics simulation
         /// </summary>
-        public override void Kill()
+        public void Hit()
         {
-            base.Kill();
             _agent.enabled = false;
             _rigidbody.isKinematic = false;
+            enabled = false;
         }
 
         private void GoToNextPoint()
@@ -59,22 +68,6 @@ namespace Behaviors
             _targetPoint = (_targetPoint + 1) % _points.Length;
         }
 
-        #region implemented abstract members of EnemyBase
-        public override void Movement()
-        {
-            if (!_agent.enabled)
-            {
-                return;
-            }
-
-            // move to next point once the actor is close enough
-            if (_agent.remainingDistance < _minimumDistance)
-            {
-                GoToNextPoint();
-            }
-        }
-        #endregion
-
         private void OnCollisionEnter(Collision col)
         {
             if (col.gameObject.tag != "Player") return;
@@ -86,7 +79,7 @@ namespace Behaviors
 
             if (null == _playerHealth) return;
 
-            _playerHealth.ReduceHealth();
+            _playerHealth.Hit();
             _playerHealth.TemporalImmunity();
         }
 

@@ -1,5 +1,6 @@
 ﻿using Actors;
 using Extensions;
+using Interfaces;
 using Movement;
 using UnityEngine;
 
@@ -18,13 +19,13 @@ namespace Behaviors
         private float _verticalInput;
         private bool _isAttacking;
         private int _animFlattenSpeed;
+        private int _enemiesMask;
 
         public PlayerAttack(PlayerActor player)
         {
             _player = player;
         }
 
-        // Use this for initialization
         private void Start()
         {
             // without the PlayerActor scriptableobject there
@@ -41,6 +42,8 @@ namespace Behaviors
             this.GetNeededComponent(ref _animator);
             // get animator parameters ids
             _animFlattenSpeed = Animator.StringToHash("FlattenSpeed");
+            // prefetch enemies mask
+            _enemiesMask = LayerMask.GetMask("Enemies");
         }
 
         private void RecoverFlattenSpeed()
@@ -48,7 +51,6 @@ namespace Behaviors
             _animator.SetFloat(_animFlattenSpeed, 1.0f);
         }
 
-        // Update is called once per frame
         private void Update()
         {
             _verticalInput = Input.GetAxis("Vertical");
@@ -66,21 +68,31 @@ namespace Behaviors
 
         private void OnCollisionEnter(Collision col)
         {
+            // hit the ground on falling mode
             if (!_state.Current(MovementState.States.Falling) && _isAttacking)
             {
                 _isAttacking = false;
+                // animate flatten faster to give a sense of force push
                 _animator.SetFloat(_animFlattenSpeed, col.impulse.y * 0.75f);
+                // radius scan pushback area
                 HitPushback(col.contacts[0].point, col.impulse.y * _player.PushbackRadiusScale);
+                // recover from flatten speed
                 Invoke("RecoverFlattenSpeed", 1.0f);
             }
         }
 
+        /// <summary>
+        /// Checks for nearby enemies and hits those that are inside the
+        /// sphere radius, also adds push back force from the sphere origin
+        /// </summary>
+        /// <param name="position">The position.</param>
+        /// <param name="radius">The radius.</param>
         private void HitPushback(Vector3 position, float radius)
         {
             #if UNITY_EDITOR
             DebugExtension.DebugWireSphere(position, radius, 2);
             #endif
-            Collider[] colliders = Physics.OverlapSphere(position, radius);
+            Collider[] colliders = Physics.OverlapSphere(position, radius, _enemiesMask);
 
             for(int i = 0; i < colliders.Length; i++)
             {
@@ -88,15 +100,16 @@ namespace Behaviors
 
                 if (null != rb && colliders[i].transform != transform)
                 {
-                    // switch physics
+                    // if enemy and hittable, register a hit
                     if(rb.tag == "Enemy")
                     {
-                        rb.GetComponent<NavMeshAgent>().enabled = false;
-                        rb.isKinematic = false;
+                        var enemy = rb.GetComponent(typeof(IHittable)) as IHittable;
+
+                        if (enemy != null) enemy.Hit();
                     }
 
-                    rb.AddExplosionForce(_player.PushbackForceRatio * radius, position, radius,
-                                         _player.UpwardModifier);
+                    rb.AddExplosionForce(_player.PushbackForceRatio * radius, position,
+                                         radius, _player.UpwardModifier);
                 }
             }
         }

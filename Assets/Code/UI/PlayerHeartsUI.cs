@@ -8,7 +8,7 @@ namespace UI
         [SerializeField]
         private GameObject _heartAsset;
         [SerializeField]
-        private GameObject _player;
+        private Transform _player;
         [SerializeField]
         private PlayerHealth _playerHealth;
 
@@ -24,12 +24,16 @@ namespace UI
         {
             if (null == _player)
             {
-                _player = GameObject.FindGameObjectWithTag("Player");
+                var playerGo = GameObject.FindGameObjectWithTag("Player");
 
-                if (null == _player)
+                if (null == playerGo)
                 {
                     Debug.LogError("No PlayerActor found. Disabling script...");
                     enabled = false;
+                }
+                else
+                {
+                    _player = playerGo.transform;
                 }
             }
             else

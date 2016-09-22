@@ -1,30 +1,35 @@
 fileFormatVersion: 2
-guid: 51a78afe873c4b84c861e47bdd7e32cb
-timeCreated: 1474517213
+guid: f269496b4a893b84fbc5b2ff626cf99b
+timeCreated: 1474550460
 licenseType: Free
 SketchUpImporter:
   generateBackFace: 0
   mergeCoplanarFaces: 0
-  selectedNodes: 
+  selectedNodes: 0000000001000000
   assetHash:
     serializedVersion: 2
-    Hash: 4c550e0259e13b40e58310f95579c2fc
-  longitude: 0
-  latitude: 0
-  northCorrection: 0
+    Hash: d9cdb692a53087864a157309827c9265
+  longitude: -105.242139
+  latitude: 40.018309
+  northCorrection: -0
   fileUnit: 0
   sketchUpImportData:
     defaultCamera:
-      position: {x: 0, y: 0, z: 0}
-      lookAt: {x: 0, y: 0, z: 1}
-      up: {x: 0, y: 1, z: 0}
-      fov: 45
-      aspectRatio: 1.33
-      orthoSize: 0
+      position: {x: 1.2633307, y: -0.014458188, z: 0.53073055}
+      lookAt: {x: -21.527193, y: 2.7826247, z: -8.126591}
+      up: {x: 0.10655466, y: 0.99348265, z: 0.040476378}
+      fov: 35
+      aspectRatio: 0
+      orthoSize: 1
       isPerspective: 1
     scenes: []
   serializedVersion: 19
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    100000: //RootNode
+    400000: //RootNode
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: Mesh Coin
   materials:
     importMaterials: 1
     materialName: 2

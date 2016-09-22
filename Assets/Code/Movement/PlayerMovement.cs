@@ -162,7 +162,6 @@ namespace Movement
             _rigidbody.AddForce(fForce);
         }
 
-        //
         private void OnCollisionEnter(Collision col)
         {
             // collided with something while floating

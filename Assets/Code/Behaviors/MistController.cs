@@ -58,7 +58,7 @@ namespace Behaviors
 
             if (null == _playerHealth) return;
 
-            _playerHealth.ReduceHealth();
+            _playerHealth.Hit();
             col.transform.position = SpawnZone.CurrentSpawnPoint.position;
         }
     }

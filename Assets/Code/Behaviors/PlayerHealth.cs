@@ -1,9 +1,10 @@
-﻿using UI;
+﻿using Interfaces;
+using UI;
 using UnityEngine;
 
 namespace Behaviors
 {
-    public class PlayerHealth : MonoBehaviour
+    public class PlayerHealth : MonoBehaviour, IHittable
     {
         [SerializeField]
         private PlayerHeartsUI _heartsInterface;
@@ -21,18 +22,6 @@ namespace Behaviors
             private set { _health = value; }
         }
 
-        public void ReduceHealth()
-        {
-            if (Health <= 0 || _immunityActive) return;
-
-            Health--;
-
-            if (null != _heartsInterface)
-            {
-                _heartsInterface.DissapearHeart(Health);
-            }
-        }
-
         public void TemporalImmunity()
         {
             _immunityActive = true;
@@ -43,6 +32,18 @@ namespace Behaviors
         private void DisableImmunity()
         {
             _immunityActive = false;
+        }
+
+        public void Hit()
+        {
+            if (Health <= 0 || _immunityActive) return;
+
+            Health--;
+
+            if (null != _heartsInterface)
+            {
+                _heartsInterface.DissapearHeart(Health);
+            }
         }
     }
 }
