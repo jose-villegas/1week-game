@@ -1,9 +1,12 @@
-﻿using UnityEngine;
+﻿using Behaviors.UI;
+using UnityEngine;
 
 namespace Behaviors
 {
     public class PlayerHealth : MonoBehaviour
     {
+        [SerializeField]
+        private PlayerHeartsUI _heartsInterface;
         [SerializeField]
         private int _health = 3;
 
@@ -16,9 +19,13 @@ namespace Behaviors
 
         public void ReduceHealth()
         {
-            if (Health > 0)
+            if (Health <= 0) return;
+
+            Health--;
+
+            if (null != _heartsInterface)
             {
-                Health--;
+                _heartsInterface.DissapearHeart(Health);
             }
         }
     }

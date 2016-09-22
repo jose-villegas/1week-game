@@ -11,8 +11,15 @@ namespace Behaviors.UI
         [SerializeField]
         private PlayerHealth _playerHealth;
 
+        private Animator[] _heartsAnimators = new Animator[0];
+
+        public PlayerHeartsUI(GameObject heartAsset)
+        {
+            _heartAsset = heartAsset;
+        }
+
         // Use this for initialization
-        void Start ()
+        private void Start ()
         {
             if (null == _player)
             {
@@ -39,6 +46,30 @@ namespace Behaviors.UI
             }
         }
 
+        public void DissapearHeart(int index)
+        {
+            // obtain animators from childs, heart assets
+            if (null == _heartsAnimators)
+            {
+                _heartsAnimators = new Animator[transform.childCount];
+
+                for (int i = 0; i < transform.childCount; i++)
+                {
+                    Transform t = transform.GetChild(i);
+                    _heartsAnimators[i] = t.GetComponentInChildren<Animator>();
+                }
+            }
+
+            // out of range
+            if (index > _heartsAnimators.Length || index < 0) return;
+
+            if (null != _heartsAnimators[index])
+            {
+                // animate to dissapear state
+                _heartsAnimators[index].SetBool("Dissapear", true);
+            }
+        }
+
         void OnDrawGizmos()
         {
             if (Application.isPlaying) return;
@@ -52,11 +83,14 @@ namespace Behaviors.UI
                     DestroyImmediate(transform.GetChild(i));
                 }
 
+                _heartsAnimators = new Animator[_playerHealth.Health];
+
                 // instantiate hearts ui
                 for (int i = 0; i < _playerHealth.Health; i++)
                 {
                     GameObject go = Instantiate(_heartAsset);
                     go.transform.SetParent(transform, false);
+                    _heartsAnimators[i] = go.GetComponentInChildren<Animator>();
                 }
             }
         }
