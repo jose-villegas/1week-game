@@ -6,7 +6,7 @@ namespace Actors
     public class DynamicActor : ScriptableObject
     {
         [SerializeField, Header("Movement")]
-        private float _axisMovementSpeed = 5.0f;
+        private float _movementSpeed = 5.0f;
         [SerializeField]
         private Vector2 _jumpingForce = new Vector2(35, 350);
         [SerializeField]
@@ -16,7 +16,7 @@ namespace Actors
         {
             get
             {
-                return _axisMovementSpeed;
+                return _movementSpeed;
             }
         }
 

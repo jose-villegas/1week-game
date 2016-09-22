@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using Behaviors;
+using UnityEngine;
 
-namespace Behaviors.UI
+namespace UI
 {
     public class PlayerHeartsUI : MonoBehaviour
     {

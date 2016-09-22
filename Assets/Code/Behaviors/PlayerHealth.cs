@@ -1,4 +1,4 @@
-﻿using Behaviors.UI;
+﻿using UI;
 using UnityEngine;
 
 namespace Behaviors
@@ -9,6 +9,10 @@ namespace Behaviors
         private PlayerHeartsUI _heartsInterface;
         [SerializeField]
         private int _health = 3;
+        [SerializeField]
+        private float _immunityTime = 3.0f;
+
+        private bool _immunityActive;
 
         public int Health
         {
@@ -19,7 +23,7 @@ namespace Behaviors
 
         public void ReduceHealth()
         {
-            if (Health <= 0) return;
+            if (Health <= 0 || _immunityActive) return;
 
             Health--;
 
@@ -27,6 +31,18 @@ namespace Behaviors
             {
                 _heartsInterface.DissapearHeart(Health);
             }
+        }
+
+        public void TemporalImmunity()
+        {
+            _immunityActive = true;
+            CancelInvoke("DisableImmunity");
+            Invoke("DisableImmunity", _immunityTime);
+        }
+
+        private void DisableImmunity()
+        {
+            _immunityActive = false;
         }
     }
 }

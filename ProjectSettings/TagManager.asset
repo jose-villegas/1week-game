@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Enemy
   - SpawnZone
+  - SpawnPoint
   layers:
   - Default
   - TransparentFX
@@ -16,9 +17,9 @@ TagManager:
   - 
   - 
   - Ground
-  - MovingPlatform
-  - 
-  - 
+  - MovingGround
+  - Enemies
+  - Player
   - 
   - 
   - 

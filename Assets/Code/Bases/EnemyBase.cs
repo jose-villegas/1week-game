@@ -1,21 +1,22 @@
-﻿using UnityEngine;
+﻿using Interfaces;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace Bases
 {
-    public class EnemyBase : MonoBehaviour, IEnemy
+    public abstract class EnemyBase : MonoBehaviour, IEnemy
     {
-        public UnityEvent onMovementEvent;
-        public UnityEvent onKillEvent;
+        public UnityEvent OnMovementEvent;
+        public UnityEvent OnKillEvent;
 
         /// <summary>
         /// Execute event on movement call
         /// </summary>
         public virtual void Movement()
         {
-            if (null != onMovementEvent)
+            if (null != OnMovementEvent)
             {
-                onMovementEvent.Invoke();
+                OnMovementEvent.Invoke();
             }
         }
 
@@ -24,9 +25,9 @@ namespace Bases
         /// </summary>
         public virtual void Kill()
         {
-            if (null != onKillEvent)
+            if (null != OnKillEvent)
             {
-                onKillEvent.Invoke();
+                OnKillEvent.Invoke();
             }
         }
     }

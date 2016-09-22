@@ -12,7 +12,7 @@ GameObject:
   - 95: {fileID: 9554082}
   - 136: {fileID: 13692004}
   - 23: {fileID: 2390342}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: PlayerModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -33,7 +33,7 @@ GameObject:
   - 114: {fileID: 11460196}
   - 114: {fileID: 11427476}
   - 135: {fileID: 13525226}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
@@ -143,6 +143,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa250321494a8a14a9d351b8fe631b1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _heartsInterface: {fileID: 0}
+  _health: 3
+  _immunityTime: 3
 --- !u!114 &11431498
 MonoBehaviour:
   m_ObjectHideFlags: 1

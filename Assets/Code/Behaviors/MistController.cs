@@ -56,6 +56,8 @@ namespace Behaviors
                 _playerHealth = col.transform.GetComponent<PlayerHealth>();
             }
 
+            if (null == _playerHealth) return;
+
             _playerHealth.ReduceHealth();
             col.transform.position = SpawnZone.CurrentSpawnPoint.position;
         }

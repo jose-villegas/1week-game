@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Behaviors
 {
+    [RequireComponent(typeof(Rigidbody), typeof(Collider))]
     public class EnemyPatrol : EnemyBase
     {
         [SerializeField]
@@ -14,6 +15,7 @@ namespace Behaviors
         private Rigidbody _rigidbody;
         private NavMeshAgent _agent;
         private int _targetPoint;
+        private PlayerHealth _playerHealth = null;
 
         public EnemyPatrol(Transform[] points)
         {
@@ -73,12 +75,26 @@ namespace Behaviors
         }
         #endregion
 
+        private void OnCollisionEnter(Collision col)
+        {
+            if (col.gameObject.tag != "Player") return;
+
+            if (null == _playerHealth)
+            {
+                _playerHealth = col.transform.GetComponent<PlayerHealth>();
+            }
+
+            if (null == _playerHealth) return;
+
+            _playerHealth.ReduceHealth();
+            _playerHealth.TemporalImmunity();
+        }
+
         public void OnDrawGizmos()
         {
-            if (null == _points || _points.Length == 0)
-            {
-                return;
-            }
+            if (null == _points || _points.Length == 0) return;
+
+            if (null == _points[0]) return;
 
             Vector3 prevPosition = _points[0].position;
             Gizmos.color = Color.yellow;
@@ -86,6 +102,8 @@ namespace Behaviors
 
             for (int i = 1; i < _points.Length; i++)
             {
+                if (null == _points[i]) return;
+
                 Gizmos.color = Color.yellow;
                 Gizmos.DrawSphere(_points[i].position, 0.2f);
                 Gizmos.color = Color.blue;

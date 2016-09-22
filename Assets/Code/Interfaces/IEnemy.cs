@@ -1,4 +1,4 @@
-﻿namespace Bases
+﻿namespace Interfaces
 {
     public interface IEnemy
     {
