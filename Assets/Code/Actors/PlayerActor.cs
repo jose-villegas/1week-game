@@ -2,6 +2,11 @@
 
 namespace Actors
 {
+    /// <summary>
+    /// Contains the parameters for a player actor, a player actor
+    /// receives direct input from the user
+    /// </summary>
+    /// <seealso cref="Actors.DynamicActor" />
     [CreateAssetMenu]
     public class PlayerActor : DynamicActor
     {

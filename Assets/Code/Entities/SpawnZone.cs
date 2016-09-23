@@ -3,21 +3,17 @@ using UnityEngine;
 
 namespace Entities
 {
+    /// <summary>
+    /// Handles a level's spawn zone and its spawn point
+    /// </summary>
+    /// <seealso cref="UnityEngine.MonoBehaviour" />
     [RequireComponent(typeof(Collider))]
     public class SpawnZone : MonoBehaviour
     {
         [SerializeField]
         private Transform _spawnPoint;
 
-        private Collider _collider;
-
         public static Transform CurrentSpawnPoint { get; private set; }
-
-        public SpawnZone(Collider collider, Transform spawnPoint)
-        {
-            _collider = collider;
-            _spawnPoint = spawnPoint;
-        }
 
         private void Start ()
         {
@@ -25,8 +21,6 @@ namespace Entities
             {
                 _spawnPoint = transform;
             }
-
-            this.GetNeededComponent(ref _collider);
         }
 
         private void OnTriggerEnter(Collider col)

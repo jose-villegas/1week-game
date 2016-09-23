@@ -3,6 +3,11 @@ using UnityEngine;
 
 namespace Behaviors
 {
+    /// <summary>
+    /// Main camera movement logic, follows the player and handles
+    /// movement orientation
+    /// </summary>
+    /// <seealso cref="UnityEngine.MonoBehaviour" />
     public class PlayerCamera : MonoBehaviour
     {
         [SerializeField]
@@ -65,14 +70,17 @@ namespace Behaviors
         private IEnumerator OrientationChangeCo(float angle)
         {
             float t = 0.0f;
-            Quaternion rotate = Quaternion.AngleAxis(angle, Vector3.up);
-            Quaternion dstRot = rotate * transform.rotation;
+            Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.up);
+            // camera final rotatio
             Quaternion srcRot = transform.rotation;
-            Vector3 targetFwd = rotate * transform.forward;
+            Quaternion dstRot = rotation * transform.rotation;
+            // camera final position
+            Vector3 targetForward = rotation * transform.forward;
             Vector3 srcPos = transform.position;
-            Vector3 dstPos = _player.position - targetFwd * _orbitRadius;
+            Vector3 dstPos = _player.position - targetForward * _orbitRadius;
+            // final movement orientation
             Vector3 srcOrient = MovementOrientation;
-            Vector3 dstOrient = rotate * MovementOrientation;
+            Vector3 dstOrient = rotation * MovementOrientation;
 
             while (t < _orientationChangeDuration)
             {
@@ -90,6 +98,7 @@ namespace Behaviors
             transform.position = dstPos;
             transform.rotation = dstRot;
             MovementOrientation = dstOrient;
+            // reset coroutine holder
             _orientationChange = null;
         }
     }

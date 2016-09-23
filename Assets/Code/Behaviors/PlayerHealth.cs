@@ -7,6 +7,11 @@ using UnityEngine;
 
 namespace Behaviors
 {
+    /// <summary>
+    /// Handles the player's health points
+    /// </summary>
+    /// <seealso cref="UnityEngine.MonoBehaviour" />
+    /// <seealso cref="Interfaces.IHittable" />
     public class PlayerHealth : MonoBehaviour, IHittable
     {
         private PlayerActor _player;
@@ -41,6 +46,10 @@ namespace Behaviors
             _heartsInterface = FindObjectOfType<PlayerHeartsUI>();
         }
 
+        /// <summary>
+        /// Actives temporal immunity to hits for the given
+        /// <see cref="DynamicActor.AfterHitImmunityTime"/>
+        /// </summary>
         public void TemporalImmunity()
         {
             _immunityActive = true;
@@ -48,6 +57,9 @@ namespace Behaviors
             Invoke("DisableImmunity", _player.AfterHitImmunityTime);
         }
 
+        /// <summary>
+        /// Disables the temporal hit immunity.
+        /// </summary>
         private void DisableImmunity()
         {
             _immunityActive = false;
@@ -61,7 +73,7 @@ namespace Behaviors
 
             if (null != _heartsInterface)
             {
-                _heartsInterface.DissapearHeart(Health);
+                _heartsInterface.DissapearHeart();
             }
         }
     }

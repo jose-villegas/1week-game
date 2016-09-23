@@ -6,6 +6,10 @@ using UnityEngine;
 
 namespace Movement
 {
+    /// <summary>
+    /// Handles the movement state of this object
+    /// </summary>
+    /// <seealso cref="UnityEngine.MonoBehaviour" />
     [RequireComponent(typeof(Rigidbody))]
     public class MovementState : MonoBehaviour
     {

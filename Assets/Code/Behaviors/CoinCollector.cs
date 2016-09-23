@@ -4,12 +4,17 @@ using UnityEngine;
 
 namespace Behaviors
 {
+    /// <summary>
+    /// Collects all the coin objects that collide with the GameObject
+    /// collider component, adding to the coin score. Also destroys the
+    /// coin's GameObject after they are collected
+    /// </summary>
+    /// <seealso cref="UnityEngine.MonoBehaviour" />
     [RequireComponent(typeof(Collider))]
     public class CoinCollector : MonoBehaviour
     {
         private CollectedCoinsUI _collectedCoinsUI;
 
-        // Use this for initialization
         private void Start ()
         {
             _collectedCoinsUI = FindObjectOfType<CollectedCoinsUI>();

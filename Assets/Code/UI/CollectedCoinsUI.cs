@@ -3,6 +3,10 @@ using UnityEngine.UI;
 
 namespace UI
 {
+    /// <summary>
+    /// Handles the interface for the player's number of total and collected coins
+    /// </summary>
+    /// <seealso cref="UnityEngine.MonoBehaviour" />
     public class CollectedCoinsUI : MonoBehaviour
     {
         [SerializeField]
@@ -26,6 +30,10 @@ namespace UI
             _numberTotal.text = _coinCount.ToString();
         }
 
+        /// <summary>
+        /// Adds to the number of coins collected and updates the interface
+        /// respectively
+        /// </summary>
         public void ScoreCoin()
         {
             if (_coinCount <= 0) return;

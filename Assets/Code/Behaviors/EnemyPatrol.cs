@@ -5,6 +5,12 @@ using UnityEngine;
 
 namespace Behaviors
 {
+    /// <summary>
+    /// Enemy behavior for patrolling movement, moves the enemy
+    /// actor between a set of points within the navigation mesh
+    /// </summary>
+    /// <seealso cref="UnityEngine.MonoBehaviour" />
+    /// <seealso cref="Interfaces.IHittable" />
     [RequireComponent(typeof(Rigidbody), typeof(Collider))]
     public class EnemyPatrol : MonoBehaviour, IHittable
     {
@@ -20,12 +26,15 @@ namespace Behaviors
         private int _targetPoint;
         private PlayerHealth _playerHealth = null;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EnemyPatrol"/> class.
+        /// </summary>
+        /// <param name="points">The patrolling points.</param>
         public EnemyPatrol(Transform[] points)
         {
             _points = points;
         }
 
-        // Use this for initialization
         private void Start()
         {
             // neccesary components for the script to work
@@ -73,6 +82,10 @@ namespace Behaviors
             enabled = false;
         }
 
+        /// <summary>
+        /// Assigns the <see cref="NavMeshAgent"/> destination
+        /// to the next point in <see cref="_points"/>
+        /// </summary>
         private void GoToNextPoint()
         {
             if (null == _points || _points.Length == 0)
@@ -101,6 +114,9 @@ namespace Behaviors
             _playerHealth.TemporalImmunity();
         }
 
+        /// <summary>
+        /// Draws the patrolling points and draws a line between them
+        /// </summary>
         public void OnDrawGizmos()
         {
             if (null == _points || _points.Length == 0) return;

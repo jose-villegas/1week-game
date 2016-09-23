@@ -4,6 +4,10 @@ using UnityEngine;
 
 namespace General
 {
+    /// <summary>
+    /// Handles the configuration and startup of a level
+    /// </summary>
+    /// <seealso cref="UnityEngine.MonoBehaviour" />
     public class LevelSetup : MonoBehaviour
     {
         private CollectedCoinsUI _collectedCoins;

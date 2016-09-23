@@ -7,6 +7,10 @@ using UnityEngine;
 
 namespace Movement
 {
+    /// <summary>
+    /// Handles the player's movement input and logic
+    /// </summary>
+    /// <seealso cref="UnityEngine.MonoBehaviour" />
     [RequireComponent(typeof(Rigidbody), typeof(MovementState))]
     public class PlayerMovement : MonoBehaviour
     {
@@ -21,11 +25,6 @@ namespace Movement
         private float _upwardTimer;
         private int _animInflate;
         private int _animFlatten;
-
-        public PlayerMovement(PlayerActor player)
-        {
-            _player = player;
-        }
 
         private void Start()
         {
@@ -88,6 +87,10 @@ namespace Movement
             FloatingMovement();
         }
 
+        /// <summary>
+        /// Handles the horizontal movement depending on the current
+        /// <see cref="PlayerCamera.MovementOrientation"/>
+        /// </summary>
         private void HorizontalMovement()
         {
             // horizontal movement - forward and backwards,
@@ -129,6 +132,9 @@ namespace Movement
             }
         }
 
+        /// <summary>
+        /// Adds the jumping vertical force on input
+        /// </summary>
         private void JumpMovement()
         {
             // jumping has to happen on the ground
@@ -143,6 +149,9 @@ namespace Movement
             }
         }
 
+        /// <summary>
+        /// Horizontal and vertical movement on floating mode
+        /// </summary>
         private void FloatingMovement()
         {
             if (!_state.IsCurrent(MovementState.States.Floating)) { return; }

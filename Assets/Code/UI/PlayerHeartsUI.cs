@@ -6,14 +6,22 @@ using UnityEngine;
 
 namespace UI
 {
+    /// <summary>
+    /// Handles the interface for the player's number of health points
+    /// </summary>
+    /// <seealso cref="UnityEngine.MonoBehaviour" />
     public class PlayerHeartsUI : MonoBehaviour
     {
         [SerializeField]
         private GameObject _heartAsset;
 
-        private Transform _player;
+        private PlayerHealth _playerHealth;
         private Animator[] _heartsAnimators = new Animator[0];
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PlayerHeartsUI"/> class.
+        /// </summary>
+        /// <param name="heartAsset">The heart asset.</param>
         public PlayerHeartsUI(GameObject heartAsset)
         {
             _heartAsset = heartAsset;
@@ -21,22 +29,22 @@ namespace UI
 
         private void Start ()
         {
-            var player = GameObject.FindGameObjectWithTag("Player");
+            _playerHealth = FindObjectOfType<PlayerHealth>();
 
-            if (null == player)
+            if (null == _playerHealth)
             {
-                Debug.LogError("No player transform found, please use the Player tag");
+                Debug.LogError("No " + typeof(PlayerHealth) + " found. " +
+                               "Disabling script...");
                 enabled = false;
             }
-            else
-            {
-                _player = player.transform;
-            }
 
-            BuildHeartsUI();
+            BuildHeartsInterface();
         }
 
-        public void DissapearHeart(int index)
+        /// <summary>
+        /// Dissapears
+        /// </summary>
+        public void DissapearHeart()
         {
             // obtain animators from child heartUI assets
             if (null == _heartsAnimators)
@@ -49,6 +57,9 @@ namespace UI
                     _heartsAnimators[i] = t.GetComponentInChildren<Animator>();
                 }
             }
+
+            // current heart being removed
+            int index = _playerHealth.Health;
 
             // out of range
             if (index > _heartsAnimators.Length || index < 0) return;
@@ -64,7 +75,7 @@ namespace UI
         /// Instantiates the heart asset as children of this transform,
         /// the number of distances depends on the current health of the player
         /// </summary>
-        private void BuildHeartsUI()
+        private void BuildHeartsInterface()
         {
             PlayerActor player = GameSettings.Instance.PlayerSettings;
 

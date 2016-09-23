@@ -3,6 +3,10 @@ using UnityEngine;
 
 namespace Movement
 {
+    /// <summary>
+    /// Moving platform movement logic, handles position, rotation and scale.
+    /// </summary>
+    /// <seealso cref="UnityEngine.MonoBehaviour" />
     public class MovingPlatform : MonoBehaviour
     {
         [SerializeField]
@@ -18,6 +22,12 @@ namespace Movement
         private Rigidbody _rigidbody;
         private float _elapsedTime = 0.0f;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MovingPlatform"/> class.
+        /// </summary>
+        /// <param name="target">The target transform.</param>
+        /// <param name="movementCurve">The movement curve.</param>
+        /// <param name="speed">The speed.</param>
         public MovingPlatform(Transform target, AnimationCurve movementCurve,
                               float speed)
         {
@@ -27,7 +37,6 @@ namespace Movement
             _target = target;
         }
 
-        // Use this for initialization
         private void Start()
         {
             _rigidbody = GetComponent<Rigidbody>();
@@ -41,6 +50,10 @@ namespace Movement
             _source.hideFlags = HideFlags.HideInHierarchy;
         }
 
+        /// <summary>
+        /// Aligns this GameObject transform parameters with the
+        /// <see cref="_target"/> transform
+        /// </summary>
         private void AlignWithTransform()
         {
             // curve determines the interpolation behavior
@@ -80,6 +93,9 @@ namespace Movement
             AlignWithTransform();
         }
 
+        /// <summary>
+        /// Draws the beginning point and the ending point
+        /// </summary>
         private void OnDrawGizmos()
         {
             if (null == _target) return;

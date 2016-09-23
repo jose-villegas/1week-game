@@ -2,6 +2,10 @@
 
 namespace Actors
 {
+    /// <summary>
+    /// Contains parameters for a dynamic actor, meaning it moves
+    /// </summary>
+    /// <seealso cref="UnityEngine.ScriptableObject" />
     [CreateAssetMenu]
     public class DynamicActor : ScriptableObject
     {
@@ -26,6 +30,11 @@ namespace Actors
             get { return _healthPoints; }
         }
 
+        public float AfterHitImmunityTime
+        {
+            get { return _afterHitImmunityTime; }
+        }
+
         public float MovementSpeed
         {
             get { return _movementSpeed; }
@@ -34,11 +43,6 @@ namespace Actors
         public Vector2 JumpingForce
         {
             get { return _jumpingForce; }
-        }
-
-        public float AfterHitImmunityTime
-        {
-            get { return _afterHitImmunityTime; }
         }
     }
 }

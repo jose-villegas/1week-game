@@ -8,6 +8,10 @@ using UnityEngine;
 
 namespace Behaviors
 {
+    /// <summary>
+    /// Describes the logic for the player's motion attacks
+    /// </summary>
+    /// <seealso cref="UnityEngine.MonoBehaviour" />
     [RequireComponent(typeof(Rigidbody), typeof(MovementState))]
     public class PlayerAttack : MonoBehaviour
     {
@@ -21,11 +25,6 @@ namespace Behaviors
         private bool _isAttacking;
         private int _animFlattenSpeed;
         private int _enemiesMask;
-
-        public PlayerAttack(PlayerActor player)
-        {
-            _player = player;
-        }
 
         private void Start()
         {
@@ -72,7 +71,7 @@ namespace Behaviors
 
         private void OnCollisionEnter(Collision col)
         {
-            // hit the ground on falling mode
+            // hit something on falling mode
             if (!_state.IsCurrent(MovementState.States.Falling) && _isAttacking)
             {
                 _isAttacking = false;

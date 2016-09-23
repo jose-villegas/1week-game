@@ -3,6 +3,13 @@ using UnityEngine;
 
 namespace Behaviors
 {
+    /// <summary>
+    /// Controls the mist layers in a wave like motion, the layers are obtained
+    /// from the <see cref="MistController.transform"/>'s childs. If the player
+    /// collides with one of the layers damage is done to the player and the player
+    /// is translated to the last spawn point.
+    /// </summary>
+    /// <seealso cref="UnityEngine.MonoBehaviour" />
     public class MistController : MonoBehaviour
     {
         [SerializeField]
@@ -15,7 +22,6 @@ namespace Behaviors
         private float _sumOfSin;
         private PlayerHealth _playerHealth = null;
 
-        // Use this for initialization
         private void Start()
         {
             // ignore last layer, final layer registers hits
@@ -27,7 +33,6 @@ namespace Behaviors
             }
         }
 
-        // Update is called once per frame
         private void Update()
         {
             // move horizontally with camera

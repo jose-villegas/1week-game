@@ -2,6 +2,9 @@
 
 namespace Extensions
 {
+    /// <summary>
+    /// Collection of extension methods
+    /// </summary>
     public static class Miscellaneous
     {
         /// <summary>
