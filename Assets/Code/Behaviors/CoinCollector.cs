@@ -7,21 +7,18 @@ namespace Behaviors
     [RequireComponent(typeof(Collider))]
     public class CoinCollector : MonoBehaviour
     {
-        [SerializeField]
         private CollectedCoinsUI _collectedCoinsUI;
 
         // Use this for initialization
         private void Start ()
         {
+            _collectedCoinsUI = FindObjectOfType<CollectedCoinsUI>();
+
             if (null == _collectedCoinsUI)
             {
-                _collectedCoinsUI = FindObjectOfType<CollectedCoinsUI>();
-
-                if (null == _collectedCoinsUI)
-                {
-                    enabled = false;
-                    Debug.Log("No " + typeof(CollectedCoinsUI) + " found");
-                }
+                Debug.Log("No " + typeof(CollectedCoinsUI) + " found. " +
+                          "Disabling script...");
+                enabled = false;
             }
         }
 

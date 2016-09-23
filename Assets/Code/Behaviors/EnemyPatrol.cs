@@ -1,4 +1,5 @@
-﻿using Extensions;
+﻿using Actors;
+using Extensions;
 using Interfaces;
 using UnityEngine;
 
@@ -7,6 +8,8 @@ namespace Behaviors
     [RequireComponent(typeof(Rigidbody), typeof(Collider))]
     public class EnemyPatrol : MonoBehaviour, IHittable
     {
+        [SerializeField]
+        private DynamicActor _enemy;
         [SerializeField]
         private Transform[] _points;
         [SerializeField]
@@ -28,6 +31,21 @@ namespace Behaviors
             // neccesary components for the script to work
             this.GetNeededComponent(ref _rigidbody);
             this.GetNeededComponent(ref _agent);
+
+            // neccesary for enemy parameters
+            if (!_enemy)
+            {
+                Debug.LogError("No " + typeof(DynamicActor) + " found. " +
+                               "Disabling script...");
+                enabled = false;
+            }
+            else
+            {
+                if (_agent)
+                {
+                    _agent.speed = _enemy.MovementSpeed;
+                }
+            }
         }
 
         private void Update()

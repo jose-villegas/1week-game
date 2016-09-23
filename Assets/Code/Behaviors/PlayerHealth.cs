@@ -1,4 +1,7 @@
-﻿using Interfaces;
+﻿using Actors;
+using Entities;
+using General;
+using Interfaces;
 using UI;
 using UnityEngine;
 
@@ -6,27 +9,43 @@ namespace Behaviors
 {
     public class PlayerHealth : MonoBehaviour, IHittable
     {
-        [SerializeField]
+        private PlayerActor _player;
         private PlayerHeartsUI _heartsInterface;
-        [SerializeField]
-        private int _health = 3;
-        [SerializeField]
-        private float _immunityTime = 3.0f;
-
         private bool _immunityActive;
+        private int _currentHealth;
 
         public int Health
         {
-            get { return _health;}
+            get { return _currentHealth; }
 
-            private set { _health = value; }
+            private set { _currentHealth = value; }
+        }
+
+        private void Start()
+        {
+            _player = GameSettings.Instance.PlayerSettings;
+
+            // without the PlayerActor scriptableobject there
+            // are no defined parameters for the player health
+            if (!_player)
+            {
+                Debug.LogError("No " + typeof(PlayerActor) + " found. " +
+                               "Disabling script...");
+                enabled = false;
+            }
+            else
+            {
+                _currentHealth = _player.HealthPoints;
+            }
+
+            _heartsInterface = FindObjectOfType<PlayerHeartsUI>();
         }
 
         public void TemporalImmunity()
         {
             _immunityActive = true;
             CancelInvoke("DisableImmunity");
-            Invoke("DisableImmunity", _immunityTime);
+            Invoke("DisableImmunity", _player.AfterHitImmunityTime);
         }
 
         private void DisableImmunity()

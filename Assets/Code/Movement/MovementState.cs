@@ -1,5 +1,7 @@
 ﻿using System.Collections;
+using Actors;
 using Extensions;
+using General;
 using UnityEngine;
 
 namespace Movement
@@ -22,6 +24,7 @@ namespace Movement
         [SerializeField]
         private Collider _groundCollider;
 
+        private PlayerActor _player;
         private Rigidbody _rigidbody;
         private Coroutine _routine;
 
@@ -34,36 +37,58 @@ namespace Movement
 
             private set
             {
+                // set previous state only if state has changed
                 _previousState = _state != value ? _state : _previousState;
                 _state = value;
             }
         }
 
-        public bool Current(States state)
-        {
-            return State == state;
-        }
-
-        public bool Previous(States state)
-        {
-            return _previousState == state;
-        }
-
-        // Use this for initialization
         private void Start()
         {
+            _player = GameSettings.Instance.PlayerSettings;
+
+            if (!_player)
+            {
+                Debug.LogError("No " + typeof(PlayerActor) + " found. " +
+                               "Disabling script...");
+                enabled = false;
+            }
+
             // neccesary components for the script to work
             this.GetNeededComponent(ref _rigidbody);
             this.GetNeededComponent(ref _groundCollider);
         }
 
-        // Update is called once per frame
         private void FixedUpdate()
         {
             // refresh state
             UpdateMovementState();
         }
 
+        /// <summary>
+        /// Compares the current state with the given state
+        /// </summary>
+        /// <param name="state">The state.</param>
+        /// <returns></returns>
+        public bool IsCurrent(States state)
+        {
+            return State == state;
+        }
+
+        /// <summary>
+        /// Compares the previous state with the given state
+        /// </summary>
+        /// <param name="state">The state.</param>
+        /// <returns></returns>
+        public bool IsPrevious(States state)
+        {
+            return _previousState == state;
+        }
+
+        /// <summary>
+        /// Updates the movement state depending on the rigidbody sorroudings
+        /// and velocity
+        /// </summary>
         private void UpdateMovementState()
         {
             // if it's floating keep it's state, managed from toggle
@@ -89,17 +114,27 @@ namespace Movement
             }
         }
 
-        public void ToggleFloating(float floatingTime)
+        /// <summary>
+        /// Toggles the movement state to floating mode, after the player's
+        /// floating time it's toggled back again
+        /// </summary>
+        public void ToggleFloating()
         {
             if (_routine != null)
             {
                 StopCoroutine(_routine);
             }
 
-            _routine = StartCoroutine(ToggleFloatingCo(floatingTime));
+            _routine = StartCoroutine(ToggleFloating(_player.FloatingTime));
         }
 
-        public IEnumerator ToggleFloatingCo(float floatingTime)
+        /// <summary>
+        /// Toggles floating mode, after a given time floating mode is toggled
+        /// again to recover it's original status mode
+        /// </summary>
+        /// <param name="floatingTime">The floating time.</param>
+        /// <returns></returns>
+        private IEnumerator ToggleFloating(float floatingTime)
         {
             // if it's already inflated then reset and deflate, asume it's
             // falling UpdateMovementState will set the correct state
@@ -109,7 +144,7 @@ namespace Movement
             if (State == States.Floating)
             {
                 yield return new WaitForSeconds(floatingTime);
-                _routine = StartCoroutine(ToggleFloatingCo(0.0f));
+                _routine = StartCoroutine(ToggleFloating(0.0f));
             }
 
             _routine = null;

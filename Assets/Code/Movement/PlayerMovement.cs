@@ -2,6 +2,7 @@
 using Actors;
 using Behaviors;
 using Extensions;
+using General;
 using UnityEngine;
 
 namespace Movement
@@ -10,10 +11,9 @@ namespace Movement
     public class PlayerMovement : MonoBehaviour
     {
         [SerializeField]
-        private PlayerActor _player;
-        [SerializeField]
         private Animator _animator;
 
+        private PlayerActor _player;
         private Rigidbody _rigidbody;
         private MovementState _state;
         private Vector2 _inputAxis = Vector2.zero;
@@ -29,11 +29,14 @@ namespace Movement
 
         private void Start()
         {
+            _player = GameSettings.Instance.PlayerSettings;
+
             // without the PlayerActor scriptableobject there
             // is no defined parameters for the player movement
             if (!_player)
             {
-                Debug.LogError("No PlayerActor found. Disabling script...");
+                Debug.LogError("No " + typeof(PlayerActor) + " found. " +
+                               "Disabling script...");
                 enabled = false;
             }
 
@@ -54,19 +57,21 @@ namespace Movement
             // inflate player and set the status
             if (Input.GetKeyDown(KeyCode.F))
             {
-                _state.ToggleFloating(_player.FloatingTime);
-                _animator.SetBool(_animInflate, _state.Current(MovementState.States.Floating));
+                _state.ToggleFloating();
+                _animator.SetBool(_animInflate,
+                                  _state.IsCurrent(MovementState.States.Floating));
             }
 
-            // floating state exists for a given time, check if no longer floating to disable animation
-            if (!_state.Current(MovementState.States.Floating) &&
+            // floating state exists for a given time, check if
+            // no longer floating to disable animation
+            if (!_state.IsCurrent(MovementState.States.Floating) &&
                     _animator.GetBool(_animInflate))
             {
                 _animator.SetBool(_animInflate, false);
             }
 
             // reset floating mode timer
-            if (_state.Previous(MovementState.States.Floating))
+            if (_state.IsPrevious(MovementState.States.Floating))
             {
                 _upwardTimer = 0.0f;
             }
@@ -87,9 +92,9 @@ namespace Movement
         {
             // horizontal movement - forward and backwards,
             // check if grounded to avoid air strafing on jump
-            if (_state.Current(MovementState.States.Grounded) ||
-                    _state.Current(MovementState.States.Falling) &&
-                    _state.Previous(MovementState.States.Grounded)
+            if (_state.IsCurrent(MovementState.States.Grounded) ||
+                    _state.IsCurrent(MovementState.States.Falling) &&
+                    _state.IsPrevious(MovementState.States.Grounded)
                     && Math.Abs(_inputAxis.x) > Mathf.Epsilon)
             {
                 _movement = PlayerCamera.MovementOrientation * _inputAxis.x *
@@ -97,9 +102,9 @@ namespace Movement
             }
 
             // air strafing happens on falling state
-            if (_state.Current(MovementState.States.Falling) &&
-                    (_state.Previous(MovementState.States.OnJump)
-                     || _state.Previous(MovementState.States.Floating))
+            if (_state.IsCurrent(MovementState.States.Falling) &&
+                    (_state.IsPrevious(MovementState.States.OnJump)
+                     || _state.IsPrevious(MovementState.States.Floating))
                     && Math.Abs(_inputAxis.x) > Mathf.Epsilon)
             {
                 _movement = PlayerCamera.MovementOrientation * _inputAxis.x *
@@ -107,8 +112,8 @@ namespace Movement
             }
 
             // flatten with push down on ground
-            if (_state.Current(MovementState.States.Grounded) && _inputAxis.y < 0.0f &&
-                    !_animator.GetBool("Flatten"))
+            if (_state.IsCurrent(MovementState.States.Grounded) &&
+                    _inputAxis.y < 0.0f && !_animator.GetBool("Flatten"))
             {
                 _animator.SetBool(_animFlatten, true);
             }
@@ -117,8 +122,8 @@ namespace Movement
                 _animator.SetBool(_animFlatten, false);
             }
 
-            if (_state.Current(MovementState.States.Grounded) ||
-                    _state.Current(MovementState.States.Falling))
+            if (_state.IsCurrent(MovementState.States.Grounded) ||
+                    _state.IsCurrent(MovementState.States.Falling))
             {
                 _rigidbody.MovePosition(transform.position + _movement * Time.deltaTime);
             }
@@ -127,7 +132,7 @@ namespace Movement
         private void JumpMovement()
         {
             // jumping has to happen on the ground
-            if(_state.Current(MovementState.States.Grounded) && _inputAxis.y > 0.0f)
+            if(_state.IsCurrent(MovementState.States.Grounded) && _inputAxis.y > 0.0f)
             {
                 // jump direction force
                 _rigidbody.AddForce
@@ -140,7 +145,7 @@ namespace Movement
 
         private void FloatingMovement()
         {
-            if (!_state.Current(MovementState.States.Floating)) { return; }
+            if (!_state.IsCurrent(MovementState.States.Floating)) { return; }
 
             Vector3 fForce = Vector3.up * _player.FloatingForce.y;
 
@@ -165,7 +170,7 @@ namespace Movement
         private void OnCollisionEnter(Collision col)
         {
             // collided with something while floating
-            if (_state.Current(MovementState.States.Floating) && col.contacts.Length > 0)
+            if (_state.IsCurrent(MovementState.States.Floating) && col.contacts.Length > 0)
             {
                 Vector3 collisionDir = (col.contacts[0].point - transform.position).normalized;
 
@@ -174,7 +179,7 @@ namespace Movement
                 if (Vector3.Angle(collisionDir, Vector3.up) < 5.0)
                 {
                     CancelInvoke();
-                    _state.ToggleFloating(_player.FloatingTime);
+                    _state.ToggleFloating();
                     _animator.SetBool(_animInflate, false);
                     _upwardTimer = 0.0f;
                 }

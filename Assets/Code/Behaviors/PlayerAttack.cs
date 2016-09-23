@@ -1,5 +1,7 @@
 ﻿using Actors;
+using Entities;
 using Extensions;
+using General;
 using Interfaces;
 using Movement;
 using UnityEngine;
@@ -10,10 +12,9 @@ namespace Behaviors
     public class PlayerAttack : MonoBehaviour
     {
         [SerializeField]
-        private PlayerActor _player;
-        [SerializeField]
         private Animator _animator;
 
+        private PlayerActor _player;
         private Rigidbody _rigidbody;
         private MovementState _state;
         private float _verticalInput;
@@ -28,11 +29,14 @@ namespace Behaviors
 
         private void Start()
         {
+            _player = GameSettings.Instance.PlayerSettings;
+
             // without the PlayerActor scriptableobject there
             // is no defined parameters for the player movement
             if (!_player)
             {
-                Debug.LogError("No PlayerActor found. Disabling script...");
+                Debug.LogError("No " + typeof(PlayerActor) + " found. " +
+                               "Disabling script...");
                 enabled = false;
             }
 
@@ -59,7 +63,7 @@ namespace Behaviors
         private void FixedUpdate()
         {
             // to enter attack mode downward force is added on the already falling player
-            if (_state.Current(MovementState.States.Falling) && _verticalInput < 0.0f)
+            if (_state.IsCurrent(MovementState.States.Falling) && _verticalInput < 0.0f)
             {
                 _rigidbody.AddForce(-Vector3.up * _player.AttackVerticalForce);
                 _isAttacking = true;
@@ -69,7 +73,7 @@ namespace Behaviors
         private void OnCollisionEnter(Collision col)
         {
             // hit the ground on falling mode
-            if (!_state.Current(MovementState.States.Falling) && _isAttacking)
+            if (!_state.IsCurrent(MovementState.States.Falling) && _isAttacking)
             {
                 _isAttacking = false;
                 // animate flatten faster to give a sense of force push

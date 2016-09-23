@@ -11,6 +11,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14a8a344c7c8d5b439706a750cf1407b, type: 3}
   m_Name: Player
   m_EditorClassIdentifier: 
+  _healthPoints: 3
+  _afterHitImmunityTime: 3
   _movementSpeed: 5
   _jumpingForce: {x: 35, y: 350}
   _airStrafingSpeed: 1

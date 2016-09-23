@@ -32,8 +32,8 @@ GameObject:
   - 114: {fileID: 11464750}
   - 114: {fileID: 11460196}
   - 114: {fileID: 11427476}
-  - 135: {fileID: 13525226}
   - 114: {fileID: 11426590}
+  - 135: {fileID: 13525226}
   m_Layer: 11
   m_Name: Player
   m_TagString: Player
@@ -156,9 +156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa250321494a8a14a9d351b8fe631b1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _heartsInterface: {fileID: 0}
-  _health: 3
-  _immunityTime: 3
+  _player: {fileID: 11400000, guid: ee8dc9051ed10bb429dfa1bce0fbcca9, type: 2}
 --- !u!114 &11431498
 MonoBehaviour:
   m_ObjectHideFlags: 1

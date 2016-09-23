@@ -9,17 +9,20 @@ namespace UI
         private Text _numberCollected;
         [SerializeField]
         private Text _numberTotal;
-        [SerializeField]
-        private Transform _levelCoins;
 
         private int _coinCount;
         private int _coinsCollected;
 
-        // Use this for initialization
-        private void Start ()
+        /// <summary>
+        /// Resets to zero de number of coins collected and sets the
+        /// coin count to the number of children of the given transform
+        /// </summary>
+        /// <param name="numberOfCoins">The number of coins.</param>
+        public void Initialize(int numberOfCoins)
         {
-            _numberCollected.text = 0.ToString();
-            _coinCount = _levelCoins.childCount;
+            _coinsCollected = 0;
+            _numberCollected.text = _coinsCollected.ToString();
+            _coinCount = numberOfCoins;
             _numberTotal.text = _coinCount.ToString();
         }
 

@@ -105,16 +105,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58bf389519db91d4ab56e0307b4ca2d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnMovementEvent:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  OnKillEvent:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
+  _enemy: {fileID: 11400000, guid: b580decf6b988694395181c25e9cda45, type: 2}
   _points:
   - {fileID: 0}
   - {fileID: 0}

@@ -1,4 +1,7 @@
-﻿using Behaviors;
+﻿using Actors;
+using Behaviors;
+using Entities;
+using General;
 using UnityEngine;
 
 namespace UI
@@ -7,11 +10,8 @@ namespace UI
     {
         [SerializeField]
         private GameObject _heartAsset;
-        [SerializeField]
-        private Transform _player;
-        [SerializeField]
-        private PlayerHealth _playerHealth;
 
+        private Transform _player;
         private Animator[] _heartsAnimators = new Animator[0];
 
         public PlayerHeartsUI(GameObject heartAsset)
@@ -19,41 +19,26 @@ namespace UI
             _heartAsset = heartAsset;
         }
 
-        // Use this for initialization
         private void Start ()
         {
-            if (null == _player)
-            {
-                var playerGo = GameObject.FindGameObjectWithTag("Player");
+            var player = GameObject.FindGameObjectWithTag("Player");
 
-                if (null == playerGo)
-                {
-                    Debug.LogError("No PlayerActor found. Disabling script...");
-                    enabled = false;
-                }
-                else
-                {
-                    _player = playerGo.transform;
-                }
+            if (null == player)
+            {
+                Debug.LogError("No player transform found, please use the Player tag");
+                enabled = false;
             }
             else
             {
-                if (null == _playerHealth)
-                {
-                    _playerHealth = _player.GetComponent<PlayerHealth>();
-
-                    if (null == _playerHealth)
-                    {
-                        Debug.LogError("No PlayerHealth component on " + _player);
-                        enabled = false;
-                    }
-                }
+                _player = player.transform;
             }
+
+            BuildHeartsUI();
         }
 
         public void DissapearHeart(int index)
         {
-            // obtain animators from childs, heart assets
+            // obtain animators from child heartUI assets
             if (null == _heartsAnimators)
             {
                 _heartsAnimators = new Animator[transform.childCount];
@@ -75,23 +60,27 @@ namespace UI
             }
         }
 
-        void OnDrawGizmos()
+        /// <summary>
+        /// Instantiates the heart asset as children of this transform,
+        /// the number of distances depends on the current health of the player
+        /// </summary>
+        private void BuildHeartsUI()
         {
-            if (Application.isPlaying) return;
+            PlayerActor player = GameSettings.Instance.PlayerSettings;
 
-            // take advantage of OnDrawGizmos editor update to add hearts ui elements
-            if (_playerHealth != null && transform.childCount != _playerHealth.Health)
+            if (player != null && transform.childCount != player.HealthPoints)
             {
                 // remove children from transforms
                 for (int i = 0; i < transform.childCount; i++)
                 {
-                    DestroyImmediate(transform.GetChild(i));
+                    Destroy(transform.GetChild(i).gameObject);
                 }
 
-                _heartsAnimators = new Animator[_playerHealth.Health];
+                // obtain the animators as well for animations on health loss
+                _heartsAnimators = new Animator[player.HealthPoints];
 
                 // instantiate hearts ui
-                for (int i = 0; i < _playerHealth.Health; i++)
+                for (int i = 0; i < player.HealthPoints; i++)
                 {
                     GameObject go = Instantiate(_heartAsset);
                     go.transform.SetParent(transform, false);

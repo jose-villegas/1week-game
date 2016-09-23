@@ -48,11 +48,11 @@ namespace Behaviors
 
             if (Input.GetKeyDown(KeyCode.J))
             {
-                _orientationChange = StartCoroutine(OrientationChangeCo(-90));
+                _orientationChange = StartCoroutine(OrientationChangeCo(90));
             }
             else if (Input.GetKeyDown(KeyCode.K))
             {
-                _orientationChange = StartCoroutine(OrientationChangeCo(90));
+                _orientationChange = StartCoroutine(OrientationChangeCo(-90));
             }
         }
 
