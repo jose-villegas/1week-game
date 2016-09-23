@@ -1,5 +1,4 @@
 ﻿using Actors;
-using Entities;
 using Extensions;
 using General;
 using Interfaces;
@@ -97,14 +96,14 @@ namespace Behaviors
             #endif
             Collider[] colliders = Physics.OverlapSphere(position, radius, _enemiesMask);
 
-            for(int i = 0; i < colliders.Length; i++)
+            for (int i = 0; i < colliders.Length; i++)
             {
                 var rb = colliders[i].GetComponent<Rigidbody>();
 
                 if (null != rb && colliders[i].transform != transform)
                 {
                     // if enemy and hittable, register a hit
-                    if(rb.tag == "Enemy")
+                    if (rb.CompareTag("Enemy"))
                     {
                         var enemy = rb.GetComponent(typeof(IHittable)) as IHittable;
 
@@ -118,4 +117,3 @@ namespace Behaviors
         }
     }
 }
-

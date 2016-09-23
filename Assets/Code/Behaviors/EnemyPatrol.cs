@@ -101,7 +101,7 @@ namespace Behaviors
 
         private void OnCollisionEnter(Collision col)
         {
-            if (col.gameObject.tag != "Player") return;
+            if (!col.gameObject.CompareTag("Player")) return;
 
             if (null == _playerHealth)
             {

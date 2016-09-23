@@ -43,20 +43,19 @@ namespace Behaviors
 
         private void OnTriggerEnter(Collider col)
         {
-            if (col.gameObject.tag == "Coin")
+            if (!col.CompareTag("Coin")) return;
+
+            col.gameObject.tag = "Untagged";
+            // obtain coin animator to make it dissapear
+            var anim = col.GetComponent<Animator>();
+
+            if (null != anim)
             {
-                col.gameObject.tag = "Untagged";
-                // obtain coin animator to make it dissapear
-                var anim = col.GetComponent<Animator>();
-
-                if (null != anim)
-                {
-                    anim.SetBool("Dissapear", true);
-                    StartCoroutine(DestroyCoin(col.gameObject));
-                }
-
-                _collectedCoinsUI.ScoreCoin();
+                anim.SetBool("Dissapear", true);
+                StartCoroutine(DestroyCoin(col.gameObject));
             }
+
+            _collectedCoinsUI.ScoreCoin();
         }
     }
 }

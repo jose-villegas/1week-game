@@ -25,7 +25,7 @@ namespace Entities
 
         private void OnTriggerEnter(Collider col)
         {
-            if (col.tag != "Player") return;
+            if (!col.CompareTag("Player")) return;
 
             CurrentSpawnPoint = _spawnPoint;
         }

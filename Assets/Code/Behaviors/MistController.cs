@@ -20,7 +20,7 @@ namespace Behaviors
         private Vector3 _newPosition = Vector3.zero;
         private Transform[] _layers;
         private float _sumOfSin;
-        private PlayerHealth _playerHealth = null;
+        private PlayerHealth _playerHealth;
 
         private void Start()
         {
@@ -31,6 +31,8 @@ namespace Behaviors
             {
                 _layers[i] = transform.GetChild(i);
             }
+
+            _playerHealth = FindObjectOfType<PlayerHealth>();
         }
 
         private void Update()
@@ -54,14 +56,7 @@ namespace Behaviors
 
         private void OnTriggerEnter(Collider col)
         {
-            if (col.gameObject.tag != "Player") return;
-
-            if (null == _playerHealth)
-            {
-                _playerHealth = col.transform.GetComponent<PlayerHealth>();
-            }
-
-            if (null == _playerHealth) return;
+            if (!col.CompareTag("Player") || null == _playerHealth) return;
 
             _playerHealth.Hit();
             col.transform.position = SpawnZone.CurrentSpawnPoint.position;
