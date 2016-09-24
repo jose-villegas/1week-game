@@ -1,8 +1,6 @@
 ﻿using Actors;
-using Entities;
 using General;
 using Interfaces;
-using UI;
 using UnityEngine;
 
 namespace Behaviors
@@ -37,6 +35,8 @@ namespace Behaviors
             {
                 Health = _player.HealthPoints;
             }
+
+            EventManager.StartListening("HitPlayer", Hit);
         }
 
         /// <summary>
@@ -63,6 +63,7 @@ namespace Behaviors
             if (Health <= 0 || _immunityActive) return;
 
             Health--;
+            TemporalImmunity();
             EventManager.TriggerEvent("HealthReduced");
         }
     }

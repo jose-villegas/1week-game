@@ -1,5 +1,4 @@
-﻿using Extensions;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Movement
 {
@@ -20,7 +19,7 @@ namespace Movement
 
         private Transform _source;
         private Rigidbody _rigidbody;
-        private float _elapsedTime = 0.0f;
+        private float _elapsedTime;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MovingPlatform"/> class.

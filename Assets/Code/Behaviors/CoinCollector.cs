@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using General;
-using UI;
 using UnityEngine;
 
 namespace Behaviors

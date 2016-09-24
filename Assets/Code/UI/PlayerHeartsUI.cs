@@ -1,8 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
 using Actors;
-using Behaviors;
-using Entities;
 using General;
 using UnityEngine;
 
@@ -20,7 +17,6 @@ namespace UI
         private List<Animator> _heartsAnimators;
         private int _availableHearts;
         private int _dissapearAnimation;
-        private int _appearAnimation;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PlayerHeartsUI"/> class.
@@ -35,7 +31,6 @@ namespace UI
         {
             // prefetch animation parameter identifiers
             _dissapearAnimation = Animator.StringToHash("Dissapear");
-            _appearAnimation = Animator.StringToHash("Appear");
             // add heart assets to build interface
             BuildHeartsInterface();
             // subscribe to health reduction event

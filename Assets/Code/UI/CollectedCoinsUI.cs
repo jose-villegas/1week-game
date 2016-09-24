@@ -18,6 +18,17 @@ namespace UI
         private int _coinCount;
         private int _coinsCollected;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CollectedCoinsUI"/> class.
+        /// </summary>
+        /// <param name="numberCollected">The text for number collected.</param>
+        /// <param name="numberTotal">The text for number total.</param>
+        public CollectedCoinsUI(Text numberCollected, Text numberTotal)
+        {
+            _numberCollected = numberCollected;
+            _numberTotal = numberTotal;
+        }
+
         private void Start()
         {
             EventManager.StartListening("CoinCollected", ScoreCoin);

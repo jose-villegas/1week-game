@@ -1,5 +1,6 @@
 ﻿using Actors;
 using Extensions;
+using General;
 using Interfaces;
 using UnityEngine;
 
@@ -24,15 +25,16 @@ namespace Behaviors
         private Rigidbody _rigidbody;
         private NavMeshAgent _agent;
         private int _targetPoint;
-        private PlayerHealth _playerHealth = null;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="EnemyPatrol"/> class.
+        /// Initializes a new instance of the <see cref="EnemyPatrol" /> class.
         /// </summary>
         /// <param name="points">The patrolling points.</param>
-        public EnemyPatrol(Transform[] points)
+        /// <param name="enemy">The enemy.</param>
+        public EnemyPatrol(Transform[] points, DynamicActor enemy)
         {
             _points = points;
+            _enemy = enemy;
         }
 
         private void Start()
@@ -55,8 +57,6 @@ namespace Behaviors
                     _agent.speed = _enemy.MovementSpeed;
                 }
             }
-
-            _playerHealth = FindObjectOfType<PlayerHealth>();
         }
 
         private void Update()
@@ -103,10 +103,9 @@ namespace Behaviors
 
         private void OnCollisionEnter(Collision col)
         {
-            if (!col.gameObject.CompareTag("Player") || null == _playerHealth) return;
+            if (!col.gameObject.CompareTag("Player")) return;
 
-            _playerHealth.Hit();
-            _playerHealth.TemporalImmunity();
+            EventManager.TriggerEvent("HitPlayer");
         }
 
         /// <summary>

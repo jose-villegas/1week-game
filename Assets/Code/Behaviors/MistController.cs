@@ -1,4 +1,5 @@
 ﻿using Entities;
+using General;
 using UnityEngine;
 
 namespace Behaviors
@@ -20,7 +21,6 @@ namespace Behaviors
         private Vector3 _newPosition = Vector3.zero;
         private Transform[] _layers;
         private float _sumOfSin;
-        private PlayerHealth _playerHealth;
 
         private void Start()
         {
@@ -31,15 +31,13 @@ namespace Behaviors
             {
                 _layers[i] = transform.GetChild(i);
             }
-
-            _playerHealth = FindObjectOfType<PlayerHealth>();
         }
 
         private void Update()
         {
             // move horizontally with camera
-            _newPosition.x = UnityEngine.Camera.main.transform.position.x;
-            _newPosition.z = UnityEngine.Camera.main.transform.position.z;
+            _newPosition.x = Camera.main.transform.position.x;
+            _newPosition.z = Camera.main.transform.position.z;
             _newPosition.y = transform.position.y;
             // update position
             transform.position = _newPosition;
@@ -56,9 +54,9 @@ namespace Behaviors
 
         private void OnTriggerEnter(Collider col)
         {
-            if (!col.CompareTag("Player") || null == _playerHealth) return;
+            if (!col.CompareTag("Player")) return;
 
-            _playerHealth.Hit();
+            EventManager.TriggerEvent("HitPlayer");
             col.transform.position = SpawnZone.CurrentSpawnPoint.position;
         }
     }
