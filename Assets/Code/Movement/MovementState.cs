@@ -129,7 +129,7 @@ namespace Movement
                 StopCoroutine(_routine);
             }
 
-            _routine = StartCoroutine(ToggleFloating(_player.FloatingTime));
+            _routine = ToggleFloating(_player.FloatingTime).Start();
         }
 
         /// <summary>

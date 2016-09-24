@@ -78,8 +78,11 @@ namespace Behaviors
                 _animator.SetFloat(_animFlattenSpeed, col.impulse.y * 0.75f);
                 // radius scan pushback area
                 HitPushback(col.contacts[0].point, col.impulse.y * _player.PushbackRadiusScale);
-                // recover from flatten speed
-                Invoke("RecoverFlattenSpeed", 1.0f);
+                // recover from flatten speed modification
+                CoroutineUtils.DelaySeconds(() =>
+                {
+                    _animator.SetFloat(_animFlattenSpeed, 1.0f);
+                }, 1.0f).Start();
             }
         }
 

@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using General;
+using UnityEngine;
 
 namespace Extensions
 {
@@ -43,6 +45,17 @@ namespace Extensions
         {
             return Physics.Raycast(actor.transform.position, -Vector3.up,
                                    actor.bounds.extents.y + 0.1f);
+        }
+
+        /// <summary>
+        /// Starts the specified coroutine with the <see cref="CoroutineUtils"/>
+        /// instance
+        /// </summary>
+        /// <param name="coroutine">The coroutine.</param>
+        /// <returns></returns>
+        public static Coroutine Start(this IEnumerator coroutine)
+        {
+            return CoroutineUtils.Instance.StartCoroutine(coroutine);
         }
     }
 }

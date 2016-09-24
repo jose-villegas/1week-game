@@ -1,4 +1,5 @@
 ﻿using Actors;
+using Extensions;
 using General;
 using Interfaces;
 using UnityEngine;
@@ -46,18 +47,16 @@ namespace Behaviors
         public void TemporalImmunity()
         {
             _immunityActive = true;
-            CancelInvoke("DisableImmunity");
-            Invoke("DisableImmunity", _player.AfterHitImmunityTime);
+            // disables immunity after immunity time
+            CoroutineUtils.DelaySeconds(() =>
+            {
+                _immunityActive = false;
+            }, _player.AfterHitImmunityTime).Start();
         }
 
         /// <summary>
-        /// Disables the temporal hit immunity.
+        /// Reduces the player's health points and activates temporal immunity
         /// </summary>
-        private void DisableImmunity()
-        {
-            _immunityActive = false;
-        }
-
         public void Hit()
         {
             if (Health <= 0 || _immunityActive) return;

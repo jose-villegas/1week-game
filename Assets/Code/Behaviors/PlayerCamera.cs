@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Extensions;
 using UnityEngine;
 
 namespace Behaviors
@@ -53,11 +54,11 @@ namespace Behaviors
 
             if (Input.GetKeyDown(KeyCode.J))
             {
-                _orientationChange = StartCoroutine(OrientationChangeCo(90));
+                _orientationChange = OrientationChangeCo(90).Start();
             }
             else if (Input.GetKeyDown(KeyCode.K))
             {
-                _orientationChange = StartCoroutine(OrientationChangeCo(-90));
+                _orientationChange = OrientationChangeCo(-90).Start(); ;
             }
         }
 

@@ -6,21 +6,22 @@ using UnityEngine;
 namespace General
 {
     /// <summary>
-    /// Handles the configuration and startup of a level
+    /// Handles a level
     /// </summary>
     /// <seealso cref="UnityEngine.MonoBehaviour" />
-    public class LevelSetup : MonoBehaviour
+    public class LevelController : MonoBehaviour
     {
         [SerializeField]
         private SpawnZone _initialSpawn;
 
         private CollectedCoinsUI _collectedCoins;
+        private int _cointCount;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LevelSetup"/> class.
+        /// Initializes a new instance of the <see cref="LevelController"/> class.
         /// </summary>
         /// <param name="initialSpawn">The initial spawn zone.</param>
-        public LevelSetup(SpawnZone initialSpawn)
+        public LevelController(SpawnZone initialSpawn)
         {
             _initialSpawn = initialSpawn;
         }
@@ -38,9 +39,16 @@ namespace General
             else
             {
                 var transforms = transform.GetComponentsInChildren<Transform>();
-                int coinCount = Array.FindAll(transforms, x => x.tag == "Coin").Length;
-                _collectedCoins.Initialize(coinCount);
+                _cointCount = Array.FindAll(transforms, x => x.tag == "Coin").Length;
+                _collectedCoins.Initialize(_cointCount);
             }
+        }
+
+        /// <summary>
+        /// Restarts this level.
+        /// </summary>
+        private void RestartLevel()
+        {
         }
     }
 }

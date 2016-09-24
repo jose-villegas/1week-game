@@ -27,58 +27,37 @@ namespace Actors
 
         public Vector3 FloatingForce
         {
-            get
-            {
-                return _floatingForce;
-            }
+            get { return _floatingForce; }
         }
 
         public float FloatingTime
         {
-            get
-            {
-                return _floatingTime;
-            }
+            get { return _floatingTime; }
         }
 
         public float UpwardBuildupTime
         {
-            get
-            {
-                return _upwardBuildupTime;
-            }
+            get { return _upwardBuildupTime; }
         }
 
         public float AttackVerticalForce
         {
-            get
-            {
-                return _attackVerticalForce;
-            }
+            get { return _attackVerticalForce; }
         }
 
         public float PushbackRadiusScale
         {
-            get
-            {
-                return _pushbackRadiusScale;
-            }
+            get { return _pushbackRadiusScale; }
         }
 
         public float UpwardModifier
         {
-            get
-            {
-                return _upwardModifier;
-            }
+            get { return _upwardModifier; }
         }
 
         public float PushbackForceRatio
         {
-            get
-            {
-                return _pushbackForceRatio;
-            }
+            get { return _pushbackForceRatio; }
         }
     }
 }
