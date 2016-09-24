@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using General;
 using UI;
 using UnityEngine;
 
@@ -13,20 +14,6 @@ namespace Behaviors
     [RequireComponent(typeof(Collider))]
     public class CoinCollector : MonoBehaviour
     {
-        private CollectedCoinsUI _collectedCoinsUI;
-
-        private void Start ()
-        {
-            _collectedCoinsUI = FindObjectOfType<CollectedCoinsUI>();
-
-            if (null == _collectedCoinsUI)
-            {
-                Debug.Log("No " + typeof(CollectedCoinsUI) + " found. " +
-                          "Disabling script...");
-                enabled = false;
-            }
-        }
-
         /// <summary>
         /// Destroys the given object after 1.5 seconds
         /// </summary>
@@ -49,13 +36,14 @@ namespace Behaviors
             // obtain coin animator to make it dissapear
             var anim = col.GetComponent<Animator>();
 
+            // dissapear animation then destory the object
             if (null != anim)
             {
                 anim.SetBool("Dissapear", true);
                 StartCoroutine(DestroyCoin(col.gameObject));
             }
 
-            _collectedCoinsUI.ScoreCoin();
+            EventManager.TriggerEvent("CoinCollected");
         }
     }
 }

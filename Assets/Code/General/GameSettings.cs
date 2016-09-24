@@ -5,8 +5,6 @@ namespace General
 {
     public class GameSettings : MonoBehaviour
     {
-        private PlayerActor _playerSettings;
-
         private static GameSettings _instance;
         private static object _lock = new object();
         private static bool _applicationQuitting;
@@ -23,40 +21,34 @@ namespace General
 
                 lock (_lock)
                 {
-                    if (null == _instance)
+                    if (null != _instance) return _instance;
+
+                    _instance = FindObjectOfType<GameSettings>();
+
+                    if (FindObjectsOfType<GameSettings>().Length > 1)
                     {
-                        _instance = FindObjectOfType<GameSettings>();
-
-                        if (FindObjectsOfType<GameSettings>().Length > 1)
-                        {
-                            Debug.LogError("There shouldn't be more than one" +
-                                           "GameSettings component in scene");
-                            return _instance;
-                        }
-
-                        if (_instance == null)
-                        {
-                            GameObject gameSettings = new GameObject();
-                            _instance = gameSettings.AddComponent<GameSettings>();
-                            gameSettings.name = typeof(GameSettings).ToString();
-                        }
+                        Debug.LogError("There shouldn't be more than one " +
+                                       typeof(GameSettings) + " component in scene");
+                        return _instance;
                     }
 
+                    if (_instance != null) return _instance;
+
+                    GameObject gameSettings = new GameObject();
+                    _instance = gameSettings.AddComponent<GameSettings>();
+                    gameSettings.name = typeof(GameSettings).ToString();
                     return _instance;
                 }
             }
         }
 
-        public PlayerActor PlayerSettings
-        {
-            get { return _playerSettings; }
-        }
+        public PlayerActor PlayerSettings { get; private set; }
 
         public void Awake()
         {
             DontDestroyOnLoad(transform.gameObject);
             // query player scriptableObject asset
-            _playerSettings = Resources.Load("Player") as PlayerActor;
+            PlayerSettings = Resources.Load("Player") as PlayerActor;
         }
 
         public void OnDestroy()

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using Actors;
 using Behaviors;
 using Entities;
@@ -16,7 +17,6 @@ namespace UI
         [SerializeField]
         private GameObject _heartAsset;
 
-        private PlayerHealth _playerHealth;
         private List<Animator> _heartsAnimators;
         private int _availableHearts;
         private int _dissapearAnimation;
@@ -33,28 +33,17 @@ namespace UI
 
         private void Start ()
         {
-            _playerHealth = FindObjectOfType<PlayerHealth>();
-
-            if (null == _playerHealth)
-            {
-                Debug.LogError("No " + typeof(PlayerHealth) + " found. " +
-                               "Disabling script...");
-                enabled = false;
-            }
-
+            // prefetch animation parameter identifiers
             _dissapearAnimation = Animator.StringToHash("Dissapear");
             _appearAnimation = Animator.StringToHash("Appear");
+            // add heart assets to build interface
             BuildHeartsInterface();
-        }
-
-        private void Update()
-        {
-            // health has been reduced
-            if (_playerHealth.Health < _availableHearts)
+            // subscribe to health reduction event
+            EventManager.StartListening("HealthReduced", () =>
             {
                 _availableHearts--;
                 AnimateHeart(_dissapearAnimation);
-            }
+            });
         }
 
         /// <summary>
@@ -67,7 +56,7 @@ namespace UI
             int index = _availableHearts;
 
             // out of range
-            if (index > _heartsAnimators.Count || index < 0) return;
+            if (index >= _heartsAnimators.Count || index < 0) return;
 
             if (null != _heartsAnimators[index])
             {
@@ -84,24 +73,20 @@ namespace UI
         {
             PlayerActor player = GameSettings.Instance.PlayerSettings;
 
-            if (player != null && transform.childCount != player.HealthPoints)
+            if (player == null || transform.childCount == player.HealthPoints)
             {
-                // remove children from transforms
-                for (int i = 0; i < transform.childCount; i++)
-                {
-                    Destroy(transform.GetChild(i).gameObject);
-                }
+                return;
+            }
 
-                _availableHearts = player.HealthPoints;
-                _heartsAnimators = new List<Animator>();
+            _availableHearts = player.HealthPoints;
+            _heartsAnimators = new List<Animator>();
 
-                // instantiate hearts ui
-                for (int i = 0; i < _availableHearts; i++)
-                {
-                    GameObject go = Instantiate(_heartAsset);
-                    go.transform.SetParent(transform, false);
-                    _heartsAnimators.Add(go.GetComponentInChildren<Animator>());
-                }
+            // instantiate hearts ui
+            for (int i = 0; i < _availableHearts; i++)
+            {
+                GameObject go = Instantiate(_heartAsset);
+                go.transform.SetParent(transform, false);
+                _heartsAnimators.Add(go.GetComponentInChildren<Animator>());
             }
         }
     }

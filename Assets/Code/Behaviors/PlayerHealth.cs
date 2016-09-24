@@ -18,14 +18,8 @@ namespace Behaviors
     {
         private PlayerActor _player;
         private bool _immunityActive;
-        private int _currentHealth;
 
-        public int Health
-        {
-            get { return _currentHealth; }
-
-            private set { _currentHealth = value; }
-        }
+        public int Health { get; private set; }
 
         private void Start()
         {
@@ -41,7 +35,7 @@ namespace Behaviors
             }
             else
             {
-                _currentHealth = _player.HealthPoints;
+                Health = _player.HealthPoints;
             }
         }
 
@@ -69,6 +63,7 @@ namespace Behaviors
             if (Health <= 0 || _immunityActive) return;
 
             Health--;
+            EventManager.TriggerEvent("HealthReduced");
         }
     }
 }

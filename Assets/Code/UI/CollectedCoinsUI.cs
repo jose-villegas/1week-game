@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using General;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI
@@ -16,6 +17,11 @@ namespace UI
 
         private int _coinCount;
         private int _coinsCollected;
+
+        private void Start()
+        {
+            EventManager.StartListening("CoinCollected", ScoreCoin);
+        }
 
         /// <summary>
         /// Resets to zero de number of coins collected and sets the
