@@ -46,6 +46,16 @@ namespace Movement
             // prefetch animator parameters ids
             _animInflate = Animator.StringToHash("Inflate");
             _animFlatten = Animator.StringToHash("Flatten");
+            // subscribe to player death event to stop movement
+            EventManager.StartListening("PlayerDied", () =>
+            {
+                enabled = false;
+            });
+            // subscribe to level reset to start movement again
+            EventManager.StartListening("LevelReset", () =>
+            {
+                enabled = true;
+            });
         }
 
         private void Update()

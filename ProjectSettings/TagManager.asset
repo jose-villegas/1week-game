@@ -9,6 +9,7 @@ TagManager:
   - SpawnPoint
   - Coin
   - ActorModel
+  - Model
   layers:
   - Default
   - TransparentFX

@@ -14,11 +14,13 @@ namespace Behaviors
     public class CollectibleCoin : MonoBehaviour, IRestartable
     {
         private Animator _animator;
+        private Collider _collider;
         private int _dissapearAnimation;
 
         private void Start()
         {
             _animator = GetComponent<Animator>();
+            _collider = GetComponent<Collider>();
             _dissapearAnimation = Animator.StringToHash("Dissapear");
         }
 
@@ -30,6 +32,7 @@ namespace Behaviors
             if (null != _animator)
             {
                 _animator.SetBool(_dissapearAnimation, true);
+                _collider.enabled = false;
                 // dissapear the game object after animation finishes
                 CoroutineUtils.DelaySeconds(() =>
                 {
@@ -43,7 +46,12 @@ namespace Behaviors
         public void Restart()
         {
             gameObject.SetActive(true);
-            _animator.SetBool(_dissapearAnimation, false);
+            _collider.enabled = true;
+
+            if (null != _animator)
+            {
+                _animator.SetBool(_dissapearAnimation, false);
+            }
         }
     }
 }

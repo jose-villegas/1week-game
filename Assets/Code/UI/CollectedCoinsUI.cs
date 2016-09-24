@@ -36,6 +36,8 @@ namespace UI
             EventManager.StartListening("CoinCollected", ScoreCoin);
             // restarts ui on level reset
             EventManager.StartListening("LevelReset", Restart);
+            // restarts on level begin
+            EventManager.StartListening("LevelBegin", Restart);
         }
 
 

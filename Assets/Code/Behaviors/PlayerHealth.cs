@@ -67,6 +67,11 @@ namespace Behaviors
             Health--;
             TemporalImmunity();
             EventManager.TriggerEvent("HealthReduced");
+
+            if (Health == 0)
+            {
+                EventManager.TriggerEvent("PlayerDied");
+            }
         }
 
         public void Restart()

@@ -1,16 +1,16 @@
 ﻿using System;
 using Entities;
+using Extensions;
 using Interfaces;
-using UI;
 using UnityEngine;
 
 namespace General
 {
     /// <summary>
-    /// Handles a level
+    /// Handles a level, its components and active status
     /// </summary>
     /// <seealso cref="UnityEngine.MonoBehaviour" />
-    public class LevelController : MonoBehaviour
+    public class LevelController : MonoBehaviour, IRestartable
     {
         [SerializeField]
         private SpawnZone _initialSpawn;
@@ -18,7 +18,6 @@ namespace General
         private IRestartable[] _restartables;
 
         private static Transform _player;
-        private static CollectedCoinsUI _collectedCoins;
 
         public int CointCount { get; private set; }
 
@@ -48,20 +47,6 @@ namespace General
                 return;
             }
 
-            // find coins interface
-            if (null == _collectedCoins)
-            {
-                _collectedCoins = FindObjectOfType<CollectedCoinsUI>();
-
-                if (null == _collectedCoins)
-                {
-                    Debug.LogError("No " + typeof(CollectedCoinsUI) + " found. " +
-                                   "Disabling script...");
-                    enabled = false;
-                    return;
-                }
-            }
-
             // find player transform
             if (null == _player)
             {
@@ -80,15 +65,27 @@ namespace General
             // get coin count and initialize coin interface
             var transforms = GetComponentsInChildren<Transform>();
             CointCount = Array.FindAll(transforms, x => x.tag == "Coin").Length;
-            _collectedCoins.Restart();
             // find restartables for level reset
             _restartables = GetComponentsInChildren<IRestartable>();
+
+            // remove self from restartables, level controller is also restartable
+            for (int i = 0; i < _restartables.Length; i++)
+            {
+                if (ReferenceEquals(_restartables[i], this))
+                {
+                    _restartables.RemoveAt(i);
+                    break;
+                }
+            }
+
+            // trigger level begin event for other scripts to handle
+            EventManager.TriggerEvent("LevelBegin");
         }
 
         /// <summary>
         /// Restarts this level.
         /// </summary>
-        private void RestartLevel()
+        public void Restart()
         {
             if (!enabled) return;
 
