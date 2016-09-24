@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using Extensions;
+using General;
+using Interfaces;
 using UnityEngine;
 
 namespace Behaviors
@@ -9,7 +11,7 @@ namespace Behaviors
     /// movement orientation
     /// </summary>
     /// <seealso cref="UnityEngine.MonoBehaviour" />
-    public class PlayerCamera : MonoBehaviour
+    public class PlayerCamera : MonoBehaviour, IRestartable
     {
         [SerializeField]
         private float _damping = 5.0f;
@@ -27,11 +29,11 @@ namespace Behaviors
         // Use this for initialization
         private void Start()
         {
-            var player = GameObject.FindGameObjectWithTag("Player");
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
 
             if (null == player)
             {
-                Debug.LogError("No player transform found, please use the Player tag");
+                Debug.LogError("No player transform found, use the Player tag");
                 enabled = false;
             }
             else
@@ -41,6 +43,9 @@ namespace Behaviors
                 transform.position = _player.position - transform.forward * _orbitRadius;
                 MovementOrientation = Vector3.right;
             }
+
+            // on level reset restore original rotation
+            EventManager.StartListening("LevelReset", Restart);
         }
 
         private void Update()
@@ -101,6 +106,17 @@ namespace Behaviors
             MovementOrientation = dstOrient;
             // reset coroutine holder
             _orientationChange = null;
+        }
+
+        /// <summary>
+        /// Restores the original movement orientation to the right vector
+        /// </summary>
+        public void Restart()
+        {
+            if(null != _orientationChange) StopCoroutine(_orientationChange);
+
+            float angle = Vector3.Angle(MovementOrientation, Vector3.right);
+            _orientationChange = OrientationChangeCo(angle).Start();
         }
     }
 }

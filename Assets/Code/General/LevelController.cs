@@ -1,5 +1,6 @@
 ﻿using System;
 using Entities;
+using Interfaces;
 using UI;
 using UnityEngine;
 
@@ -14,8 +15,14 @@ namespace General
         [SerializeField]
         private SpawnZone _initialSpawn;
 
-        private CollectedCoinsUI _collectedCoins;
-        private int _cointCount;
+        private IRestartable[] _restartables;
+
+        private static Transform _player;
+        private static CollectedCoinsUI _collectedCoins;
+
+        public int CointCount { get; private set; }
+
+        public static LevelController ActiveLevel { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LevelController"/> class.
@@ -26,22 +33,56 @@ namespace General
             _initialSpawn = initialSpawn;
         }
 
+        private void OnEnable()
+        {
+            ActiveLevel = this;
+        }
+
         private void Start ()
         {
-            _collectedCoins = FindObjectOfType<CollectedCoinsUI>();
-
-            if (!_collectedCoins)
+            if (null == _initialSpawn)
             {
-                Debug.LogError("No " + typeof(CollectedCoinsUI) + " found. " +
+                Debug.LogError("No initial " + typeof(SpawnZone) + " given. " +
                                "Disabling script...");
                 enabled = false;
+                return;
             }
-            else
+
+            // find coins interface
+            if (null == _collectedCoins)
             {
-                var transforms = transform.GetComponentsInChildren<Transform>();
-                _cointCount = Array.FindAll(transforms, x => x.tag == "Coin").Length;
-                _collectedCoins.Initialize(_cointCount);
+                _collectedCoins = FindObjectOfType<CollectedCoinsUI>();
+
+                if (null == _collectedCoins)
+                {
+                    Debug.LogError("No " + typeof(CollectedCoinsUI) + " found. " +
+                                   "Disabling script...");
+                    enabled = false;
+                    return;
+                }
             }
+
+            // find player transform
+            if (null == _player)
+            {
+                GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+                if (null == player)
+                {
+                    Debug.LogError("No player transform found, use the Player tag");
+                    enabled = false;
+                    return;
+                }
+
+                _player = player.transform;
+            }
+
+            // get coin count and initialize coin interface
+            var transforms = GetComponentsInChildren<Transform>();
+            CointCount = Array.FindAll(transforms, x => x.tag == "Coin").Length;
+            _collectedCoins.Restart();
+            // find restartables for level reset
+            _restartables = GetComponentsInChildren<IRestartable>();
         }
 
         /// <summary>
@@ -49,6 +90,18 @@ namespace General
         /// </summary>
         private void RestartLevel()
         {
+            if (!enabled) return;
+
+            // call all level restart actions
+            for (int i = 0; i < _restartables.Length; i++)
+            {
+                _restartables[i].Restart();
+            }
+
+            // restore position from initial spawn
+            _player.position = _initialSpawn.SpawnPoint.position;
+            // call non-level related restart level actions
+            EventManager.TriggerEvent("LevelReset");
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Actors;
 using General;
+using Interfaces;
 using UnityEngine;
 
 namespace UI
@@ -9,14 +10,16 @@ namespace UI
     /// Handles the interface for the player's number of health points
     /// </summary>
     /// <seealso cref="UnityEngine.MonoBehaviour" />
-    public class PlayerHeartsUI : MonoBehaviour
+    public class PlayerHeartsUI : MonoBehaviour, IRestartable
     {
         [SerializeField]
         private GameObject _heartAsset;
 
+        private PlayerActor _player;
         private List<Animator> _heartsAnimators;
         private int _availableHearts;
         private int _dissapearAnimation;
+        private int _appearAnimation;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PlayerHeartsUI"/> class.
@@ -29,8 +32,10 @@ namespace UI
 
         private void Start ()
         {
+            _player = GameSettings.Instance.PlayerSettings;
             // prefetch animation parameter identifiers
             _dissapearAnimation = Animator.StringToHash("Dissapear");
+            _appearAnimation = Animator.StringToHash("Appear");
             // add heart assets to build interface
             BuildHeartsInterface();
             // subscribe to health reduction event
@@ -39,6 +44,8 @@ namespace UI
                 _availableHearts--;
                 AnimateHeart(_dissapearAnimation);
             });
+            // subscribe to level restart event
+            EventManager.StartListening("LevelReset", Restart);
         }
 
         /// <summary>
@@ -66,14 +73,12 @@ namespace UI
         /// </summary>
         private void BuildHeartsInterface()
         {
-            PlayerActor player = GameSettings.Instance.PlayerSettings;
-
-            if (player == null || transform.childCount == player.HealthPoints)
+            if (_player == null || transform.childCount == _player.HealthPoints)
             {
                 return;
             }
 
-            _availableHearts = player.HealthPoints;
+            _availableHearts = _player.HealthPoints;
             _heartsAnimators = new List<Animator>();
 
             // instantiate hearts ui
@@ -82,6 +87,22 @@ namespace UI
                 GameObject go = Instantiate(_heartAsset);
                 go.transform.SetParent(transform, false);
                 _heartsAnimators.Add(go.GetComponentInChildren<Animator>());
+            }
+        }
+
+        /// <summary>
+        /// Restores available hearts count and makes them appear again
+        /// </summary>
+        public void Restart()
+        {
+            _availableHearts = _player.HealthPoints;
+
+            for (int i = 0; i < _heartsAnimators.Count; i++)
+            {
+                if (null != _heartsAnimators[i])
+                {
+                    _heartsAnimators[i].SetTrigger(_appearAnimation);
+                }
             }
         }
     }

@@ -13,7 +13,7 @@ namespace Behaviors
     /// <seealso cref="UnityEngine.MonoBehaviour" />
     /// <seealso cref="Interfaces.IHittable" />
     [RequireComponent(typeof(Collider))]
-    public class PlayerHealth : MonoBehaviour, IHittable
+    public class PlayerHealth : MonoBehaviour, IHittable, IRestartable
     {
         private PlayerActor _player;
         private bool _immunityActive;
@@ -37,7 +37,10 @@ namespace Behaviors
                 Health = _player.HealthPoints;
             }
 
+            // event to receive hits from other objects
             EventManager.StartListening("HitPlayer", Hit);
+            // restore health on level reset
+            EventManager.StartListening("LevelReset", Restart);
         }
 
         /// <summary>
@@ -64,6 +67,11 @@ namespace Behaviors
             Health--;
             TemporalImmunity();
             EventManager.TriggerEvent("HealthReduced");
+        }
+
+        public void Restart()
+        {
+            Health = _player.HealthPoints;
         }
     }
 }

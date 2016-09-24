@@ -48,13 +48,27 @@ namespace Extensions
         }
 
         /// <summary>
-        /// Starts the specified coroutine with the <see cref="CoroutineUtils"/>
+        /// Copies the transform parameters from source.
+        /// </summary>
+        /// <param name="target">The target.</param>
+        /// <param name="source">The source.</param>
+        public static void Copy(this Transform target, Transform source)
+        {
+            target.localPosition = source.localPosition;
+            target.localRotation = source.localRotation;
+            target.localScale = source.localScale;
+        }
+
+        /// <summary>
+        /// Starts the specified coroutine on the <see cref="CoroutineUtils"/>
         /// instance
         /// </summary>
         /// <param name="coroutine">The coroutine.</param>
         /// <returns></returns>
         public static Coroutine Start(this IEnumerator coroutine)
         {
+            if (null == coroutine) return null;
+
             return CoroutineUtils.Instance.StartCoroutine(coroutine);
         }
     }

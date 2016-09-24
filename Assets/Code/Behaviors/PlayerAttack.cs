@@ -108,7 +108,7 @@ namespace Behaviors
                     // if enemy and hittable, register a hit
                     if (rb.CompareTag("Enemy"))
                     {
-                        var enemy = rb.GetComponent(typeof(IHittable)) as IHittable;
+                        var enemy = rb.GetComponent<IHittable>();
 
                         if (enemy != null) enemy.Hit();
                     }

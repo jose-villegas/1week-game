@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Extensions;
+using Interfaces;
+using UnityEngine;
 
 namespace Movement
 {
@@ -6,7 +8,7 @@ namespace Movement
     /// Moving platform movement logic, handles position, rotation and scale.
     /// </summary>
     /// <seealso cref="UnityEngine.MonoBehaviour" />
-    public class MovingPlatform : MonoBehaviour
+    public class MovingPlatform : MonoBehaviour, IRestartable
     {
         [SerializeField]
         private Transform _target;
@@ -36,9 +38,8 @@ namespace Movement
             _target = target;
         }
 
-        private void Start()
+        private void Awake()
         {
-            _rigidbody = GetComponent<Rigidbody>();
             // store the original transform parameters in a hidden gameObject
             _source = new GameObject("_" + transform.name).transform;
             _source.name += _source.GetInstanceID();
@@ -47,6 +48,11 @@ namespace Movement
             _source.localRotation = transform.localRotation;
             _source.localScale = transform.localScale;
             _source.hideFlags = HideFlags.HideInHierarchy;
+        }
+
+        private void Start()
+        {
+            _rigidbody = GetComponent<Rigidbody>();
         }
 
         /// <summary>
@@ -111,6 +117,12 @@ namespace Movement
             Gizmos.DrawLine(src.position, _target.position);
             // indicator
             Gizmos.DrawIcon((src.position + _target.position) / 2.0f, "pokecog");
+        }
+
+        public void Restart()
+        {
+            // restore to original transform
+            transform.Copy(_source);
         }
     }
 }

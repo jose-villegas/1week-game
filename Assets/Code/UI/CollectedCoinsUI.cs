@@ -1,4 +1,5 @@
 ﻿using General;
+using Interfaces;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,7 +9,7 @@ namespace UI
     /// Handles the interface for the player's number of total and collected coins
     /// </summary>
     /// <seealso cref="UnityEngine.MonoBehaviour" />
-    public class CollectedCoinsUI : MonoBehaviour
+    public class CollectedCoinsUI : MonoBehaviour, IRestartable
     {
         [SerializeField]
         private Text _numberCollected;
@@ -31,21 +32,12 @@ namespace UI
 
         private void Start()
         {
+            // updates interface when a coin is collected
             EventManager.StartListening("CoinCollected", ScoreCoin);
+            // restarts ui on level reset
+            EventManager.StartListening("LevelReset", Restart);
         }
 
-        /// <summary>
-        /// Resets to zero de number of coins collected and sets the
-        /// coin count to the number of children of the given transform
-        /// </summary>
-        /// <param name="numberOfCoins">The number of coins.</param>
-        public void Initialize(int numberOfCoins)
-        {
-            _coinsCollected = 0;
-            _numberCollected.text = _coinsCollected.ToString();
-            _coinCount = numberOfCoins;
-            _numberTotal.text = _coinCount.ToString();
-        }
 
         /// <summary>
         /// Adds to the number of coins collected and updates the interface
@@ -58,6 +50,19 @@ namespace UI
             _coinCount--;
             _coinsCollected++;
             _numberCollected.text = _coinsCollected.ToString();
+        }
+
+        /// <summary>
+        /// Resets to zero de number of coins collected and
+        /// sets the coin count to the number of coins in
+        /// <see cref="LevelController.ActiveLevel"/>
+        /// </summary>
+        public void Restart()
+        {
+            _coinsCollected = 0;
+            _numberCollected.text = _coinsCollected.ToString();
+            _coinCount = LevelController.ActiveLevel.CointCount;
+            _numberTotal.text = _coinCount.ToString();
         }
     }
 }

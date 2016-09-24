@@ -13,7 +13,7 @@ namespace Behaviors
     /// <seealso cref="UnityEngine.MonoBehaviour" />
     /// <seealso cref="Interfaces.IHittable" />
     [RequireComponent(typeof(Rigidbody), typeof(Collider))]
-    public class EnemyPatrol : MonoBehaviour, IHittable
+    public class EnemyPatrol : MonoBehaviour, IHittable, IRestartable
     {
         [SerializeField]
         private DynamicActor _enemy;
@@ -57,6 +57,15 @@ namespace Behaviors
                     _agent.speed = _enemy.MovementSpeed;
                 }
             }
+
+            if (null == _points || _points.Length <= 1)
+            {
+                // first point is itself
+                _points = new[] { transform };
+            }
+
+            // set to initial state
+            Restart();
         }
 
         private void Update()
@@ -133,6 +142,14 @@ namespace Behaviors
                 Gizmos.DrawIcon((prevPosition + _points[i].position) / 2.0f, "footsteps");
                 // update previous point
                 prevPosition = _points[i].position;
+            }
+        }
+
+        public void Restart()
+        {
+            if (null != _points && _points.Length > 0)
+            {
+                transform.position = _points[0].position;
             }
         }
     }
