@@ -15,19 +15,20 @@ namespace Entities
 
         public static Transform CurrentSpawnPoint { get; private set; }
 
+        public Transform SpawnPoint
+        {
+            get { return _spawnPoint ?? (_spawnPoint = transform); }
+        }
+
         private void Start ()
         {
-            if (!_spawnPoint)
-            {
-                _spawnPoint = transform;
-            }
         }
 
         private void OnTriggerEnter(Collider col)
         {
             if (!col.CompareTag("Player")) return;
 
-            CurrentSpawnPoint = _spawnPoint;
+            CurrentSpawnPoint = SpawnPoint;
         }
     }
 }

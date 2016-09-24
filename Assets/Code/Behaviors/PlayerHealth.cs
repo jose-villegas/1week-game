@@ -8,14 +8,15 @@ using UnityEngine;
 namespace Behaviors
 {
     /// <summary>
-    /// Handles the player's health points
+    /// Handles the player's health points. Requires collider
+    /// to register hits from other objects
     /// </summary>
     /// <seealso cref="UnityEngine.MonoBehaviour" />
     /// <seealso cref="Interfaces.IHittable" />
+    [RequireComponent(typeof(Collider))]
     public class PlayerHealth : MonoBehaviour, IHittable
     {
         private PlayerActor _player;
-        private PlayerHeartsUI _heartsInterface;
         private bool _immunityActive;
         private int _currentHealth;
 
@@ -42,8 +43,6 @@ namespace Behaviors
             {
                 _currentHealth = _player.HealthPoints;
             }
-
-            _heartsInterface = FindObjectOfType<PlayerHeartsUI>();
         }
 
         /// <summary>
@@ -70,11 +69,6 @@ namespace Behaviors
             if (Health <= 0 || _immunityActive) return;
 
             Health--;
-
-            if (null != _heartsInterface)
-            {
-                _heartsInterface.DissapearHeart();
-            }
         }
     }
 }

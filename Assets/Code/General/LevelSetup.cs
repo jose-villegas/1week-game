@@ -1,4 +1,5 @@
 ﻿using System;
+using Entities;
 using UI;
 using UnityEngine;
 
@@ -10,7 +11,19 @@ namespace General
     /// <seealso cref="UnityEngine.MonoBehaviour" />
     public class LevelSetup : MonoBehaviour
     {
+        [SerializeField]
+        private SpawnZone _initialSpawn;
+
         private CollectedCoinsUI _collectedCoins;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LevelSetup"/> class.
+        /// </summary>
+        /// <param name="initialSpawn">The initial spawn zone.</param>
+        public LevelSetup(SpawnZone initialSpawn)
+        {
+            _initialSpawn = initialSpawn;
+        }
 
         private void Start ()
         {

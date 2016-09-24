@@ -14,7 +14,7 @@ GameObject:
   - 23: {fileID: 2390342}
   m_Layer: 11
   m_Name: PlayerModel
-  m_TagString: Untagged
+  m_TagString: Model
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -144,7 +144,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de8194d21250da04aa0f2ff62a3de81a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _collectedCoinsUI: {fileID: 0}
 --- !u!114 &11427476
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -156,7 +155,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa250321494a8a14a9d351b8fe631b1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _player: {fileID: 11400000, guid: ee8dc9051ed10bb429dfa1bce0fbcca9, type: 2}
 --- !u!114 &11431498
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -168,7 +166,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb70df9a30a18dd4e9fc33dbe6c32781, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _player: {fileID: 11400000, guid: ee8dc9051ed10bb429dfa1bce0fbcca9, type: 2}
   _animator: {fileID: 0}
 --- !u!114 &11460196
 MonoBehaviour:
@@ -181,7 +178,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7acbb2e7d861fd146b62c5a1c63117b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _player: {fileID: 11400000, guid: ee8dc9051ed10bb429dfa1bce0fbcca9, type: 2}
   _animator: {fileID: 0}
 --- !u!114 &11464750
 MonoBehaviour:

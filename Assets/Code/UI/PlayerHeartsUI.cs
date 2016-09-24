@@ -1,4 +1,5 @@
-﻿using Actors;
+﻿using System.Collections.Generic;
+using Actors;
 using Behaviors;
 using Entities;
 using General;
@@ -16,7 +17,10 @@ namespace UI
         private GameObject _heartAsset;
 
         private PlayerHealth _playerHealth;
-        private Animator[] _heartsAnimators = new Animator[0];
+        private List<Animator> _heartsAnimators;
+        private int _availableHearts;
+        private int _dissapearAnimation;
+        private int _appearAnimation;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PlayerHeartsUI"/> class.
@@ -38,36 +42,37 @@ namespace UI
                 enabled = false;
             }
 
+            _dissapearAnimation = Animator.StringToHash("Dissapear");
+            _appearAnimation = Animator.StringToHash("Appear");
             BuildHeartsInterface();
         }
 
-        /// <summary>
-        /// Dissapears
-        /// </summary>
-        public void DissapearHeart()
+        private void Update()
         {
-            // obtain animators from child heartUI assets
-            if (null == _heartsAnimators)
+            // health has been reduced
+            if (_playerHealth.Health < _availableHearts)
             {
-                _heartsAnimators = new Animator[transform.childCount];
-
-                for (int i = 0; i < transform.childCount; i++)
-                {
-                    Transform t = transform.GetChild(i);
-                    _heartsAnimators[i] = t.GetComponentInChildren<Animator>();
-                }
+                _availableHearts--;
+                AnimateHeart(_dissapearAnimation);
             }
+        }
 
+        /// <summary>
+        /// Triggers the given animation for the heart controller
+        /// at index <see cref="_availableHearts"/>
+        /// </summary>
+        public void AnimateHeart(int animationParameter)
+        {
             // current heart being removed
-            int index = _playerHealth.Health;
+            int index = _availableHearts;
 
             // out of range
-            if (index > _heartsAnimators.Length || index < 0) return;
+            if (index > _heartsAnimators.Count || index < 0) return;
 
             if (null != _heartsAnimators[index])
             {
                 // animate to dissapear state
-                _heartsAnimators[index].SetBool("Dissapear", true);
+                _heartsAnimators[index].SetTrigger(animationParameter);
             }
         }
 
@@ -87,15 +92,15 @@ namespace UI
                     Destroy(transform.GetChild(i).gameObject);
                 }
 
-                // obtain the animators as well for animations on health loss
-                _heartsAnimators = new Animator[player.HealthPoints];
+                _availableHearts = player.HealthPoints;
+                _heartsAnimators = new List<Animator>();
 
                 // instantiate hearts ui
-                for (int i = 0; i < player.HealthPoints; i++)
+                for (int i = 0; i < _availableHearts; i++)
                 {
                     GameObject go = Instantiate(_heartAsset);
                     go.transform.SetParent(transform, false);
-                    _heartsAnimators[i] = go.GetComponentInChildren<Animator>();
+                    _heartsAnimators.Add(go.GetComponentInChildren<Animator>());
                 }
             }
         }

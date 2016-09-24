@@ -55,6 +55,8 @@ namespace Behaviors
                     _agent.speed = _enemy.MovementSpeed;
                 }
             }
+
+            _playerHealth = FindObjectOfType<PlayerHealth>();
         }
 
         private void Update()
@@ -101,14 +103,7 @@ namespace Behaviors
 
         private void OnCollisionEnter(Collision col)
         {
-            if (!col.gameObject.CompareTag("Player")) return;
-
-            if (null == _playerHealth)
-            {
-                _playerHealth = col.transform.GetComponent<PlayerHealth>();
-            }
-
-            if (null == _playerHealth) return;
+            if (!col.gameObject.CompareTag("Player") || null == _playerHealth) return;
 
             _playerHealth.Hit();
             _playerHealth.TemporalImmunity();
