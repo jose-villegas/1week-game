@@ -642,15 +642,15 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 440170, guid: 1f38331f3d305514f9be125914de4e5f, type: 2}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 440170, guid: 1f38331f3d305514f9be125914de4e5f, type: 2}
-      propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 440170, guid: 1f38331f3d305514f9be125914de4e5f, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 360
+      objectReference: {fileID: 0}
+    - target: {fileID: 440170, guid: 1f38331f3d305514f9be125914de4e5f, type: 2}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 90.00001
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 121830, guid: 1f38331f3d305514f9be125914de4e5f, type: 2}
       propertyPath: m_IsActive

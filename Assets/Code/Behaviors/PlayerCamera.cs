@@ -22,7 +22,7 @@ namespace Behaviors
 
         private Transform _player;
         private Vector3 _velocity = Vector3.zero;
-        private Coroutine _orientationChange;
+        private Coroutine _orientationCoroutine;
 
         public static Vector3 MovementOrientation { get; private set; }
 
@@ -50,7 +50,7 @@ namespace Behaviors
 
         private void Update()
         {
-            if (null != _orientationChange) { return; }
+            if (null != _orientationCoroutine) { return; }
 
             Vector3 target = _player.position - transform.forward * _orbitRadius;
             transform.position = Vector3.SmoothDamp(transform.position, target,
@@ -59,11 +59,11 @@ namespace Behaviors
 
             if (Input.GetKeyDown(KeyCode.J))
             {
-                _orientationChange = OrientationChangeCo(90).Start();
+                _orientationCoroutine = OrientationChange(90).Start();
             }
             else if (Input.GetKeyDown(KeyCode.K))
             {
-                _orientationChange = OrientationChangeCo(-90).Start(); ;
+                _orientationCoroutine = OrientationChange(-90).Start(); ;
             }
         }
 
@@ -73,7 +73,7 @@ namespace Behaviors
         /// </summary>
         /// <param name="angle">The angle.</param>
         /// <returns></returns>
-        private IEnumerator OrientationChangeCo(float angle)
+        private IEnumerator OrientationChange(float angle)
         {
             float t = 0.0f;
             Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.up);
@@ -105,7 +105,7 @@ namespace Behaviors
             transform.rotation = dstRot;
             MovementOrientation = dstOrient;
             // reset coroutine holder
-            _orientationChange = null;
+            _orientationCoroutine = null;
         }
 
         /// <summary>
@@ -113,10 +113,10 @@ namespace Behaviors
         /// </summary>
         public void Restart()
         {
-            if(null != _orientationChange) StopCoroutine(_orientationChange);
+            if(null != _orientationCoroutine) _orientationCoroutine.Stop();
 
             float angle = Vector3.Angle(MovementOrientation, Vector3.right);
-            _orientationChange = OrientationChangeCo(angle).Start();
+            _orientationCoroutine = OrientationChange(angle).Start();
         }
     }
 }

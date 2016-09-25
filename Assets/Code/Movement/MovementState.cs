@@ -30,7 +30,7 @@ namespace Movement
 
         private PlayerActor _player;
         private Rigidbody _rigidbody;
-        private Coroutine _routine;
+        private Coroutine _toggleCoroutine;
 
         public States State
         {
@@ -124,12 +124,12 @@ namespace Movement
         /// </summary>
         public void ToggleFloating()
         {
-            if (_routine != null)
+            if (_toggleCoroutine != null)
             {
-                StopCoroutine(_routine);
+                _toggleCoroutine.Stop();
             }
 
-            _routine = ToggleFloating(_player.FloatingTime).Start();
+            _toggleCoroutine = ToggleFloating(_player.FloatingTime).Start();
         }
 
         /// <summary>
@@ -148,10 +148,10 @@ namespace Movement
             if (State == States.Floating)
             {
                 yield return new WaitForSeconds(floatingTime);
-                _routine = StartCoroutine(ToggleFloating(0.0f));
+                _toggleCoroutine = ToggleFloating(0.0f).Start();
             }
 
-            _routine = null;
+            _toggleCoroutine = null;
         }
     }
 }

@@ -32,11 +32,6 @@ namespace General
             _initialSpawn = initialSpawn;
         }
 
-        private void OnEnable()
-        {
-            ActiveLevel = this;
-        }
-
         private void Start ()
         {
             if (null == _initialSpawn)
@@ -80,6 +75,13 @@ namespace General
 
             // trigger level begin event for other scripts to handle
             EventManager.TriggerEvent("LevelBegin");
+            // on level begin set the player to starting spawn point
+            _player.position = _initialSpawn.SpawnPoint.position;
+        }
+
+        private void OnEnable()
+        {
+            ActiveLevel = this;
         }
 
         /// <summary>
