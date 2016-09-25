@@ -5,6 +5,8 @@ namespace General
     /// <summary>
     /// Singleton pattern with Unity, object persists between scenes
     /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <seealso cref="MonoBehaviour" />
     public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     {
         private static T _instance;

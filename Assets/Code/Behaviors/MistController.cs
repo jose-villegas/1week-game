@@ -57,7 +57,12 @@ namespace Behaviors
             if (!col.CompareTag("Player")) return;
 
             EventManager.TriggerEvent("HitPlayer");
-            col.transform.position = SpawnZone.CurrentSpawnPoint.position;
+
+            // on mist fall return to the last spawn point
+            if (null != SpawnZone.CurrentSpawnPoint)
+            {
+                col.transform.position = SpawnZone.CurrentSpawnPoint.position;
+            }
         }
     }
 }

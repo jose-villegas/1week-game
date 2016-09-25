@@ -16,6 +16,8 @@ namespace Movement
     {
         [SerializeField]
         private Animator _animator;
+        [SerializeField]
+        private Collider _groundCollider;
 
         private PlayerActor _player;
         private Rigidbody _rigidbody;
@@ -43,6 +45,7 @@ namespace Movement
             this.GetNeededComponent(ref _rigidbody);
             this.GetNeededComponent(ref _state);
             this.GetNeededComponent(ref _animator);
+            this.GetNeededComponent(ref _groundCollider);
             // prefetch animator parameters ids
             _animInflate = Animator.StringToHash("Inflate");
             _animFlatten = Animator.StringToHash("Flatten");
@@ -67,17 +70,10 @@ namespace Movement
             if (Input.GetKeyDown(KeyCode.F))
             {
                 _state.ToggleFloating();
-                _animator.SetBool(_animInflate,
-                                  _state.IsCurrent(MovementState.States.Floating));
             }
 
-            // floating state exists for a given time, check if
-            // no longer floating to disable animation
-            if (!_state.IsCurrent(MovementState.States.Floating) &&
-                    _animator.GetBool(_animInflate))
-            {
-                _animator.SetBool(_animInflate, false);
-            }
+            bool isFloating = _state.IsCurrent(MovementState.States.Floating);
+            _animator.SetBool(_animInflate, isFloating);
 
             // reset floating mode timer
             if (_state.IsPrevious(MovementState.States.Floating))
@@ -89,8 +85,10 @@ namespace Movement
         private void FixedUpdate()
         {
             _movement = Vector3.zero;
-            // on ground movement logic
+            // horizontal on movement orientation logic
             HorizontalMovement();
+            // flatten state logic
+            FlattenMovement();
             // jump movement logic
             JumpMovement();
             // floating mode movement logic
@@ -103,42 +101,52 @@ namespace Movement
         /// </summary>
         private void HorizontalMovement()
         {
+            // for on ground movement, first it has to be ground
+            bool movementCondition = _state.IsCurrent(MovementState.States.Grounded);
+            // falling off slopes or platform condition same speed as on ground
+            movementCondition |= _state.IsCurrent(MovementState.States.Falling) &&
+                                 _state.IsPrevious(MovementState.States.Grounded);
+
             // horizontal movement - forward and backwards,
             // check if grounded to avoid air strafing on jump
-            if (_state.IsCurrent(MovementState.States.Grounded) ||
-                    _state.IsCurrent(MovementState.States.Falling) &&
-                    _state.IsPrevious(MovementState.States.Grounded)
-                    && Math.Abs(_inputAxis.x) > Mathf.Epsilon)
+            if (movementCondition && Math.Abs(_inputAxis.x) > Mathf.Epsilon)
             {
                 _movement = PlayerCamera.MovementOrientation * _inputAxis.x *
                             _player.MovementSpeed;
             }
 
+            // for air strafing horizontal movement, only enabled on falling mode
+            movementCondition = _state.IsCurrent(MovementState.States.Falling);
+            // previous state cannot be on ground, this follows normal speed
+            movementCondition &= !_state.IsPrevious(MovementState.States.Grounded);
+
             // air strafing happens on falling state
-            if (_state.IsCurrent(MovementState.States.Falling) &&
-                    (_state.IsPrevious(MovementState.States.OnJump)
-                     || _state.IsPrevious(MovementState.States.Floating))
-                    && Math.Abs(_inputAxis.x) > Mathf.Epsilon)
+            if (movementCondition && Math.Abs(_inputAxis.x) > Mathf.Epsilon)
             {
                 _movement = PlayerCamera.MovementOrientation * _inputAxis.x *
                             _player.AirStrafingSpeed;
             }
 
+            _rigidbody.MovePosition(transform.position + _movement * Time.deltaTime);
+        }
+
+        /// <summary>
+        /// Handles the "flatten" state, smaller collider for tight corridors
+        /// </summary>
+        private void FlattenMovement()
+        {
+            bool isSquashed = _animator.GetBool(_animFlatten) &&
+                              _groundCollider.IsSquashed();
+
             // flatten with push down on ground
-            if (_state.IsCurrent(MovementState.States.Grounded) &&
-                    _inputAxis.y < 0.0f && !_animator.GetBool("Flatten"))
+            if (isSquashed || _state.IsCurrent(MovementState.States.Grounded) &&
+                    _inputAxis.y < 0.0f && !_animator.GetBool(_animFlatten))
             {
                 _animator.SetBool(_animFlatten, true);
             }
-            else if(_animator.GetBool(_animFlatten) && _inputAxis.y >= 0.0f)
+            else if (_animator.GetBool(_animFlatten) && _inputAxis.y >= 0.0f)
             {
                 _animator.SetBool(_animFlatten, false);
-            }
-
-            if (_state.IsCurrent(MovementState.States.Grounded) ||
-                    _state.IsCurrent(MovementState.States.Falling))
-            {
-                _rigidbody.MovePosition(transform.position + _movement * Time.deltaTime);
             }
         }
 
@@ -153,7 +161,7 @@ namespace Movement
                 // jump direction force
                 _rigidbody.AddForce
                 (
-                    Vector3.right * _movement.x * _player.JumpingForce.x +
+                    _movement * _player.JumpingForce.x +
                     Vector3.up * _player.JumpingForce.y
                 );
             }

@@ -48,7 +48,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 172926}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071067}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -18.6, y: 20.65, z: -17.15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
   m_Children:
@@ -166,7 +166,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb70df9a30a18dd4e9fc33dbe6c32781, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animator: {fileID: 0}
+  _animator: {fileID: 9554082}
+  _groundCollider: {fileID: 13692004}
 --- !u!114 &11460196
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -178,7 +179,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7acbb2e7d861fd146b62c5a1c63117b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animator: {fileID: 0}
+  _animator: {fileID: 9554082}
 --- !u!114 &11464750
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -192,7 +193,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _state: 0
   _previousState: 0
-  _groundCollider: {fileID: 0}
+  _groundCollider: {fileID: 13692004}
 --- !u!135 &13525226
 SphereCollider:
   m_ObjectHideFlags: 1

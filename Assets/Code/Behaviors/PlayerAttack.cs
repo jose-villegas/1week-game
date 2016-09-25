@@ -48,11 +48,6 @@ namespace Behaviors
             _enemiesMask = LayerMask.GetMask("Enemies");
         }
 
-        private void RecoverFlattenSpeed()
-        {
-            _animator.SetFloat(_animFlattenSpeed, 1.0f);
-        }
-
         private void Update()
         {
             _verticalInput = Input.GetAxis("Vertical");

@@ -49,6 +49,20 @@ namespace Extensions
         }
 
         /// <summary>
+        /// Determines whether the actor is squeezed between two colliders
+        /// </summary>
+        /// <param name="actor">The actor.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified actor is squashed; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsSquashed(this Collider actor)
+        {
+            bool top = Physics.Raycast(actor.transform.position, Vector3.up,
+                                       actor.bounds.extents.y + 0.1f);
+            return top && actor.IsGrounded();
+        }
+
+        /// <summary>
         /// Copies the transform parameters from source.
         /// </summary>
         /// <param name="target">The target.</param>

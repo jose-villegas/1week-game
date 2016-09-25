@@ -140,6 +140,13 @@ namespace Movement
         /// <returns></returns>
         private IEnumerator ToggleFloating(float floatingTime)
         {
+            // if the player is jumping wait for falling to avoid
+            // vertical force stacking
+            while (State == States.OnJump)
+            {
+                yield return new WaitForFixedUpdate();
+            }
+
             // if it's already inflated then reset and deflate, asume it's
             // falling UpdateMovementState will set the correct state
             State = State == States.Floating ? States.Falling : States.Floating;
@@ -147,6 +154,7 @@ namespace Movement
             // if no input is received the floating mode will eventually timeout
             if (State == States.Floating)
             {
+                // floating time for reset back to falling state
                 yield return new WaitForSeconds(floatingTime);
                 _toggleCoroutine = ToggleFloating(0.0f).Start();
             }

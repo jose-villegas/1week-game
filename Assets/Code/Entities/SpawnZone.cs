@@ -20,10 +20,6 @@ namespace Entities
             get { return _spawnPoint ?? (_spawnPoint = transform); }
         }
 
-        private void Start ()
-        {
-        }
-
         private void OnTriggerEnter(Collider col)
         {
             if (!col.CompareTag("Player")) return;
