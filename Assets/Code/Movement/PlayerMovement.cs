@@ -50,15 +50,12 @@ namespace Movement
             _animInflate = Animator.StringToHash("Inflate");
             _animFlatten = Animator.StringToHash("Flatten");
             // subscribe to player death event to stop movement
-            EventManager.StartListening("PlayerDied", () =>
-            {
-                enabled = false;
-            });
+            EventManager.StartListening("PlayerDied", () => { enabled = false; });
             // subscribe to level reset to start movement again
-            EventManager.StartListening("LevelReset", () =>
-            {
-                enabled = true;
-            });
+            EventManager.StartListening("LevelReset", () => { enabled = true; });
+            // subscribe to game pause events
+            EventManager.StartListening("GamePaused", () => { enabled = false; });
+            EventManager.StartListening("GameResumed", () => { enabled = true; });
         }
 
         private void Update()

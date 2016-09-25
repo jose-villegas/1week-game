@@ -13,6 +13,7 @@ namespace UI
     {
         private Button _button;
         private Animator _animator;
+        private int _appearAnimation;
 
         private void Start ()
         {
@@ -28,6 +29,8 @@ namespace UI
             if (null == _button) return;
 
             _button.onClick.AddListener(Dissapear);
+            // prefetch animation
+            _appearAnimation = Animator.StringToHash("Appear");
         }
 
         /// <summary>
@@ -36,7 +39,7 @@ namespace UI
         private void Dissapear()
         {
             _button.interactable = false;
-            _animator.SetBool("Appear", false);
+            _animator.SetBool(_appearAnimation, false);
             LevelController.ActiveLevel.Restart();
         }
 
@@ -46,7 +49,7 @@ namespace UI
         private void Appear()
         {
             _button.interactable = true;
-            _animator.SetBool("Appear", true);
+            _animator.SetBool(_appearAnimation, true);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Extensions;
+using General;
 using Interfaces;
 using UnityEngine;
 
@@ -53,6 +54,9 @@ namespace Movement
         private void Start()
         {
             _rigidbody = GetComponent<Rigidbody>();
+            // subscribe to game pause events
+            EventManager.StartListening("GamePaused", () => { enabled = false; });
+            EventManager.StartListening("GameResumed", () => { enabled = true; });
         }
 
         /// <summary>

@@ -66,6 +66,25 @@ namespace Behaviors
 
             // set to initial state
             Restart();
+            // pause events
+            EventManager.StartListening("GamePaused", OnGamePaused);
+            EventManager.StartListening("GameResumed", OnGameResumed);
+        }
+
+        private void OnGamePaused()
+        {
+            if (null != _agent && enabled)
+            {
+                _agent.enabled = false;
+            }
+        }
+
+        private void OnGameResumed()
+        {
+            if (null != _agent && enabled)
+            {
+                _agent.enabled = true;
+            }
         }
 
         private void Update()

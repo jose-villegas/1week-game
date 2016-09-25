@@ -62,17 +62,6 @@ namespace General
             CointCount = Array.FindAll(transforms, x => x.tag == "Coin").Length;
             // find restartables for level reset
             _restartables = GetComponentsInChildren<IRestartable>();
-
-            // remove self from restartables, level controller is also restartable
-            for (int i = 0; i < _restartables.Length; i++)
-            {
-                if (ReferenceEquals(_restartables[i], this))
-                {
-                    _restartables.RemoveAt(i);
-                    break;
-                }
-            }
-
             // trigger level begin event for other scripts to handle
             EventManager.TriggerEvent("LevelBegin");
             // on level begin set the player to starting spawn point
@@ -94,6 +83,9 @@ namespace General
             // call all level restart actions
             for (int i = 0; i < _restartables.Length; i++)
             {
+                // avoid calling restart on self, infinite recursion
+                if (ReferenceEquals(_restartables[i], this)) continue;
+
                 _restartables[i].Restart();
             }
 

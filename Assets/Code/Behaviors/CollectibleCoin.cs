@@ -22,6 +22,26 @@ namespace Behaviors
             _animator = GetComponent<Animator>();
             _collider = GetComponent<Collider>();
             _dissapearAnimation = Animator.StringToHash("Dissapear");
+            EventManager.StartListening("GamePaused", OnGamePaused);
+            EventManager.StartListening("GameResumed", OnGameResumed);
+        }
+
+        private void OnGamePaused()
+        {
+            if (null != _animator && enabled)
+            {
+                _animator.enabled = false;
+                _collider.enabled = false;
+            }
+        }
+
+        private void OnGameResumed()
+        {
+            if (null != _animator && enabled)
+            {
+                _animator.enabled = true;
+                _collider.enabled = true;
+            }
         }
 
         private void OnTriggerEnter(Collider col)
