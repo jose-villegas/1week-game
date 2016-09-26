@@ -7,11 +7,6 @@ namespace General
 {
     public class ObjectPool : MonoBehaviour
     {
-        private class PoolMember : MonoBehaviour
-        {
-            public ObjectPool Pool { get; set; }
-        }
-
         [SerializeField]
         private GameObject _poolObject;
         [SerializeField]
@@ -38,6 +33,13 @@ namespace General
 
         private void Start()
         {
+            if (null == _poolObject)
+            {
+                Debug.LogError("The given poolObject is null. Destroying this object...");
+                Destroy(gameObject);
+                return;
+            }
+
             if (null != _poolObject && !_pools.ContainsKey(_poolObject))
             {
                 _pools.Add(_poolObject, this);
@@ -65,6 +67,7 @@ namespace General
             if (localScale == null) { localScale = new Vector3(1, 1, 1); }
 
             GameObject obj;
+            PoolMember member = null;
 
             if (_actives.Count < _capacity)
             {
@@ -73,8 +76,18 @@ namespace General
                     // the object isn't on the pool, thus it's instantiated
                     obj = Instantiate(_poolObject);
                     obj.name = _poolObject.name + " (" + obj.GetInstanceID() + ")";
+                    obj.transform.SetParent(transform);
                     // link with this object pool
-                    obj.AddComponent<PoolMember>().Pool = this;
+                    member = obj.GetComponent<PoolMember>();
+
+                    if (null == member)
+                    {
+                        obj.AddComponent<PoolMember>().Pool = this;
+                    }
+                    else
+                    {
+                        member.Pool = this;
+                    }
                 }
                 else
                 {
@@ -91,6 +104,15 @@ namespace General
             if (obj == null)
             {
                 return Spawn(position, rotation, localScale);
+            }
+
+            if (null != member)
+            {
+                member.OnSpawn();
+            }
+            else
+            {
+                obj.GetComponent<PoolMember>().OnSpawn();
             }
 
             // set transform parameters
@@ -127,9 +149,10 @@ namespace General
         /// and deactivates it's <see cref="GameObject"/>
         /// </summary>
         /// <param name="member">The member.</param>
-        private void Despawn(Component member)
+        private void Despawn(PoolMember member)
         {
             member.gameObject.SetActive(false);
+            member.OnDespawn();
             _inactives.Push(member.gameObject);
         }
 
@@ -141,7 +164,7 @@ namespace General
         /// <param name="poolObject">The pool object.</param>
         /// <param name="capacity">The pool capacity.</param>
         /// <returns></returns>
-        public static ObjectPool Instance(GameObject poolObject, int capacity)
+        public static ObjectPool Instance(GameObject poolObject, int capacity = 5)
         {
             if (_pools.ContainsKey(poolObject))
             {
@@ -154,6 +177,26 @@ namespace General
             pool.Initialize(poolObject, capacity);
             go.name = typeof(ObjectPool) + " (" + poolObject + ")";
             return pool;
+        }
+
+        /// <summary>
+        /// Pre-instances all the pool members objects
+        /// </summary>
+        public void Preload()
+        {
+            GameObject[] objs = new GameObject[_capacity];
+
+            // spawn all the pool members
+            for (int i = 0; i < _capacity; i++)
+            {
+                objs[i] = Spawn();
+            }
+
+            // now despawn them
+            for (int i = 0; i < _capacity; i++)
+            {
+                Despawn(objs[i]);
+            }
         }
     }
 }
