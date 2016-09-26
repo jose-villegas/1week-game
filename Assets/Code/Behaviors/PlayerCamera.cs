@@ -77,7 +77,7 @@ namespace Behaviors
         {
             float t = 0.0f;
             Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.up);
-            // camera final rotatio
+            // camera final rotation
             Quaternion srcRot = transform.rotation;
             Quaternion dstRot = rotation * transform.rotation;
             // camera final position

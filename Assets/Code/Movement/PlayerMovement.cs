@@ -103,7 +103,7 @@ namespace Movement
                 // transform rotation extract
                 Vector3 up;
 
-                if (!_groundCollider.GroundNormal(out up)) return;
+                if (!_groundCollider.GroundNormal(out up) || up == Vector3.zero) return;
 
                 Vector3 right = Quaternion.AngleAxis(-90, Vector3.up) * orientation;
                 Vector3 forward = Vector3.Cross(up, right);
