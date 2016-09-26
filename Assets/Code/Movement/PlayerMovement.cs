@@ -100,10 +100,10 @@ namespace Movement
             if (_state.IsCurrent(MovementState.States.Grounded))
             {
                 Vector3 orientation = PlayerCamera.MovementOrientation;
-                // transform rotation extradct
-                Vector3 up = _groundCollider.GroundNormal();
+                // transform rotation extract
+                Vector3 up;
 
-                if (up == Vector3.zero) return;
+                if (!_groundCollider.GroundNormal(out up)) return;
 
                 Vector3 right = Quaternion.AngleAxis(-90, Vector3.up) * orientation;
                 Vector3 forward = Vector3.Cross(up, right);

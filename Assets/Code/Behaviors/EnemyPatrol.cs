@@ -1,4 +1,5 @@
-﻿using Actors;
+﻿using System.Text;
+using Actors;
 using Extensions;
 using General;
 using Interfaces;
@@ -12,11 +13,13 @@ namespace Behaviors
     /// </summary>
     /// <seealso cref="UnityEngine.MonoBehaviour" />
     /// <seealso cref="Interfaces.IHittable" />
-    [RequireComponent(typeof(Rigidbody), typeof(Collider))]
+    [RequireComponent(typeof(Rigidbody))]
     public class EnemyPatrol : MonoBehaviour, IHittable, IRestartable
     {
         [SerializeField]
         private DynamicActor _enemy;
+        [SerializeField]
+        private Collider _groundCollider;
         [SerializeField]
         private Transform[] _points;
         [SerializeField]
@@ -24,6 +27,8 @@ namespace Behaviors
 
         private Rigidbody _rigidbody;
         private NavMeshAgent _agent;
+        private MeshRenderer _model;
+        private bool _isDead;
         private int _targetPoint;
 
         /// <summary>
@@ -39,9 +44,11 @@ namespace Behaviors
 
         private void Start()
         {
+            _model = GetComponentInChildren<MeshRenderer>();
             // neccesary components for the script to work
             this.GetNeededComponent(ref _rigidbody);
             this.GetNeededComponent(ref _agent);
+            this.GetNeededComponent(ref _groundCollider);
 
             // neccesary for enemy parameters
             if (!_enemy)
@@ -100,6 +107,32 @@ namespace Behaviors
             {
                 GoToNextPoint();
             }
+
+            OrientModel();
+        }
+
+        /// <summary>
+        /// Orients the <see cref="MeshRenderer"/> model transform
+        /// to match smoothly the surface normal
+        /// </summary>
+        private void OrientModel()
+        {
+            if (null == _model) return;
+
+            Vector3 up;
+
+            if (_groundCollider.GroundNormal(out up))
+            {
+                Vector3 forward = _agent.transform.forward;
+                forward.y = 0.0f;
+
+                if (forward != Vector3.zero)
+                {
+                    var look = Quaternion.LookRotation(forward, Vector3.up);
+                    var norm = Quaternion.FromToRotation(Vector3.up, up);
+                    _model.transform.rotation = norm * look;
+                }
+            }
         }
 
         /// <summary>
@@ -108,9 +141,10 @@ namespace Behaviors
         /// </summary>
         public void Hit()
         {
+            _isDead = true;
             _agent.enabled = false;
             _rigidbody.isKinematic = false;
-            enabled = false;
+            _groundCollider.enabled = false;
         }
 
         /// <summary>
@@ -132,7 +166,7 @@ namespace Behaviors
 
         private void OnCollisionEnter(Collision col)
         {
-            if (!col.gameObject.CompareTag("Player") || !enabled) return;
+            if (!col.gameObject.CompareTag("Player") || !_isDead) return;
 
             EventManager.TriggerEvent("HitPlayer");
         }

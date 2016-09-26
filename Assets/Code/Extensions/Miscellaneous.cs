@@ -48,12 +48,19 @@ namespace Extensions
                                    actor.bounds.extents.y + 0.1f);
         }
 
-        public static Vector3 GroundNormal(this Collider actor)
+        /// <summary>
+        /// Obtains the surface normal below a collider if raycast is sucessfull
+        /// </summary>
+        /// <param name="actor">The actor.</param>
+        /// <param name="groundNormal">The ground normal.</param>
+        /// <returns></returns>
+        public static bool GroundNormal(this Collider actor, out Vector3 groundNormal)
         {
             RaycastHit hit;
             Ray ray = new Ray(actor.transform.position, -Vector3.up);
-            Physics.Raycast(ray, out hit, actor.bounds.extents.y + 0.1f);
-            return hit.normal;
+            bool ground = Physics.Raycast(ray, out hit, actor.bounds.extents.y + 0.1f);
+            groundNormal = ground ? hit.normal : Vector3.zero;
+            return ground;
         }
 
         /// <summary>
