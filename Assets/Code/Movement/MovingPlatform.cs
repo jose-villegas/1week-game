@@ -25,13 +25,13 @@ namespace Movement
         private float _elapsedTime;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MovingPlatform"/> class.
+        /// Initializes a <see cref="MovingPlatform"/> class.
         /// </summary>
         /// <param name="target">The target transform.</param>
         /// <param name="movementCurve">The movement curve.</param>
         /// <param name="speed">The speed.</param>
-        public MovingPlatform(Transform target, AnimationCurve movementCurve,
-                              float speed)
+        public void Initialize(Transform target, AnimationCurve movementCurve,
+                               float speed)
         {
             _target = target;
             _movementCurve = movementCurve;

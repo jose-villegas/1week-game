@@ -1,4 +1,5 @@
 ﻿using Actors;
+using General;
 using UnityEngine;
 
 namespace Behaviors
@@ -16,8 +17,6 @@ namespace Behaviors
         private Transform _rotatingGun;
 
         private Transform _player;
-        private float _gunHeight;
-        private float _gunDistance;
 
         private void Start ()
         {
@@ -40,12 +39,12 @@ namespace Behaviors
                 _player = player.transform;
             }
 
-            Vector3 position = _rotatingGun.localPosition;
-            // height respective to parent
-            _gunHeight = position.y;
-            // horizontal distance from parent origin
-            position.y = 0;
-            _gunDistance = position.magnitude;
+            InvokeRepeating("CreateSomething", 0, 1);
+        }
+
+        private void CreateSomething()
+        {
+            ObjectPool.Instance(_rotatingGun.gameObject, 10).Spawn();
         }
 
         private void Update()
@@ -64,13 +63,15 @@ namespace Behaviors
             directionToPlayer.y = 0.0f;
             directionToPlayer = directionToPlayer.normalized;
             // look at player rotation
-            var rotation = Quaternion.LookRotation(directionToPlayer, Vector3.up);
-            var position = transform.position + directionToPlayer * _gunDistance +
-                           Vector3.up * _gunHeight;
-            // finally do rotation and translation
-            float t = Time.deltaTime * _enemy.AngularSpeed;
-            _rotatingGun.rotation = Quaternion.Slerp(_rotatingGun.rotation, rotation, t);
-            _rotatingGun.position = Vector3.Lerp(_rotatingGun.position, position, t);
+            float angle = Vector3.Angle(_rotatingGun.forward, directionToPlayer);
+
+            if (Vector3.Cross(_rotatingGun.forward, directionToPlayer).y < 0)
+            {
+                angle = -angle;
+            }
+
+            angle = angle * Time.deltaTime * _enemy.AngularSpeed;
+            _rotatingGun.RotateAround(transform.position, transform.up, angle);
         }
     }
 }

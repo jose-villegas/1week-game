@@ -11,7 +11,7 @@ GameObject:
   - 65: {fileID: 6588956}
   - 114: {fileID: 11404240}
   - 54: {fileID: 5453742}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: SpawnZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26,7 +26,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 414678}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: SpawnPoint
   m_TagString: SpawnPoint
   m_Icon: {fileID: 0}

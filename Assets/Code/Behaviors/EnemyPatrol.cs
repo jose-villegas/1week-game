@@ -35,11 +35,11 @@ namespace Behaviors
         private int _dissapearAnimation;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="EnemyPatrol" /> class.
+        /// Initializes a <see cref="EnemyPatrol" /> class.
         /// </summary>
         /// <param name="points">The patrolling points.</param>
         /// <param name="enemy">The enemy.</param>
-        public EnemyPatrol(Transform[] points, DynamicActor enemy)
+        public void Initialize(Transform[] points, DynamicActor enemy)
         {
             _points = points;
             _enemy = enemy;

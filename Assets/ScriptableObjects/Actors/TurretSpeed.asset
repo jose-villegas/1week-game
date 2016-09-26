@@ -14,6 +14,6 @@ MonoBehaviour:
   _healthPoints: 1
   _immunityTime: 0
   _speed: 0
-  _angularSpeed: 1
+  _angularSpeed: 2.5
   _jumpForce: {x: 0, y: 0}
   _airStrafingSpeed: 0

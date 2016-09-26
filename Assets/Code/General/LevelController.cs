@@ -24,10 +24,10 @@ namespace General
         public static LevelController ActiveLevel { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LevelController"/> class.
+        /// Initializes a <see cref="LevelController"/> class.
         /// </summary>
         /// <param name="initialSpawn">The initial spawn zone.</param>
-        public LevelController(SpawnZone initialSpawn)
+        public void Initialize(SpawnZone initialSpawn)
         {
             _initialSpawn = initialSpawn;
         }
