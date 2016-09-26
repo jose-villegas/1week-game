@@ -45,7 +45,7 @@ namespace Behaviors
 
         /// <summary>
         /// Actives temporal immunity to hits for the given
-        /// <see cref="DynamicActor.AfterHitImmunityTime"/>
+        /// <see cref="DynamicActor.ImmunityTime"/>
         /// </summary>
         public void TemporalImmunity()
         {
@@ -54,7 +54,7 @@ namespace Behaviors
             CoroutineUtils.DelaySeconds(() =>
             {
                 _immunityActive = false;
-            }, _player.AfterHitImmunityTime).Start();
+            }, _player.ImmunityTime).Start();
         }
 
         /// <summary>

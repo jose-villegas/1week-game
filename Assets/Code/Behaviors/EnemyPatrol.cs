@@ -54,7 +54,8 @@ namespace Behaviors
             {
                 if (_agent)
                 {
-                    _agent.speed = _enemy.MovementSpeed;
+                    _agent.speed = _enemy.Speed;
+                    _agent.angularSpeed = _enemy.AngularSpeed;
                 }
             }
 
@@ -131,7 +132,7 @@ namespace Behaviors
 
         private void OnCollisionEnter(Collision col)
         {
-            if (!col.gameObject.CompareTag("Player")) return;
+            if (!col.gameObject.CompareTag("Player") || !enabled) return;
 
             EventManager.TriggerEvent("HitPlayer");
         }

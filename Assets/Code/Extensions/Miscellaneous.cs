@@ -48,6 +48,14 @@ namespace Extensions
                                    actor.bounds.extents.y + 0.1f);
         }
 
+        public static Vector3 GroundNormal(this Collider actor)
+        {
+            RaycastHit hit;
+            Ray ray = new Ray(actor.transform.position, -Vector3.up);
+            Physics.Raycast(ray, out hit, actor.bounds.extents.y + 0.1f);
+            return hit.normal;
+        }
+
         /// <summary>
         /// Determines whether the actor is squeezed between two colliders
         /// </summary>

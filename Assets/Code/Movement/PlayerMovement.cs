@@ -27,6 +27,8 @@ namespace Movement
         private float _upwardTimer;
         private int _animInflate;
         private int _animFlatten;
+        private Vector3 _savedVelocity;
+        private Vector3 _savedAngularVelocity;
 
         private void Start()
         {
@@ -54,8 +56,24 @@ namespace Movement
             // subscribe to level reset to start movement again
             EventManager.StartListening("LevelReset", () => { enabled = true; });
             // subscribe to game pause events
-            EventManager.StartListening("GamePaused", () => { enabled = false; });
-            EventManager.StartListening("GameResumed", () => { enabled = true; });
+            EventManager.StartListening("GamePaused", OnGamePaused);
+            EventManager.StartListening("GameResumed", OnGameResumed);
+        }
+
+        private void OnGameResumed()
+        {
+            _rigidbody.isKinematic = false;
+            _rigidbody.AddTorque(_savedAngularVelocity, ForceMode.VelocityChange);
+            _rigidbody.AddForce(_savedVelocity, ForceMode.VelocityChange);
+            enabled = true;
+        }
+
+        private void OnGamePaused()
+        {
+            _savedAngularVelocity = _rigidbody.angularVelocity;
+            _savedVelocity = _rigidbody.velocity;
+            _rigidbody.isKinematic = true;
+            enabled = false;
         }
 
         private void Update()
@@ -76,6 +94,25 @@ namespace Movement
             if (_state.IsPrevious(MovementState.States.Floating))
             {
                 _upwardTimer = 0.0f;
+            }
+
+            // look to orientation
+            if (_state.IsCurrent(MovementState.States.Grounded))
+            {
+                Vector3 orientation = PlayerCamera.MovementOrientation;
+                // transform rotation extradct
+                Vector3 up = _groundCollider.GroundNormal();
+
+                if (up == Vector3.zero) return;
+
+                Vector3 right = Quaternion.AngleAxis(-90, Vector3.up) * orientation;
+                Vector3 forward = Vector3.Cross(up, right);
+                // final rotation, oriented with ground normal and proper forward
+                Quaternion rotation = Quaternion.LookRotation(forward, up);
+                // lerp with angular speed
+                rotation = Quaternion.Lerp(transform.rotation, rotation,
+                                           Time.deltaTime * _player.AngularSpeed);
+                transform.rotation = rotation;
             }
         }
 
@@ -109,7 +146,7 @@ namespace Movement
             if (movementCondition && Math.Abs(_inputAxis.x) > Mathf.Epsilon)
             {
                 _movement = PlayerCamera.MovementOrientation * _inputAxis.x *
-                            _player.MovementSpeed;
+                            _player.Speed;
             }
 
             // for air strafing horizontal movement, only enabled on falling mode
@@ -158,8 +195,8 @@ namespace Movement
                 // jump direction force
                 _rigidbody.AddForce
                 (
-                    _movement * _player.JumpingForce.x +
-                    Vector3.up * _player.JumpingForce.y
+                    _movement * _player.JumpForce.x +
+                    Vector3.up * _player.JumpForce.y
                 );
             }
         }

@@ -12,11 +12,13 @@ namespace Actors
         [SerializeField, Header("Health")]
         private int _healthPoints = 1;
         [SerializeField]
-        private float _afterHitImmunityTime = 3.0f;
+        private float _immunityTime = 3.0f;
         [SerializeField, Header("Movement")]
-        private float _movementSpeed = 5.0f;
+        private float _speed = 5.0f;
         [SerializeField]
-        private Vector2 _jumpingForce = new Vector2(35, 350);
+        private float _angularSpeed = 120.0f;
+        [SerializeField]
+        private Vector2 _jumpForce = new Vector2(35, 350);
         [SerializeField]
         private float _airStrafingSpeed = 1.0f ;
 
@@ -30,19 +32,24 @@ namespace Actors
             get { return _healthPoints; }
         }
 
-        public float AfterHitImmunityTime
+        public float ImmunityTime
         {
-            get { return _afterHitImmunityTime; }
+            get { return _immunityTime; }
         }
 
-        public float MovementSpeed
+        public float Speed
         {
-            get { return _movementSpeed; }
+            get { return _speed; }
         }
 
-        public Vector2 JumpingForce
+        public Vector2 JumpForce
         {
-            get { return _jumpingForce; }
+            get { return _jumpForce; }
+        }
+
+        public float AngularSpeed
+        {
+            get { return _angularSpeed; }
         }
     }
 }
