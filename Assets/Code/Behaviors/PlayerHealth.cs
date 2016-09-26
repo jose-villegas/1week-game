@@ -10,9 +10,9 @@ namespace Behaviors
     /// Handles the player's health points. Requires collider
     /// to register hits from other objects
     /// </summary>
+    /// <seealso cref="Interfaces.IRestartable" />
     /// <seealso cref="UnityEngine.MonoBehaviour" />
     /// <seealso cref="Interfaces.IHittable" />
-    [RequireComponent(typeof(Collider))]
     public class PlayerHealth : MonoBehaviour, IHittable, IRestartable
     {
         private PlayerActor _player;

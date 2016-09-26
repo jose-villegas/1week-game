@@ -11,6 +11,7 @@ GameObject:
   - 33: {fileID: 3355180}
   - 23: {fileID: 2383750}
   - 65: {fileID: 6504440}
+  - 95: {fileID: 9566516}
   m_Layer: 10
   m_Name: EnemyModel
   m_TagString: Untagged
@@ -123,6 +124,23 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!95 &9566516
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 128516}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d1c56b035d8148a4abc6cc16c2b56139, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!114 &11437968
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -136,9 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemy: {fileID: 11400000, guid: b580decf6b988694395181c25e9cda45, type: 2}
   _groundCollider: {fileID: 6504440}
-  _points:
-  - {fileID: 0}
-  - {fileID: 0}
+  _points: []
   _minimumDistance: 0.1
 --- !u!195 &19563236
 NavMeshAgent:

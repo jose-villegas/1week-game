@@ -11,6 +11,7 @@ namespace Behaviors
     /// Enemy behavior for patrolling movement, moves the enemy
     /// actor between a set of points within the navigation mesh
     /// </summary>
+    /// <seealso cref="Interfaces.IRestartable" />
     /// <seealso cref="UnityEngine.MonoBehaviour" />
     /// <seealso cref="Interfaces.IHittable" />
     [RequireComponent(typeof(Rigidbody))]
@@ -28,8 +29,10 @@ namespace Behaviors
         private Rigidbody _rigidbody;
         private NavMeshAgent _agent;
         private MeshRenderer _model;
+        private Animator _animator;
         private bool _isDead;
         private int _targetPoint;
+        private int _dissapearAnimation;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EnemyPatrol" /> class.
@@ -49,6 +52,12 @@ namespace Behaviors
             this.GetNeededComponent(ref _rigidbody);
             this.GetNeededComponent(ref _agent);
             this.GetNeededComponent(ref _groundCollider);
+            this.GetNeededComponent(ref _animator);
+
+            if (null != _animator)
+            {
+                _dissapearAnimation = Animator.StringToHash("Dissapear");
+            }
 
             // neccesary for enemy parameters
             if (!_enemy)
@@ -144,7 +153,16 @@ namespace Behaviors
             _isDead = true;
             _agent.enabled = false;
             _rigidbody.isKinematic = false;
-            _groundCollider.enabled = false;
+            // play dissapear animation
+            CoroutineUtils.DelaySeconds(() =>
+            {
+                _animator.SetBool(_dissapearAnimation, true);
+            }, 2.0f).Start();
+            // disable after a time
+            CoroutineUtils.DelaySeconds(() =>
+            {
+                gameObject.SetActive(false);
+            }, 3.0f).Start();
         }
 
         /// <summary>
@@ -166,7 +184,7 @@ namespace Behaviors
 
         private void OnCollisionEnter(Collision col)
         {
-            if (!col.gameObject.CompareTag("Player") || !_isDead) return;
+            if (!col.gameObject.CompareTag("Player") || _isDead) return;
 
             EventManager.TriggerEvent("HitPlayer");
         }
@@ -205,6 +223,12 @@ namespace Behaviors
             {
                 transform.position = _points[0].position;
             }
+
+            gameObject.SetActive(true);
+            _animator.SetBool(_dissapearAnimation, false);
+            _isDead = false;
+            _rigidbody.isKinematic = true;
+            _agent.enabled = true;
         }
     }
 }

@@ -9,6 +9,7 @@ namespace Behaviors
     /// <summary>
     /// Describes a level coin meant to be collected by the player
     /// </summary>
+    /// <seealso cref="Interfaces.IRestartable" />
     /// <seealso cref="UnityEngine.MonoBehaviour" />
     [RequireComponent(typeof(Collider))]
     public class CollectibleCoin : MonoBehaviour, IRestartable
@@ -46,7 +47,9 @@ namespace Behaviors
 
         private void OnTriggerEnter(Collider col)
         {
-            if (!col.CompareTag("Player")) return;
+            var rb = col.attachedRigidbody;
+
+            if (null == rb || !rb.CompareTag("Player")) return;
 
             // dissapear animation then destory the object
             if (null != _animator)

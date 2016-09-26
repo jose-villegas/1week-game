@@ -14,9 +14,7 @@ namespace Behaviors
     [RequireComponent(typeof(Rigidbody), typeof(MovementState))]
     public class PlayerAttack : MonoBehaviour
     {
-        [SerializeField]
         private Animator _animator;
-
         private PlayerActor _player;
         private Rigidbody _rigidbody;
         private MovementState _state;
@@ -96,7 +94,7 @@ namespace Behaviors
 
             for (int i = 0; i < colliders.Length; i++)
             {
-                var rb = colliders[i].GetComponent<Rigidbody>();
+                var rb = colliders[i].attachedRigidbody;
 
                 if (null != rb && colliders[i].transform != transform)
                 {
