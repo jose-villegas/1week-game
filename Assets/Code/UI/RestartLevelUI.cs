@@ -14,9 +14,11 @@ namespace UI
         private Button _button;
         private Animator _animator;
         private int _appearAnimation;
+        private CanvasGroup _canvasGroup;
 
         private void Start ()
         {
+            this.GetNeededComponent(ref _canvasGroup);
             this.GetNeededComponent(ref _button);
             this.GetNeededComponent(ref _animator);
 
@@ -38,7 +40,8 @@ namespace UI
         /// </summary>
         private void Dissapear()
         {
-            _button.interactable = false;
+            _canvasGroup.interactable = false;
+            _canvasGroup.blocksRaycasts = false;
             _animator.SetBool(_appearAnimation, false);
             LevelController.ActiveLevel.Restart();
         }
@@ -48,7 +51,8 @@ namespace UI
         /// </summary>
         private void Appear()
         {
-            _button.interactable = true;
+            _canvasGroup.interactable = true;
+            _canvasGroup.blocksRaycasts = true;
             _animator.SetBool(_appearAnimation, true);
         }
     }

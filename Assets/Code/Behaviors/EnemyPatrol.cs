@@ -270,8 +270,8 @@ namespace Behaviors
 
         public void Restart()
         {
-            transform.Copy(_originalTransform);
             gameObject.SetActive(true);
+            transform.Copy(_originalTransform);
             _animator.SetBool(_dissapearAnimation, false);
             enabled = true;
             _rigidbody.isKinematic = true;

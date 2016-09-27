@@ -27,6 +27,8 @@ namespace Movement
         private States _previousState;
         [SerializeField]
         private Collider _groundCollider;
+        [SerializeField]
+        private LayerMask _groundLayerMask;
 
         private PlayerActor _player;
         private Rigidbody _rigidbody;
@@ -47,6 +49,11 @@ namespace Movement
             }
         }
 
+        public LayerMask GroundLayerMask
+        {
+            get { return _groundLayerMask; }
+        }
+
         private void Start()
         {
             _player = GameSettings.Instance.PlayerSettings;
@@ -61,6 +68,7 @@ namespace Movement
             // neccesary components for the script to work
             this.GetNeededComponent(ref _rigidbody);
             this.GetNeededComponent(ref _groundCollider);
+            // obtain collision mask
         }
 
         private void FixedUpdate()
@@ -102,7 +110,7 @@ namespace Movement
             }
 
             // check if the player is touching the ground, otherwise asume it's jumping
-            bool isGrounded = _groundCollider.IsGrounded();
+            bool isGrounded = _groundCollider.IsGrounded(_groundLayerMask);
 
             if (!isGrounded && _rigidbody.velocity.y > 0.0f)
             {

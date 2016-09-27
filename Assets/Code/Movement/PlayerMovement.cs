@@ -80,6 +80,8 @@ namespace Movement
         {
             // store input
             _inputAxis.Set(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+            // handle transform orientation for movement direction
+            Orientate();
 
             // inflate player and set the status
             if (Input.GetKeyDown(KeyCode.F))
@@ -95,7 +97,14 @@ namespace Movement
             {
                 _upwardTimer = 0.0f;
             }
+        }
 
+        /// <summary>
+        /// Handles the transform orientation depending
+        /// on <see cref="PlayerCamera.MovementOrientation"/>
+        /// </summary>
+        private void Orientate()
+        {
             // look to orientation
             if (_state.IsCurrent(MovementState.States.Grounded))
             {
@@ -137,24 +146,21 @@ namespace Movement
         {
             // for on ground movement, first it has to be ground
             bool movementCondition = _state.IsCurrent(MovementState.States.Grounded);
-            // falling off slopes or platform condition same speed as on ground
+            // falling off slopes or platforms condition; same speed as on ground
             movementCondition |= _state.IsCurrent(MovementState.States.Falling) &&
                                  _state.IsPrevious(MovementState.States.Grounded);
 
-            // horizontal movement - forward and backwards,
-            // check if grounded to avoid air strafing on jump
             if (movementCondition && Math.Abs(_inputAxis.x) > Mathf.Epsilon)
             {
                 _movement = PlayerCamera.MovementOrientation * _inputAxis.x *
                             _player.Speed;
             }
 
-            // for air strafing horizontal movement, only enabled on falling mode
+            // for air strafing horizontal movement; only enabled on falling mode
             movementCondition = _state.IsCurrent(MovementState.States.Falling);
-            // previous state cannot be on ground, this follows normal speed
+            // previous state cannot be on ground; this follows normal speed
             movementCondition &= !_state.IsPrevious(MovementState.States.Grounded);
 
-            // air strafing happens on falling state
             if (movementCondition && Math.Abs(_inputAxis.x) > Mathf.Epsilon)
             {
                 _movement = PlayerCamera.MovementOrientation * _inputAxis.x *
@@ -165,12 +171,13 @@ namespace Movement
         }
 
         /// <summary>
-        /// Handles the "flatten" state, smaller collider for tight corridors
+        /// Handles the "flatten" state, smaller collider for small corridors
         /// </summary>
         private void FlattenMovement()
         {
+            // squashed between two colliders, keep the flatten animation
             bool isSquashed = _animator.GetBool(_animFlatten) &&
-                              _groundCollider.IsSquashed();
+                              _groundCollider.IsSquashed(_state.GroundLayerMask);
 
             // flatten with push down on ground
             if (isSquashed || _state.IsCurrent(MovementState.States.Grounded) &&
@@ -193,12 +200,8 @@ namespace Movement
             if(_state.IsCurrent(MovementState.States.Grounded) && _inputAxis.y > 0.0f)
             {
                 // jump direction force
-                _rigidbody.AddForce
-                (
-                    _movement * _player.JumpForce.x +
-                    Vector3.up * _player.JumpForce.y,
-                    ForceMode.Impulse
-                );
+                _rigidbody.AddForce(_movement * _player.JumpForce.x + Vector3.up *
+                                    _player.JumpForce.y, ForceMode.Impulse);
             }
         }
 
@@ -232,13 +235,14 @@ namespace Movement
         private void OnCollisionEnter(Collision col)
         {
             // collided with something while floating
-            if (_state.IsCurrent(MovementState.States.Floating) && col.contacts.Length > 0)
+            if (_state.IsCurrent(MovementState.States.Floating) &&
+                    col.contacts.Length > 0 && !col.collider.isTrigger)
             {
-                Vector3 collisionDir = (col.contacts[0].point - transform.position).normalized;
+                Vector3 collisionDir = col.contacts[0].normal;
 
                 // checks whether we collided with somethong -above- the player,
                 // 5 degree cone area check, stop floating mode if that's the case
-                if (Vector3.Angle(collisionDir, Vector3.up) < 5.0)
+                if (Vector3.Angle(collisionDir, -Vector3.up) < 10.0)
                 {
                     CancelInvoke();
                     _state.ToggleFloating();

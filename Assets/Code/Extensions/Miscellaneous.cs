@@ -42,10 +42,43 @@ namespace Extensions
         ///  <c>true</c> if the actor is on top of a collider; otherwise, <c>false</c>.
         /// </returns>
         /// <param name="actor">The actor.</param>
-        public static bool IsGrounded(this Collider actor)
+        /// <param name="layer">The layer mask</param>
+        public static bool IsGrounded(this Collider actor, LayerMask? layer = null)
         {
+            if (null == layer)
+            {
+                return Physics.Raycast(actor.transform.position, -Vector3.up,
+                                       actor.bounds.extents.y + 0.1f);
+            }
+
             return Physics.Raycast(actor.transform.position, -Vector3.up,
-                                   actor.bounds.extents.y + 0.1f);
+                                   actor.bounds.extents.y + 0.1f, layer.Value);
+        }
+
+        /// <summary>
+        /// Determines whether the actor is squeezed between two colliders
+        /// </summary>
+        /// <param name="actor">The actor.</param>
+        /// <param name="layer">The layer mask</param>
+        /// <returns>
+        ///   <c>true</c> if the specified actor is squashed; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsSquashed(this Collider actor, LayerMask? layer = null)
+        {
+            bool top;
+
+            if (null == layer)
+            {
+                top = Physics.Raycast(actor.transform.position, Vector3.up,
+                                      actor.bounds.extents.y + 0.1f);
+            }
+            else
+            {
+                top = Physics.Raycast(actor.transform.position, Vector3.up,
+                                      actor.bounds.extents.y + 0.1f, layer.Value);
+            }
+
+            return top && actor.IsGrounded(layer);
         }
 
         /// <summary>
@@ -61,20 +94,6 @@ namespace Extensions
             bool ground = Physics.Raycast(ray, out hit, actor.bounds.extents.y + 0.1f);
             groundNormal = ground ? hit.normal : Vector3.zero;
             return ground;
-        }
-
-        /// <summary>
-        /// Determines whether the actor is squeezed between two colliders
-        /// </summary>
-        /// <param name="actor">The actor.</param>
-        /// <returns>
-        ///   <c>true</c> if the specified actor is squashed; otherwise, <c>false</c>.
-        /// </returns>
-        public static bool IsSquashed(this Collider actor)
-        {
-            bool top = Physics.Raycast(actor.transform.position, Vector3.up,
-                                       actor.bounds.extents.y + 0.1f);
-            return top && actor.IsGrounded();
         }
 
         /// <summary>

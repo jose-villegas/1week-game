@@ -167,6 +167,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7acbb2e7d861fd146b62c5a1c63117b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _pushbackMask:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!114 &11464750
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -181,6 +184,9 @@ MonoBehaviour:
   _state: 0
   _previousState: 0
   _groundCollider: {fileID: 13692004}
+  _groundLayerMask:
+    serializedVersion: 2
+    m_Bits: 1792
 --- !u!135 &13525226
 SphereCollider:
   m_ObjectHideFlags: 1

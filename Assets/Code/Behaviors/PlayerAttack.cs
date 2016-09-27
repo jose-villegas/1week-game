@@ -14,6 +14,9 @@ namespace Behaviors
     [RequireComponent(typeof(Rigidbody), typeof(MovementState))]
     public class PlayerAttack : MonoBehaviour
     {
+        [SerializeField]
+        private LayerMask _pushbackMask;
+
         private Animator _animator;
         private PlayerActor _player;
         private Rigidbody _rigidbody;
@@ -21,7 +24,6 @@ namespace Behaviors
         private float _verticalInput;
         private bool _isAttacking;
         private int _animFlattenSpeed;
-        private int _enemiesMask;
 
         private void Start()
         {
@@ -42,8 +44,6 @@ namespace Behaviors
             this.GetNeededComponent(ref _animator);
             // get animator parameters ids
             _animFlattenSpeed = Animator.StringToHash("FlattenSpeed");
-            // prefetch enemies mask
-            _enemiesMask = LayerMask.GetMask("Enemies");
         }
 
         private void Update()
@@ -90,7 +90,7 @@ namespace Behaviors
             #if UNITY_EDITOR
             DebugExtension.DebugWireSphere(position, radius, 2);
             #endif
-            Collider[] colliders = Physics.OverlapSphere(position, radius, _enemiesMask);
+            Collider[] colliders = Physics.OverlapSphere(position, radius, _pushbackMask);
 
             for (int i = 0; i < colliders.Length; i++)
             {
