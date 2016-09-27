@@ -25,6 +25,11 @@ namespace Behaviors
         private Transform[] _points;
         [SerializeField]
         private float _minimumDistance = 0.5f;
+        [SerializeField, Header("Following Mode")]
+        private Collider _persecutionArea;
+        [SerializeField]
+        private bool _areaIsStatic;
+
 
         private Rigidbody _rigidbody;
         private NavMeshAgent _agent;
@@ -32,6 +37,8 @@ namespace Behaviors
         private Animator _animator;
         private int _targetPoint;
         private int _dissapearAnimation;
+        private Transform _originalTransform;
+        private Transform _sourceArea;
 
         /// <summary>
         /// Initializes a <see cref="EnemyPatrol" /> class.
@@ -42,6 +49,18 @@ namespace Behaviors
         {
             _points = points;
             _enemy = enemy;
+        }
+
+        private void Awake()
+        {
+            _originalTransform = transform.Duplicate();
+            _originalTransform.hideFlags = HideFlags.HideInHierarchy;
+
+            if (null == _persecutionArea || !_areaIsStatic) return;
+
+            // store the original transform parameters in a hidden gameObject
+            _sourceArea = _persecutionArea.transform.Duplicate();
+            _sourceArea.hideFlags = HideFlags.HideInHierarchy;
         }
 
         private void Start()
@@ -105,6 +124,9 @@ namespace Behaviors
 
         private void Update()
         {
+            // orient with ground
+            OrientModel();
+
             if (!_agent.enabled)
             {
                 return;
@@ -116,7 +138,11 @@ namespace Behaviors
                 GoToNextPoint();
             }
 
-            OrientModel();
+            // cancel transform movement with parent on persecution area
+            if (null != _persecutionArea && _areaIsStatic)
+            {
+                _persecutionArea.transform.Copy(_sourceArea);
+            }
         }
 
         /// <summary>
@@ -188,6 +214,32 @@ namespace Behaviors
             EventManager.TriggerEvent("HitPlayer");
         }
 
+        private void OnTriggerStay(Collider col)
+        {
+            // persecution logic if player enter children trigger
+            if (null == _persecutionArea) return;
+
+            if(!col.CompareTag("Player")) return;
+
+            if (null != _agent && _agent.enabled)
+            {
+                _agent.SetDestination(col.transform.position);
+            }
+        }
+
+        private void OnTriggerExit(Collider col)
+        {
+            // persecution logic if player  children trigger
+            if (null == _persecutionArea) return;
+
+            if (!col.CompareTag("Player")) return;
+
+            if (null != _agent && _agent.enabled)
+            {
+                GoToNextPoint();
+            }
+        }
+
         /// <summary>
         /// Draws the patrolling points and draws a line between them
         /// </summary>
@@ -218,11 +270,7 @@ namespace Behaviors
 
         public void Restart()
         {
-            if (null != _points && _points.Length > 0)
-            {
-                transform.position = _points[0].position;
-            }
-
+            transform.Copy(_originalTransform);
             gameObject.SetActive(true);
             _animator.SetBool(_dissapearAnimation, false);
             enabled = true;

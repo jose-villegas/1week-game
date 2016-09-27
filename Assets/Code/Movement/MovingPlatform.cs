@@ -42,12 +42,7 @@ namespace Movement
         private void Awake()
         {
             // store the original transform parameters in a hidden gameObject
-            _source = new GameObject("_" + transform.name).transform;
-            _source.name += _source.GetInstanceID();
-            // store transform parameters
-            _source.position = transform.position;
-            _source.rotation = transform.rotation;
-            _source.localScale = transform.localScale;
+            _source = transform.Duplicate();
             _source.hideFlags = HideFlags.HideInHierarchy;
         }
 

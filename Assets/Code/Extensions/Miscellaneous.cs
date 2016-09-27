@@ -90,6 +90,23 @@ namespace Extensions
         }
 
         /// <summary>
+        /// Duplicates the specified source transform. Creates another gameObject.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <returns></returns>
+        public static Transform Duplicate(this Transform source)
+        {
+            // store the original transform parameters in a hidden gameObject
+            var result = new GameObject(source.name).transform;
+            result.name += " (Duplicate)";
+            // store transform parameters
+            result.position = source.position;
+            result.rotation = source.rotation;
+            result.localScale = source.localScale;
+            return result;
+        }
+
+        /// <summary>
         /// Starts the specified coroutine on the <see cref="CoroutineUtils"/>
         /// instance
         /// </summary>

@@ -19,6 +19,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &182264
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 463338}
+  - 135: {fileID: 13525660}
+  m_Layer: 10
+  m_Name: PersecutionArea
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &188610
 GameObject:
   m_ObjectHideFlags: 0
@@ -50,6 +66,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 480150}
   m_RootOrder: 0
+--- !u!4 &463338
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 182264}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 480150}
+  m_RootOrder: 1
 --- !u!4 &480150
 Transform:
   m_ObjectHideFlags: 1
@@ -57,11 +86,12 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 188610}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 27.448975, y: 3.4169853, z: 18.526352}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 414302}
+  - {fileID: 463338}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!23 &2383750
@@ -154,8 +184,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemy: {fileID: 11400000, guid: b580decf6b988694395181c25e9cda45, type: 2}
   _groundCollider: {fileID: 6504440}
-  _points: []
+  _points:
+  - {fileID: 0}
+  - {fileID: 0}
   _minimumDistance: 0.1
+  _persecutionArea: {fileID: 13525660}
+  _areaIsStatic: 0
+--- !u!135 &13525660
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 182264}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 2
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!195 &19563236
 NavMeshAgent:
   m_ObjectHideFlags: 1
