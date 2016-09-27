@@ -2,7 +2,7 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!1 &172770
 GameObject:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
@@ -45,6 +45,7 @@ GameObject:
   - 33: {fileID: 3344336}
   - 136: {fileID: 13693696}
   - 23: {fileID: 2363000}
+  - 95: {fileID: 9570014}
   m_Layer: 10
   m_Name: TurretModel
   m_TagString: Untagged
@@ -62,7 +63,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children: []
+  m_Children:
+  - {fileID: 413688}
   m_Father: {fileID: 438528}
   m_RootOrder: 0
 --- !u!4 &413688
@@ -76,8 +78,8 @@ Transform:
   m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
-  m_Father: {fileID: 438528}
-  m_RootOrder: 1
+  m_Father: {fileID: 413428}
+  m_RootOrder: 0
 --- !u!4 &438528
 Transform:
   m_ObjectHideFlags: 1
@@ -85,12 +87,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 193328}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 4.4}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 413428}
-  - {fileID: 413688}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!23 &2363000
@@ -172,8 +173,25 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!95 &9570014
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 197366}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e3a73fa1b4ee005448db2b47c5643fdb, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!114 &11457650
 MonoBehaviour:
   m_ObjectHideFlags: 1

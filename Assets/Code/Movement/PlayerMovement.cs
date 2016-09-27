@@ -196,7 +196,8 @@ namespace Movement
                 _rigidbody.AddForce
                 (
                     _movement * _player.JumpForce.x +
-                    Vector3.up * _player.JumpForce.y
+                    Vector3.up * _player.JumpForce.y,
+                    ForceMode.Impulse
                 );
             }
         }

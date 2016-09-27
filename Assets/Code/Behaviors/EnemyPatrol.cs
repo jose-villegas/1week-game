@@ -30,7 +30,6 @@ namespace Behaviors
         private NavMeshAgent _agent;
         private MeshRenderer _model;
         private Animator _animator;
-        private bool _isDead;
         private int _targetPoint;
         private int _dissapearAnimation;
 
@@ -150,7 +149,7 @@ namespace Behaviors
         /// </summary>
         public void Hit()
         {
-            _isDead = true;
+            enabled = false;
             _agent.enabled = false;
             _rigidbody.isKinematic = false;
             // play dissapear animation
@@ -184,7 +183,7 @@ namespace Behaviors
 
         private void OnCollisionEnter(Collision col)
         {
-            if (!col.gameObject.CompareTag("Player") || _isDead) return;
+            if (!col.gameObject.CompareTag("Player") || !enabled) return;
 
             EventManager.TriggerEvent("HitPlayer");
         }
@@ -226,7 +225,7 @@ namespace Behaviors
 
             gameObject.SetActive(true);
             _animator.SetBool(_dissapearAnimation, false);
-            _isDead = false;
+            enabled = true;
             _rigidbody.isKinematic = true;
             _agent.enabled = true;
         }
