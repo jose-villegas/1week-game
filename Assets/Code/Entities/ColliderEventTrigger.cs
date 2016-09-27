@@ -8,7 +8,7 @@ namespace Entities
     /// </summary>
     /// <seealso cref="UnityEngine.MonoBehaviour" />
     [RequireComponent(typeof(Collider))]
-    class ColliderEvent : MonoBehaviour
+    class ColliderEventTrigger : MonoBehaviour
     {
         [SerializeField] private UnityEvent _onTriggerEnter;
         [SerializeField] private UnityEvent _onTriggerExit;

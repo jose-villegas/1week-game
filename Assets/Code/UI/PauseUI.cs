@@ -55,6 +55,8 @@ public class PauseUI : MonoBehaviour
 
         if (pressedScape && !_animator.GetBool(_appearAnimation))
         {
+            _canvasGroup.interactable = true;
+            _canvasGroup.blocksRaycasts = true;
             _animator.SetBool(_appearAnimation, true);
             EventManager.TriggerEvent("GamePaused");
         }

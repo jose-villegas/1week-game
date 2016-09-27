@@ -5,19 +5,19 @@ licenseType: Free
 SketchUpImporter:
   generateBackFace: 0
   mergeCoplanarFaces: 1
-  selectedNodes: 00000000010000000200000003000000
+  selectedNodes: 0000000001000000
   assetHash:
     serializedVersion: 2
-    Hash: d919bd674c25228e8ce81ecd1afbeafe
+    Hash: d2f9316037b49e8fcd00ea2664397afa
   longitude: -105.242139
   latitude: 40.018309
   northCorrection: -0
   fileUnit: 0
   sketchUpImportData:
     defaultCamera:
-      position: {x: 36.09452, y: 30.122019, z: -20.257998}
-      lookAt: {x: 15.794459, y: 7.2426076, z: -1.9386892}
-      up: {x: -0.4764112, y: 0.76693946, z: 0.429926}
+      position: {x: 27.205912, y: 11.43499, z: -10.025792}
+      lookAt: {x: -1.4660571, y: 0.13819571, z: 7.903447}
+      up: {x: -0.2686505, y: 0.94847524, z: 0.1679933}
       fov: 35
       aspectRatio: 0
       orthoSize: 1
@@ -61,7 +61,7 @@ SketchUpImporter:
   meshes:
     lODScreenPercentages: []
     globalScale: 0.0254
-    meshCompression: 0
+    meshCompression: 3
     addColliders: 0
     importBlendShapes: 1
     swapUVChannels: 0

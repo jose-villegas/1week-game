@@ -45,8 +45,8 @@ namespace Movement
             _source = new GameObject("_" + transform.name).transform;
             _source.name += _source.GetInstanceID();
             // store transform parameters
-            _source.localPosition = transform.position;
-            _source.localRotation = transform.localRotation;
+            _source.position = transform.position;
+            _source.rotation = transform.rotation;
             _source.localScale = transform.localScale;
             _source.hideFlags = HideFlags.HideInHierarchy;
         }
@@ -126,6 +126,7 @@ namespace Movement
         public void Restart()
         {
             // restore to original transform
+            _elapsedTime = 0.0f;
             transform.Copy(_source);
         }
     }

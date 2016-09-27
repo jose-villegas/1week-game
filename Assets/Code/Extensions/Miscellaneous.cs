@@ -84,8 +84,8 @@ namespace Extensions
         /// <param name="source">The source.</param>
         public static void Copy(this Transform target, Transform source)
         {
-            target.localPosition = source.localPosition;
-            target.localRotation = source.localRotation;
+            target.position = source.position;
+            target.rotation = source.rotation;
             target.localScale = source.localScale;
         }
 
