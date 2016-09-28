@@ -14,6 +14,7 @@ namespace Behaviors
     [RequireComponent(typeof(Collider))]
     public class CollectibleCoin : MonoBehaviour, IRestartable
     {
+        private AudioSource _audio;
         private Animator _animator;
         private Collider _collider;
         private int _dissapearAnimation;
@@ -22,6 +23,7 @@ namespace Behaviors
         {
             _animator = GetComponent<Animator>();
             _collider = GetComponent<Collider>();
+            _audio = GetComponent<AudioSource>();
             _dissapearAnimation = Animator.StringToHash("Dissapear");
             EventManager.StartListening("GamePaused", OnGamePaused);
             EventManager.StartListening("GameResumed", OnGameResumed);
@@ -62,6 +64,8 @@ namespace Behaviors
                     gameObject.SetActive(false);
                 }, 1.5f).Start();
             }
+
+            if(null != _audio) { _audio.Play(); }
 
             EventManager.TriggerEvent("CoinCollected");
         }

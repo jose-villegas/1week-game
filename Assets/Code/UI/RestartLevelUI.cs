@@ -26,6 +26,7 @@ namespace UI
             if (null == _animator) return;
 
             EventManager.StartListening("PlayerDied", Appear);
+            EventManager.StartListening("StartOver", Appear);
 
             // add level restart action to button
             if (null == _button) return;

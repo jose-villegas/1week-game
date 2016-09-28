@@ -31,6 +31,7 @@ namespace Behaviors
         private Animator _animator;
         private int _dissapearAnimation;
         private GameplaySettings _gameplay;
+        private AudioSource _audio;
 
         private void Start ()
         {
@@ -43,6 +44,7 @@ namespace Behaviors
                 enabled = false;
             }
 
+            // pretch player
             GameObject player = GameObject.FindGameObjectWithTag("Player");
 
             if (null == player)
@@ -55,7 +57,9 @@ namespace Behaviors
                 _player = player.transform;
             }
 
+            // get needed components
             this.GetNeededComponent(ref _animator);
+            _audio = GetComponent<AudioSource>();
 
             if (null != _animator)
             {
@@ -123,6 +127,8 @@ namespace Behaviors
             {
                 rb.AddForce(_rotatingGun.forward * _shootForce);
             }
+
+            if(null != _audio) { _audio.Play(); }
         }
 
         /// <summary>
