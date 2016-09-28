@@ -23,7 +23,6 @@ namespace UI
         private int _coinCount;
         private int _coinsCollected;
         private int _appearAnimation;
-        private int _currentTotal;
         private int _totalCollected;
 
         /// <summary>
@@ -60,11 +59,9 @@ namespace UI
             // add to the total count the number of coins from the previous level
             EventManager.StartListening("GoToNextLevel", () =>
             {
-                _totalCollected += _currentTotal;
-                _currentTotal = 0;
+                _totalCollected += _coinsCollected;
             });
         }
-
 
         /// <summary>
         /// Adds to the number of coins collected and updates the interface
@@ -76,7 +73,6 @@ namespace UI
 
             _coinCount--;
             _coinsCollected++;
-            _currentTotal++;
             _numberCollected.text = _coinsCollected.ToString();
         }
 
@@ -88,7 +84,6 @@ namespace UI
         public void Restart()
         {
             _coinsCollected = 0;
-            _currentTotal = 0;
             _numberCollected.text = _coinsCollected.ToString();
             _coinCount = LevelController.ActiveLevel.CointCount;
             _numberTotal.text = _coinCount.ToString();
