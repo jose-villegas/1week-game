@@ -15,9 +15,16 @@ namespace UI
         private Text _numberCollected;
         [SerializeField]
         private Text _numberTotal;
+        [SerializeField]
+        private Animator _scoreAnimator;
+        [SerializeField]
+        private Text _score;
 
         private int _coinCount;
         private int _coinsCollected;
+        private int _appearAnimation;
+        private int _currentTotal;
+        private int _totalCollected;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CollectedCoinsUI"/> class.
@@ -38,6 +45,24 @@ namespace UI
             EventManager.StartListening("LevelReset", Restart);
             // restarts on level begin
             EventManager.StartListening("LevelBegin", Restart);
+
+            // prefetch animation
+            if (null == _scoreAnimator || null == _score) return;
+
+            _appearAnimation = Animator.StringToHash("Appear");
+            // on start over show score and reset total collected
+            EventManager.StartListening("StartOver", () =>
+            {
+                _score.text = _totalCollected.ToString();
+                _totalCollected = 0;
+                _scoreAnimator.SetBool(_appearAnimation, true);
+            });
+            // add to the total count the number of coins from the previous level
+            EventManager.StartListening("GoToNextLevel", () =>
+            {
+                _totalCollected += _currentTotal;
+                _currentTotal = 0;
+            });
         }
 
 
@@ -51,6 +76,7 @@ namespace UI
 
             _coinCount--;
             _coinsCollected++;
+            _currentTotal++;
             _numberCollected.text = _coinsCollected.ToString();
         }
 
@@ -62,9 +88,12 @@ namespace UI
         public void Restart()
         {
             _coinsCollected = 0;
+            _currentTotal = 0;
             _numberCollected.text = _coinsCollected.ToString();
             _coinCount = LevelController.ActiveLevel.CointCount;
             _numberTotal.text = _coinCount.ToString();
+            // level reset will also happen after StartOver, hide score
+            _scoreAnimator.SetBool(_appearAnimation, false);
         }
     }
 }

@@ -2704,7 +2704,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Kubad Temple
+  m_Text: ollama
 --- !u!222 &701887680
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3650,7 +3650,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1205754776}
-  - 114: {fileID: 1205754777}
   m_Layer: 0
   m_Name: Levels
   m_TagString: Untagged
@@ -3669,31 +3668,13 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
-  - {fileID: 2095374552}
   - {fileID: 1586500689}
   m_Father: {fileID: 0}
   m_RootOrder: 3
---- !u!114 &1205754777
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1205754775}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9559f99e981f82345967bc8db65adee1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1206509273 stripped
 Transform:
   m_PrefabParentObject: {fileID: 476060, guid: 43744496eeb59e543a9687afc5438a27, type: 2}
   m_PrefabInternal: {fileID: 329506829}
---- !u!114 &1206509275 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 11404240, guid: 43744496eeb59e543a9687afc5438a27,
-    type: 2}
-  m_PrefabInternal: {fileID: 329506829}
-  m_Script: {fileID: 11500000, guid: 6eb648d0b4bf5054f9a8572bdae30a5b, type: 3}
 --- !u!1 &1214041332
 GameObject:
   m_ObjectHideFlags: 0
@@ -4125,7 +4106,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
 --- !u!1 &1335820629
 GameObject:
   m_ObjectHideFlags: 0
@@ -5071,7 +5052,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1586500689}
-  - 114: {fileID: 1586500690}
   m_Layer: 0
   m_Name: L003
   m_TagString: Untagged
@@ -5095,19 +5075,7 @@ Transform:
   - {fileID: 143141282}
   - {fileID: 1894271389}
   m_Father: {fileID: 1205754776}
-  m_RootOrder: 1
---- !u!114 &1586500690
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1586500688}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65b3426fc598ae24db25b80420f4e609, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _initialSpawn: {fileID: 1206509275}
+  m_RootOrder: 0
 --- !u!1001 &1620638762
 Prefab:
   m_ObjectHideFlags: 0
@@ -5793,7 +5761,8 @@ Transform:
   m_LocalPosition: {x: 58.7, y: 21.6, z: 81.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 19.9443, y: -405, z: 0}
-  m_Children: []
+  m_Children:
+  - {fileID: 2095374552}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!1001 &1710456260
@@ -6140,7 +6109,7 @@ MonoBehaviour:
   m_CancelButton: Cancel
   m_InputActionsPerSecond: 10
   m_RepeatDelay: 0.5
-  m_ForceModuleActive: 0
+  m_ForceModuleActive: 1
 --- !u!114 &1802404718
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7128,7 +7097,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Kubad Temple
+  m_Text: ollama
 --- !u!222 &2059374865
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7238,7 +7207,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
-  m_Father: {fileID: 1205754776}
+  m_Father: {fileID: 1705267076}
   m_RootOrder: 0
 --- !u!1001 &2108290435
 Prefab:
