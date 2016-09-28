@@ -16,6 +16,8 @@ namespace Behaviors
     {
         [SerializeField]
         private LayerMask _pushbackMask;
+        [SerializeField]
+        private ParticleSystem _pushBackPlayParticles;
 
         private Animator _animator;
         private PlayerActor _player;
@@ -71,6 +73,8 @@ namespace Behaviors
                 _animator.SetFloat(_animFlattenSpeed, col.impulse.y * 0.75f);
                 // radius scan pushback area
                 HitPushback(col.contacts[0].point, col.impulse.y * _player.PushbackRadiusScale);
+                // play particle system
+                _pushBackPlayParticles.Play();
                 // recover from flatten speed modification
                 CoroutineUtils.DelaySeconds(() =>
                 {

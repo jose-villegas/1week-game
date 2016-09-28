@@ -720,7 +720,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11401900, guid: a3d199a7b5d1aff43ae34482c136bb1d, type: 2}
       propertyPath: m_Text
-      value: Press F to inflate and float away
+      value: Press F to inflate and float away, F again to stop floating
       objectReference: {fileID: 0}
     - target: {fileID: 475884, guid: a3d199a7b5d1aff43ae34482c136bb1d, type: 2}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -8069,18 +8069,6 @@ Prefab:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1335455488}
-    - target: {fileID: 485046, guid: a3d199a7b5d1aff43ae34482c136bb1d, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 485046, guid: a3d199a7b5d1aff43ae34482c136bb1d, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 485046, guid: a3d199a7b5d1aff43ae34482c136bb1d, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a3d199a7b5d1aff43ae34482c136bb1d, type: 2}
   m_IsPrefabParent: 0
