@@ -33,17 +33,12 @@ namespace General
             if (null == _levels) return;
 
             // final level, can't advance anymore
-            if (_currentLevel >= _levels.Length - 1) return;
+            if (_currentLevel > _levels.Length - 1) return;
 
             // deactivate current
             _levels[_currentLevel].gameObject.SetActive(false);
             // activate next level
-            _currentLevel++;
-
-            // already on the last level
-            if (_currentLevel >= _levels.Length) return;
-
-            _levels[_currentLevel].gameObject.SetActive(true);
+            _levels[++_currentLevel].gameObject.SetActive(true);
         }
     }
 }

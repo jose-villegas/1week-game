@@ -6,11 +6,9 @@ namespace Actors
     /// Contains parameters for a dynamic actor, meaning it moves
     /// </summary>
     /// <seealso cref="UnityEngine.ScriptableObject" />
-    [CreateAssetMenu]
+    [CreateAssetMenu(fileName = "DynamicActor", menuName = "Actors/Dynamic Actor")]
     public class DynamicActor : ScriptableObject
     {
-        [SerializeField, Header("Health")]
-        private int _healthPoints = 1;
         [SerializeField]
         private float _immunityTime = 3.0f;
         [SerializeField, Header("Movement")]
@@ -25,11 +23,6 @@ namespace Actors
         public float AirStrafingSpeed
         {
             get { return _airStrafingSpeed; }
-        }
-
-        public int HealthPoints
-        {
-            get { return _healthPoints; }
         }
 
         public float ImmunityTime

@@ -7,7 +7,7 @@ namespace Actors
     /// receives direct input from the user
     /// </summary>
     /// <seealso cref="Actors.DynamicActor" />
-    [CreateAssetMenu]
+    [CreateAssetMenu(fileName = "PlayerActor", menuName = "Actors/Player Actor")]
     public class PlayerActor : DynamicActor
     {
         [SerializeField, Header("Floating Mode")]

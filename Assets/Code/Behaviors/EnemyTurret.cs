@@ -30,9 +30,12 @@ namespace Behaviors
         private ObjectPool _bulletPool;
         private Animator _animator;
         private int _dissapearAnimation;
+        private GameplaySettings _gameplay;
 
         private void Start ()
         {
+            _gameplay = GameSettings.Instance.GameplaySettings;
+
             if (!_enemy)
             {
                 Debug.LogError("No " + typeof(DynamicActor) + " found. " +
@@ -66,7 +69,8 @@ namespace Behaviors
             // fire rate
             if (_enemy.Speed > 0.0)
             {
-                InvokeRepeating("FireBullet", 0.0f, 1.0f / _enemy.Speed);
+                InvokeRepeating("FireBullet", 0.0f,
+                                1.0f / (_enemy.Speed * _gameplay.EnemySpeedMultiplier));
             }
             else
             {
@@ -115,7 +119,10 @@ namespace Behaviors
             var rb = go.GetComponent<Rigidbody>();
 
             // push bullet forward with shoot force
-            if (null != rb) { rb.AddForce(_rotatingGun.forward * _shootForce); }
+            if (null != rb)
+            {
+                rb.AddForce(_rotatingGun.forward * _shootForce);
+            }
         }
 
         /// <summary>
@@ -136,7 +143,8 @@ namespace Behaviors
                 angle = -angle;
             }
 
-            angle = angle * Time.deltaTime * _enemy.AngularSpeed;
+            angle = angle * Time.deltaTime * _enemy.AngularSpeed *
+                    _gameplay.EnemySpeedMultiplier;
             _rotatingGun.RotateAround(transform.position, transform.up, angle);
         }
 

@@ -33,6 +33,8 @@ namespace General
 
         private void Start()
         {
+            DontDestroyOnLoad(transform.gameObject);
+
             if (null == _poolObject)
             {
                 Debug.LogError("The given poolObject is null. Destroying this object...");

@@ -15,7 +15,7 @@ namespace UI
         [SerializeField]
         private GameObject _heartAsset;
 
-        private PlayerActor _player;
+        private GameplaySettings _gameplay;
         private List<Animator> _heartsAnimators;
         private int _availableHearts;
         private int _dissapearAnimation;
@@ -32,7 +32,7 @@ namespace UI
 
         private void Start ()
         {
-            _player = GameSettings.Instance.PlayerSettings;
+            _gameplay = GameSettings.Instance.GameplaySettings;
             // prefetch animation parameter identifiers
             _dissapearAnimation = Animator.StringToHash("Dissapear");
             _appearAnimation = Animator.StringToHash("Appear");
@@ -73,12 +73,12 @@ namespace UI
         /// </summary>
         private void BuildHeartsInterface()
         {
-            if (_player == null || transform.childCount == _player.HealthPoints)
+            if (_gameplay == null || transform.childCount == _gameplay.HealthPoints)
             {
                 return;
             }
 
-            _availableHearts = _player.HealthPoints;
+            _availableHearts = _gameplay.HealthPoints;
             _heartsAnimators = new List<Animator>();
 
             // instantiate hearts ui
@@ -95,7 +95,7 @@ namespace UI
         /// </summary>
         public void Restart()
         {
-            _availableHearts = _player.HealthPoints;
+            _availableHearts = _gameplay.HealthPoints;
 
             for (int i = 0; i < _heartsAnimators.Count; i++)
             {

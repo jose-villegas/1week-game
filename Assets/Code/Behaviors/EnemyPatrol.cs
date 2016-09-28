@@ -32,6 +32,7 @@ namespace Behaviors
 
 
         private Rigidbody _rigidbody;
+        private GameplaySettings _gameplay;
         private NavMeshAgent _agent;
         private MeshRenderer _model;
         private Animator _animator;
@@ -65,6 +66,7 @@ namespace Behaviors
 
         private void Start()
         {
+            _gameplay = GameSettings.Instance.GameplaySettings;
             _model = GetComponentInChildren<MeshRenderer>();
             // neccesary components for the script to work
             this.GetNeededComponent(ref _rigidbody);
@@ -88,8 +90,8 @@ namespace Behaviors
             {
                 if (_agent)
                 {
-                    _agent.speed = _enemy.Speed;
-                    _agent.angularSpeed = _enemy.AngularSpeed;
+                    _agent.speed = _enemy.Speed * _gameplay.EnemySpeedMultiplier;
+                    _agent.angularSpeed = _enemy.AngularSpeed * _gameplay.EnemySpeedMultiplier;
                 }
             }
 

@@ -17,24 +17,26 @@ namespace Behaviors
     {
         private PlayerActor _player;
         private bool _immunityActive;
+        private GameplaySettings _gameplay;
 
         public int Health { get; private set; }
 
         private void Start()
         {
             _player = GameSettings.Instance.PlayerSettings;
+            _gameplay = GameSettings.Instance.GameplaySettings;
 
-            // without the PlayerActor scriptableobject there
+            // without the GameplaySettings scriptableobject there
             // are no defined parameters for the player health
-            if (!_player)
+            if (!_gameplay)
             {
-                Debug.LogError("No " + typeof(PlayerActor) + " found. " +
+                Debug.LogError("No " + typeof(GameplaySettings) + " found. " +
                                "Disabling script...");
                 enabled = false;
             }
             else
             {
-                Health = _player.HealthPoints;
+                Health = _gameplay.HealthPoints;
             }
 
             // event to receive hits from other objects
@@ -50,11 +52,15 @@ namespace Behaviors
         public void TemporalImmunity()
         {
             _immunityActive = true;
+
             // disables immunity after immunity time
-            CoroutineUtils.DelaySeconds(() =>
+            if (_player != null)
             {
-                _immunityActive = false;
-            }, _player.ImmunityTime).Start();
+                CoroutineUtils.DelaySeconds(() =>
+                {
+                    _immunityActive = false;
+                }, _player.ImmunityTime).Start();
+            }
         }
 
         /// <summary>
@@ -76,7 +82,7 @@ namespace Behaviors
 
         public void Restart()
         {
-            Health = _player.HealthPoints;
+            Health = _gameplay.HealthPoints;
         }
     }
 }

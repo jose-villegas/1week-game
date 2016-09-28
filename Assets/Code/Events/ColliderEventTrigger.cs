@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 
-namespace Entities
+namespace Events
 {
     /// <summary>
     /// Executes unity events on collider events

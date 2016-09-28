@@ -10,10 +10,12 @@ namespace General
     public class GameSettings : Singleton<GameSettings>
     {
         public PlayerActor PlayerSettings { get; private set; }
+        public GameplaySettings GameplaySettings { get; private set; }
 
         public void Awake()
         {
             PlayerSettings = Resources.Load("Player") as PlayerActor;
+            GameplaySettings = Resources.Load("Settings") as GameplaySettings;
         }
     }
 }

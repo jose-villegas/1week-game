@@ -20,6 +20,7 @@ namespace Movement
         private Collider _groundCollider;
 
         private PlayerActor _player;
+        private GameplaySettings _gameplay;
         private Rigidbody _rigidbody;
         private MovementState _state;
         private Vector2 _inputAxis = Vector2.zero;
@@ -33,6 +34,7 @@ namespace Movement
         private void Start()
         {
             _player = GameSettings.Instance.PlayerSettings;
+            _gameplay = GameSettings.Instance.GameplaySettings;
 
             // without the PlayerActor scriptableobject there
             // is no defined parameters for the player movement
@@ -167,6 +169,7 @@ namespace Movement
                             _player.AirStrafingSpeed;
             }
 
+            _movement *= _gameplay.PlayerSpeedMultiplier;
             _rigidbody.MovePosition(transform.position + _movement * Time.deltaTime);
         }
 
