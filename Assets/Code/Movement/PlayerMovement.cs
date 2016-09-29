@@ -17,7 +17,7 @@ namespace Movement
         [SerializeField]
         private Animator _animator;
         [SerializeField]
-        private Collider _groundCollider;
+        private Collider _modelCollider;
 
         private PlayerActor _player;
         private GameplaySettings _gameplay;
@@ -49,7 +49,7 @@ namespace Movement
             this.GetNeededComponent(ref _rigidbody);
             this.GetNeededComponent(ref _state);
             this.GetNeededComponent(ref _animator);
-            this.GetNeededComponent(ref _groundCollider);
+            this.GetNeededComponent(ref _modelCollider);
             // prefetch animator parameters ids
             _animInflate = Animator.StringToHash("Inflate");
             _animFlatten = Animator.StringToHash("Flatten");
@@ -81,7 +81,7 @@ namespace Movement
         private void Update()
         {
             // store input
-            _inputAxis.Set(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+            _inputAxis.Set(Input.GetAxis("Horizontal"), Input.GetAxisRaw("Vertical"));
             // handle transform orientation for movement direction
             Orientate();
 
@@ -91,11 +91,11 @@ namespace Movement
                 _state.ToggleFloating();
             }
 
-            bool isFloating = _state.IsCurrent(MovementState.States.Floating);
+            bool isFloating = _state.Is(MovementState.States.Floating);
             _animator.SetBool(_animInflate, isFloating);
 
             // reset floating mode timer
-            if (_state.IsPrevious(MovementState.States.Floating))
+            if (_state.Was(MovementState.States.Floating))
             {
                 _upwardTimer = 0.0f;
             }
@@ -108,13 +108,13 @@ namespace Movement
         private void Orientate()
         {
             // look to orientation
-            if (_state.IsCurrent(MovementState.States.Grounded))
+            if (_state.Is(MovementState.States.Grounded))
             {
                 Vector3 orientation = PlayerCamera.MovementOrientation;
                 // transform rotation extract
                 Vector3 up;
 
-                if (!_groundCollider.GroundNormal(out up) || up == Vector3.zero) return;
+                if (!_modelCollider.GroundNormal(out up) || up == Vector3.zero) return;
 
                 Vector3 right = Quaternion.AngleAxis(-90, Vector3.up) * orientation;
                 Vector3 forward = Vector3.Cross(up, right);
@@ -147,10 +147,10 @@ namespace Movement
         private void HorizontalMovement()
         {
             // for on ground movement, first it has to be ground
-            bool movementCondition = _state.IsCurrent(MovementState.States.Grounded);
+            bool movementCondition = _state.Is(MovementState.States.Grounded);
             // falling off slopes or platforms condition; same speed as on ground
-            movementCondition |= _state.IsCurrent(MovementState.States.Falling) &&
-                                 _state.IsPrevious(MovementState.States.Grounded);
+            movementCondition |= _state.Is(MovementState.States.Falling) &&
+                                 _state.Was(MovementState.States.Grounded);
 
             if (movementCondition && Math.Abs(_inputAxis.x) > Mathf.Epsilon)
             {
@@ -159,9 +159,9 @@ namespace Movement
             }
 
             // for air strafing horizontal movement; only enabled on falling mode
-            movementCondition = _state.IsCurrent(MovementState.States.Falling);
+            movementCondition = _state.Is(MovementState.States.Falling);
             // previous state cannot be on ground; this follows normal speed
-            movementCondition &= !_state.IsPrevious(MovementState.States.Grounded);
+            movementCondition &= !_state.Was(MovementState.States.Grounded);
 
             if (movementCondition && Math.Abs(_inputAxis.x) > Mathf.Epsilon)
             {
@@ -180,10 +180,10 @@ namespace Movement
         {
             // squashed between two colliders, keep the flatten animation
             bool isSquashed = _animator.GetBool(_animFlatten) &&
-                              _groundCollider.IsSquashed(_state.GroundLayerMask);
+                              _modelCollider.IsSquashed(_state.GroundLayerMask);
 
             // flatten with push down on ground
-            if (isSquashed || _state.IsCurrent(MovementState.States.Grounded) &&
+            if (isSquashed || _state.Is(MovementState.States.Grounded) &&
                     _inputAxis.y < 0.0f && !_animator.GetBool(_animFlatten))
             {
                 _animator.SetBool(_animFlatten, true);
@@ -200,7 +200,7 @@ namespace Movement
         private void JumpMovement()
         {
             // jumping has to happen on the ground
-            if(_state.IsCurrent(MovementState.States.Grounded) && _inputAxis.y > 0.0f)
+            if(_state.Is(MovementState.States.Grounded) && _inputAxis.y > 0.0f)
             {
                 // jump direction force
                 _rigidbody.AddForce(_movement * _player.JumpForce.x + Vector3.up *
@@ -213,7 +213,7 @@ namespace Movement
         /// </summary>
         private void FloatingMovement()
         {
-            if (!_state.IsCurrent(MovementState.States.Floating)) { return; }
+            if (!_state.Is(MovementState.States.Floating)) { return; }
 
             Vector3 fForce = Vector3.up * _player.FloatingForce.y;
 
@@ -238,7 +238,7 @@ namespace Movement
         private void OnCollisionEnter(Collision col)
         {
             // collided with something while floating
-            if (_state.IsCurrent(MovementState.States.Floating) &&
+            if (_state.Is(MovementState.States.Floating) &&
                     col.contacts.Length > 0 && !col.collider.isTrigger)
             {
                 Vector3 collisionDir = col.contacts[0].normal;

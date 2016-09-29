@@ -36,7 +36,7 @@ namespace Extensions
         }
 
         /// <summary>
-        /// Determines whether the actor is on the ground, on top of a collider
+        /// Determines whether the actor is on the ground, on top of a collider using raycast
         /// </summary>
         /// <returns>
         ///  <c>true</c> if the actor is on top of a collider; otherwise, <c>false</c>.
@@ -56,7 +56,7 @@ namespace Extensions
         }
 
         /// <summary>
-        /// Determines whether the actor is squeezed between two colliders
+        /// Determines whether the actor is squeezed between two colliders using raycast
         /// </summary>
         /// <param name="actor">The actor.</param>
         /// <param name="layer">The layer mask</param>

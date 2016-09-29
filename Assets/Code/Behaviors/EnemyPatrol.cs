@@ -20,7 +20,7 @@ namespace Behaviors
         [SerializeField]
         private DynamicActor _enemy;
         [SerializeField]
-        private Collider _groundCollider;
+        private Collider _modelCollider;
         [SerializeField]
         private Transform[] _points;
         [SerializeField]
@@ -71,7 +71,7 @@ namespace Behaviors
             // neccesary components for the script to work
             this.GetNeededComponent(ref _rigidbody);
             this.GetNeededComponent(ref _agent);
-            this.GetNeededComponent(ref _groundCollider);
+            this.GetNeededComponent(ref _modelCollider);
             this.GetNeededComponent(ref _animator);
 
             if (null != _animator)
@@ -157,7 +157,7 @@ namespace Behaviors
 
             Vector3 up;
 
-            if (_groundCollider.GroundNormal(out up))
+            if (_modelCollider.GroundNormal(out up))
             {
                 Vector3 forward = _agent.transform.forward;
                 forward.y = 0.0f;

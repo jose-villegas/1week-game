@@ -194,7 +194,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 9554082}
-  _groundCollider: {fileID: 13692004}
+  _modelCollider: {fileID: 13692004}
 --- !u!114 &11460196
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -223,7 +223,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _state: 0
   _previousState: 0
-  _groundCollider: {fileID: 13692004}
+  _modelCollider: {fileID: 13692004}
   _groundLayerMask:
     serializedVersion: 2
     m_Bits: 1792

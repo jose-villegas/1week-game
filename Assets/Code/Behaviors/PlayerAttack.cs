@@ -56,7 +56,7 @@ namespace Behaviors
         private void FixedUpdate()
         {
             // to enter attack mode downward force is added on the already falling player
-            if (_state.IsCurrent(MovementState.States.Falling) && _verticalInput < 0.0f)
+            if (_state.Is(MovementState.States.Falling) && _verticalInput < 0.0f)
             {
                 _rigidbody.AddForce(-Vector3.up * _player.AttackVerticalForce);
                 _isAttacking = true;
@@ -66,7 +66,7 @@ namespace Behaviors
         private void OnCollisionEnter(Collision col)
         {
             // hit something on falling mode
-            if (!_state.IsCurrent(MovementState.States.Falling) && _isAttacking)
+            if (!_state.Is(MovementState.States.Falling) && _isAttacking)
             {
                 _isAttacking = false;
                 // animate flatten faster to give a sense of force push

@@ -26,13 +26,14 @@ namespace Movement
         [SerializeField]
         private States _previousState;
         [SerializeField]
-        private Collider _groundCollider;
+        private Collider _modelCollider;
         [SerializeField]
         private LayerMask _groundLayerMask;
 
         private PlayerActor _player;
         private Rigidbody _rigidbody;
         private Coroutine _toggleCoroutine;
+        private bool _pressedJump;
 
         public States State
         {
@@ -67,8 +68,12 @@ namespace Movement
 
             // neccesary components for the script to work
             this.GetNeededComponent(ref _rigidbody);
-            this.GetNeededComponent(ref _groundCollider);
-            // obtain collision mask
+            this.GetNeededComponent(ref _modelCollider);
+        }
+
+        private void Update()
+        {
+            _pressedJump = Input.GetAxisRaw("Vertical") > 0;
         }
 
         private void FixedUpdate()
@@ -82,7 +87,7 @@ namespace Movement
         /// </summary>
         /// <param name="state">The state.</param>
         /// <returns></returns>
-        public bool IsCurrent(States state)
+        public bool Is(States state)
         {
             return State == state;
         }
@@ -92,7 +97,7 @@ namespace Movement
         /// </summary>
         /// <param name="state">The state.</param>
         /// <returns></returns>
-        public bool IsPrevious(States state)
+        public bool Was(States state)
         {
             return _previousState == state;
         }
@@ -110,19 +115,22 @@ namespace Movement
             }
 
             // check if the player is touching the ground, otherwise asume it's jumping
-            bool isGrounded = _groundCollider.IsGrounded(_groundLayerMask);
+            bool isGrounded = _modelCollider.IsGrounded(_groundLayerMask);
 
-            if (!isGrounded && _rigidbody.velocity.y > 0.0f)
-            {
-                State = States.OnJump;
-            }
-            else if (!isGrounded && _rigidbody.velocity.y < 0.0f)
-            {
-                State = States.Falling;
-            }
-            else if (isGrounded)
+            if (isGrounded && !_pressedJump)
             {
                 State = States.Grounded;
+            }
+
+            if (!isGrounded && _pressedJump)
+            {
+                State = States.OnJump;
+                _pressedJump = false;
+            }
+
+            if (!isGrounded && _rigidbody.velocity.y < 0.0f)
+            {
+                State = States.Falling;
             }
         }
 

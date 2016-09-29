@@ -183,7 +183,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemy: {fileID: 11400000, guid: b580decf6b988694395181c25e9cda45, type: 2}
-  _groundCollider: {fileID: 6504440}
+  _modelCollider: {fileID: 6504440}
   _points:
   - {fileID: 0}
   - {fileID: 0}

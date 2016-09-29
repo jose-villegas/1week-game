@@ -13,6 +13,7 @@ GameObject:
   - 23: {fileID: 2382682}
   - 114: {fileID: 11428090}
   - 54: {fileID: 5437630}
+  - 65: {fileID: 6517464}
   m_Layer: 9
   m_Name: MovingPlatform
   m_TagString: Untagged
@@ -81,6 +82,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!65 &6517464
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 138284}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &6535412
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -91,8 +104,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.95, y: 0.05, z: 0.95}
+  m_Center: {x: 0, y: 0.475, z: 0}
 --- !u!114 &11428090
 MonoBehaviour:
   m_ObjectHideFlags: 1
