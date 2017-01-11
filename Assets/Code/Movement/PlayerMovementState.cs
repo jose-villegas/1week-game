@@ -11,7 +11,7 @@ namespace Movement
     /// </summary>
     /// <seealso cref="UnityEngine.MonoBehaviour" />
     [RequireComponent(typeof(Rigidbody))]
-    public class MovementState : MonoBehaviour
+    public class PlayerMovementState : MonoBehaviour
     {
         public enum States
         {

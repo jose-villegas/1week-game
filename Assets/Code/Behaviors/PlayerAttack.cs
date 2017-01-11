@@ -11,7 +11,7 @@ namespace Behaviors
     /// Describes the logic for the player's motion attacks
     /// </summary>
     /// <seealso cref="UnityEngine.MonoBehaviour" />
-    [RequireComponent(typeof(Rigidbody), typeof(MovementState))]
+    [RequireComponent(typeof(Rigidbody), typeof(PlayerMovementState))]
     public class PlayerAttack : MonoBehaviour
     {
         [SerializeField]
@@ -22,7 +22,7 @@ namespace Behaviors
         private Animator _animator;
         private PlayerActor _player;
         private Rigidbody _rigidbody;
-        private MovementState _state;
+        private PlayerMovementState _state;
         private float _verticalInput;
         private bool _isAttacking;
         private int _animFlattenSpeed;
@@ -56,7 +56,7 @@ namespace Behaviors
         private void FixedUpdate()
         {
             // to enter attack mode downward force is added on the already falling player
-            if (_state.Is(MovementState.States.Falling) && _verticalInput < 0.0f)
+            if (_state.Is(PlayerMovementState.States.Falling) && _verticalInput < 0.0f)
             {
                 _rigidbody.AddForce(-Vector3.up * _player.AttackVerticalForce);
                 _isAttacking = true;
@@ -66,7 +66,7 @@ namespace Behaviors
         private void OnCollisionEnter(Collision col)
         {
             // hit something on falling mode
-            if (!_state.Is(MovementState.States.Falling) && _isAttacking)
+            if (!_state.Is(PlayerMovementState.States.Falling) && _isAttacking)
             {
                 _isAttacking = false;
                 // animate flatten faster to give a sense of force push

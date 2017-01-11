@@ -11,7 +11,7 @@ namespace Movement
     /// Handles the player's movement input and logic
     /// </summary>
     /// <seealso cref="UnityEngine.MonoBehaviour" />
-    [RequireComponent(typeof(Rigidbody), typeof(MovementState))]
+    [RequireComponent(typeof(Rigidbody), typeof(PlayerMovementState))]
     public class PlayerMovement : MonoBehaviour
     {
         [SerializeField]
@@ -22,7 +22,7 @@ namespace Movement
         private PlayerActor _player;
         private GameplaySettings _gameplay;
         private Rigidbody _rigidbody;
-        private MovementState _state;
+        private PlayerMovementState _state;
         private Vector2 _inputAxis = Vector2.zero;
         private Vector3 _movement;
         private float _upwardTimer;
@@ -91,11 +91,11 @@ namespace Movement
                 _state.ToggleFloating();
             }
 
-            bool isFloating = _state.Is(MovementState.States.Floating);
+            bool isFloating = _state.Is(PlayerMovementState.States.Floating);
             _animator.SetBool(_animInflate, isFloating);
 
             // reset floating mode timer
-            if (_state.Was(MovementState.States.Floating))
+            if (_state.Was(PlayerMovementState.States.Floating))
             {
                 _upwardTimer = 0.0f;
             }
@@ -108,7 +108,7 @@ namespace Movement
         private void Orientate()
         {
             // look to orientation
-            if (_state.Is(MovementState.States.Grounded))
+            if (_state.Is(PlayerMovementState.States.Grounded))
             {
                 Vector3 orientation = PlayerCamera.MovementOrientation;
                 // transform rotation extract
@@ -147,10 +147,10 @@ namespace Movement
         private void HorizontalMovement()
         {
             // for on ground movement, first it has to be ground
-            bool movementCondition = _state.Is(MovementState.States.Grounded);
+            bool movementCondition = _state.Is(PlayerMovementState.States.Grounded);
             // falling off slopes or platforms condition; same speed as on ground
-            movementCondition |= _state.Is(MovementState.States.Falling) &&
-                                 _state.Was(MovementState.States.Grounded);
+            movementCondition |= _state.Is(PlayerMovementState.States.Falling) &&
+                                 _state.Was(PlayerMovementState.States.Grounded);
 
             if (movementCondition && Math.Abs(_inputAxis.x) > Mathf.Epsilon)
             {
@@ -159,9 +159,9 @@ namespace Movement
             }
 
             // for air strafing horizontal movement; only enabled on falling mode
-            movementCondition = _state.Is(MovementState.States.Falling);
+            movementCondition = _state.Is(PlayerMovementState.States.Falling);
             // previous state cannot be on ground; this follows normal speed
-            movementCondition &= !_state.Was(MovementState.States.Grounded);
+            movementCondition &= !_state.Was(PlayerMovementState.States.Grounded);
 
             if (movementCondition && Math.Abs(_inputAxis.x) > Mathf.Epsilon)
             {
@@ -183,7 +183,7 @@ namespace Movement
                               _modelCollider.IsSquashed(_state.GroundLayerMask);
 
             // flatten with push down on ground
-            if (isSquashed || _state.Is(MovementState.States.Grounded) &&
+            if (isSquashed || _state.Is(PlayerMovementState.States.Grounded) &&
                     _inputAxis.y < 0.0f && !_animator.GetBool(_animFlatten))
             {
                 _animator.SetBool(_animFlatten, true);
@@ -200,7 +200,7 @@ namespace Movement
         private void JumpMovement()
         {
             // jumping has to happen on the ground
-            if(_state.Is(MovementState.States.Grounded) && _inputAxis.y > 0.0f)
+            if(_state.Is(PlayerMovementState.States.Grounded) && _inputAxis.y > 0.0f)
             {
                 // jump direction force
                 _rigidbody.AddForce(_movement * _player.JumpForce.x + Vector3.up *
@@ -213,7 +213,7 @@ namespace Movement
         /// </summary>
         private void FloatingMovement()
         {
-            if (!_state.Is(MovementState.States.Floating)) { return; }
+            if (!_state.Is(PlayerMovementState.States.Floating)) { return; }
 
             Vector3 fForce = Vector3.up * _player.FloatingForce.y;
 
@@ -238,7 +238,7 @@ namespace Movement
         private void OnCollisionEnter(Collision col)
         {
             // collided with something while floating
-            if (_state.Is(MovementState.States.Floating) &&
+            if (_state.Is(PlayerMovementState.States.Floating) &&
                     col.contacts.Length > 0 && !col.collider.isTrigger)
             {
                 Vector3 collisionDir = col.contacts[0].normal;
