@@ -33,7 +33,7 @@ namespace Behaviors
 
         private Rigidbody _rigidbody;
         private GameplaySettings _gameplay;
-        private NavMeshAgent _agent;
+        private UnityEngine.AI.NavMeshAgent _agent;
         private MeshRenderer _model;
         private Animator _animator;
         private int _targetPoint;

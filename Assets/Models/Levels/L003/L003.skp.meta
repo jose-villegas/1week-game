@@ -5,10 +5,10 @@ licenseType: Free
 SketchUpImporter:
   generateBackFace: 0
   mergeCoplanarFaces: 1
-  selectedNodes: 000000000100000002000000030000000400000005000000060000000700000008000000090000000a0000000b0000000c0000000d0000000e0000000f000000100000001100000012000000130000001400000015000000160000001700000018000000190000001a0000001b000000
+  selectedNodes: 
   assetHash:
     serializedVersion: 2
-    Hash: c40db3bb2ddc70a95bdf8294a0b152ad
+    Hash: 02198f92032af4e8229ad89fac44def9
   longitude: -105.242139
   latitude: 40.018309
   northCorrection: -0
@@ -92,7 +92,7 @@ SketchUpImporter:
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
-    resampleRotations: 1
+    resampleCurves: 1
     optimizeGameObjects: 0
     motionNodeName: 
     animationImportErrors: 
@@ -131,6 +131,7 @@ SketchUpImporter:
   importAnimation: 0
   copyAvatar: 0
   humanDescription:
+    serializedVersion: 2
     human: []
     skeleton: []
     armTwist: 0.5
@@ -141,7 +142,10 @@ SketchUpImporter:
     legStretch: 0.05
     feetSpacing: 0
     rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 0
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 0
   humanoidOversampling: 1
